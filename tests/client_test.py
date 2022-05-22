@@ -1,12 +1,15 @@
 import unittest
 
-from src.amplitude_experiment import Client, Variant, User
+from src.amplitude_experiment import Client, Variant, User, Config
 
 API_KEY = 'client-DvWljIjiiuqLbyjqdvBaLFfEBrAvGuA3'
 SERVER_URL = 'https://api.lab.amplitude.com/sdk/vardata'
 
 
 class ClientTestCase(unittest.TestCase):
+
+    def test_initialize_raise_error(self):
+        self.assertRaises(ValueError, Client, "")
 
     def test_fetch(self):
         client = Client(API_KEY)
