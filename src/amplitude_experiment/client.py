@@ -1,35 +1,78 @@
+import time
+from time import sleep
 from .config import Config
 from .version import __version__
 from .variant import Variant
+from .user import User
 import http.client
 import json
+import logging
 
 
 class Client:
+    """Main client for fetching variant data."""
+
     def __init__(self, api_key, config=None):
+        """
+        Creates a new Experiment Client instance.
+            Parameters:
+                api_key (str): The environment API Key
+                config (Config): Config Object
+
+            Returns:
+                Experiment Client instance.
+        """
+        if not api_key:
+            raise ValueError("Experiment API key is empty")
         self.api_key = api_key
         self.config = config or Config()
+        self.logger = logging.getLogger("Amplitude")
+        self.logger.addHandler(logging.StreamHandler())
+        if self.config.debug:
+            self.logger.setLevel(logging.DEBUG)
 
-    def fetch(self, user):
+    def fetch(self, user: User):
+        """
+        Fetch all variants for a user synchronous.This method will automatically retry if configured.
+            Parameters:
+                user (User): The Experiment User
+
+            Returns:
+                Variants Dictionary.
+        """
         try:
             return self.fetch_internal(user)
-        except:
-            print("[Experiment] Failed to fetch variants")
+        except Exception as e:
+            self.logger.error(f"[Experiment] Failed to fetch variants: {e}")
             return {}
 
     def fetch_internal(self, user):
+        self.logger.debug(f"[Experiment] Fetching variants for user: {user}")
         try:
             return self.do_fetch(user, self.config.fetch_timeout_millis)
-        except:
-            print("Experiment] Fetch failed")
+        except Exception as e:
+            self.logger.error(f"Experiment] Fetch failed: {e}")
             return self.retry_fetch(user)
 
     def retry_fetch(self, user):
         if self.config.fetch_retries == 0:
             return {}
-        pass
+        self.logger.debug("[Experiment] Retrying fetch")
+        err = None
+        delay_millis = self.config.fetch_retry_backoff_min_millis
+        for i in range(self.config.fetch_retries):
+            sleep(delay_millis / 1000.0)
+            try:
+                return self.do_fetch(user, self.config.fetch_timeout_millis)
+            except Exception as e:
+                self.logger.error(f"[Experiment] Retry failed: {e}")
+                err = e
+            delay_millis = min(delay_millis * self.config.fetch_retry_backoff_scalar,
+                               self.config.fetch_retry_backoff_max_millis)
+        raise err
 
     def do_fetch(self, user, timeout_millis):
+        start = time.time()
         user_context = self.add_context(user)
         headers = {
             'Authorization': f"Api-Key {self.api_key}",
@@ -40,10 +83,17 @@ class Client:
         conn = Connection(host)
         conn.connect()
         body = user_context.to_json().encode('utf8')
+        if len(body) > 8000:
+            self.logger.warning(f"[Experiment] encoded user object length ${len(body)} "
+                                f"cannot be cached by CDN; must be < 8KB")
+        self.logger.debug(f"[Experiment] Fetch variants for user: {str(user_context)}")
         conn.request('POST', '/sdk/vardata', body, headers)
         response = conn.getresponse()
+        elapsed = '%.3f' % ((time.time() - start) * 1000)
+        self.logger.debug(f"[Experiment] Fetch complete in {elapsed} ms")
         json_response = json.loads(response.read().decode("utf8"))
         variants = self.parse_json_variants(json_response)
+        self.logger.debug(f"[Experiment] Fetched variants: {json.dumps(variants, default=str)}")
         conn.close()
         return variants
 
