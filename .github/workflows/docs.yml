@@ -1,0 +1,25 @@
+name: Publish Docs
+
+on: workflow_dispatch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+
+      - name: Set up pdoc
+        run:  pip install pdoc3
+
+      - name: Setup Docs
+        run:  pdoc ./src/amplitude_experiment -o ./docs --html
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@4.1.5
+        with:
+          branch: gh-pages
+          folder: docs/amplitude_experiment
