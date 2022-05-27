@@ -14,7 +14,7 @@ class Config:
         """
         Initialize a config
             Parameters:
-                debug (str): Set to true to log some extra information to the console.
+                debug (bool): Set to true to log some extra information to the console.
                 server_url (str): The server endpoint from which to request variants.
                 fetch_timeout_millis (int): The request timeout, in milliseconds, used when fetching variants
                   triggered by calling start() or setUser().
