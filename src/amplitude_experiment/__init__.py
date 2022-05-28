@@ -1,4 +1,7 @@
-"""The official Amplitude Experiment Python Server SDK"""
+"""
+The official Amplitude Experiment Python Server SDK
+.. include:: ../../README.md
+"""
 
 from .client import Client
 from .config import Config
