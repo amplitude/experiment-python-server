@@ -5,8 +5,59 @@
   <br />
 </p>
 
-# experiment-python-server
+[![PyPI version](https://badge.fury.io/py/amplitude-experiment.svg)](https://badge.fury.io/py/amplitude-experiment)
+
+# Experiment Python SDK
 Amplitude Python Server SDK for Experiment.
+
+## Installation
+```python
+pip install amplitude-experiment
+```
+
+## Quick Start
+```python
+from amplitude_experiment import Experiment, Config, Client, User
+
+# (1) Get your deployment's API key
+apiKey = 'YOUR-API-KEY'
+
+ # (2) Initialize the experiment client
+experiment = Experiment.initialize(api_key)
+
+# (3) Fetch variants for a user
+user = User(device_id="abcdefg", user_id="user@company.com", user_properties={
+    'premium': True
+})
+
+# (4) Lookup a flag's variant
+#
+# To fetch synchronous
+variants = experiment.fetch(user)
+variant = variants['sdk-ci-test']
+if variant:
+    if variant.value == 'on':
+        # Flag is on
+    else:
+        # Flag is off
+
+# To fetch asynchronous
+experiment.fetch_async(user, fetch_callback)
+
+def fetch_callback(user, variants):
+    variant = variants['sdk-ci-test']
+    if variant:
+        if variant.value == 'on':
+            # Flag is on
+        else:
+            # Flag is off
+
+
+```
+## More Information
+Please visit our :100:[Developer Center](https://www.docs.developers.amplitude.com/experiment/sdks/python-sdk/) for more instructions on using our the SDK.
+
+See our [Experiment Ruby SDK Docs](https://amplitude.github.io/experiment-python-server/) for a list and description of all available SDK methods.
 
 ## Need Help?
 If you have any problems or issues over our SDK, feel free to [create a github issue](https://github.com/amplitude/experiments-python-server/issues/new) or submit a request on [Amplitude Help](https://help.amplitude.com/hc/en-us/requests/new).
