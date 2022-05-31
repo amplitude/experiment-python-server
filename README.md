@@ -57,7 +57,7 @@ def fetch_callback(user, variants):
 ## More Information
 Please visit our :100:[Developer Center](https://www.docs.developers.amplitude.com/experiment/sdks/python-sdk/) for more instructions on using our the SDK.
 
-See our [Experiment Ruby SDK Docs](https://amplitude.github.io/experiment-python-server/) for a list and description of all available SDK methods.
+See our [Experiment Python SDK Docs](https://amplitude.github.io/experiment-python-server/) for a list and description of all available SDK methods.
 
 ## Need Help?
 If you have any problems or issues over our SDK, feel free to [create a github issue](https://github.com/amplitude/experiments-python-server/issues/new) or submit a request on [Amplitude Help](https://help.amplitude.com/hc/en-us/requests/new).
