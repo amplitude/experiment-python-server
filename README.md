@@ -34,7 +34,7 @@ user = User(device_id="abcdefg", user_id="user@company.com", user_properties={
 #
 # To fetch synchronous
 variants = experiment.fetch(user)
-variant = variants['sdk-ci-test']
+variant = variants['YOUR-FLAG-KEY']
 if variant:
     if variant.value == 'on':
         # Flag is on
