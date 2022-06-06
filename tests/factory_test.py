@@ -9,6 +9,7 @@ class FactoryTestCase(unittest.TestCase):
         client1 = Experiment.initialize(API_KEY)
         client2 = Experiment.initialize(API_KEY)
         self.assertEqual(client1, client2)
+        client1.close()
 
 
 if __name__ == '__main__':

@@ -1,13 +1,15 @@
+import json
+import logging
 import threading
 import time
 from time import sleep
+from typing import Any
+
 from .config import Config
-from .version import __version__
-from .variant import Variant
+from .connection_pool import HTTPConnectionPool
 from .user import User
-import http.client
-import json
-import logging
+from .variant import Variant
+from .version import __version__
 
 
 class Client:
@@ -31,6 +33,7 @@ class Client:
         self.logger.addHandler(logging.StreamHandler())
         if self.config.debug:
             self.logger.setLevel(logging.DEBUG)
+        self.__setup_connection_pool()
 
     def fetch(self, user: User):
         """
@@ -72,9 +75,9 @@ class Client:
     def __fetch_internal(self, user):
         self.logger.debug(f"[Experiment] Fetching variants for user: {user}")
         try:
-            return self.__do_fetch(user, self.config.fetch_timeout_millis)
+            return self.__do_fetch(user)
         except Exception as e:
-            self.logger.error(f"Experiment] Fetch failed: {e}")
+            self.logger.error(f"[Experiment] Fetch failed: {e}")
             return self.__retry_fetch(user)
 
     def __retry_fetch(self, user):
@@ -86,7 +89,7 @@ class Client:
         for i in range(self.config.fetch_retries):
             sleep(delay_millis / 1000.0)
             try:
-                return self.__do_fetch(user, self.config.fetch_timeout_millis)
+                return self.__do_fetch(user)
             except Exception as e:
                 self.logger.error(f"[Experiment] Retry failed: {e}")
                 err = e
@@ -94,31 +97,45 @@ class Client:
                                self.config.fetch_retry_backoff_max_millis)
         raise err
 
-    def __do_fetch(self, user, timeout_millis):
+    def __do_fetch(self, user):
         start = time.time()
         user_context = self.__add_context(user)
         headers = {
             'Authorization': f"Api-Key {self.api_key}",
             'Content-Type': 'application/json;charset=utf-8'
         }
-        scheme, _, host = self.config.server_url.split('/', 3)
-        Connection = http.client.HTTPConnection if scheme == 'http:' else http.client.HTTPSConnection
-        conn = Connection(host, timeout=timeout_millis / 1000)
-        conn.connect()
+        conn = self._connection_pool.acquire()
         body = user_context.to_json().encode('utf8')
         if len(body) > 8000:
             self.logger.warning(f"[Experiment] encoded user object length ${len(body)} "
                                 f"cannot be cached by CDN; must be < 8KB")
         self.logger.debug(f"[Experiment] Fetch variants for user: {str(user_context)}")
-        conn.request('POST', '/sdk/vardata', body, headers)
-        response = conn.getresponse()
+        response = conn.request('POST', '/sdk/vardata', body, headers)
+        self._connection_pool.release(conn)
         elapsed = '%.3f' % ((time.time() - start) * 1000)
         self.logger.debug(f"[Experiment] Fetch complete in {elapsed} ms")
         json_response = json.loads(response.read().decode("utf8"))
         variants = self.__parse_json_variants(json_response)
         self.logger.debug(f"[Experiment] Fetched variants: {json.dumps(variants, default=str)}")
-        conn.close()
         return variants
+
+    def __setup_connection_pool(self):
+        scheme, _, host = self.config.server_url.split('/', 3)
+        timeout = int(self.config.fetch_timeout_millis / 1000)
+        self._connection_pool = HTTPConnectionPool(host, max_size=1, idle_timeout=30,
+                                                   read_timeout=timeout, scheme=scheme)
+
+    def close(self) -> None:
+        """
+        Close resource like connection pool with client
+        """
+        self._connection_pool.close()
+
+    def __enter__(self) -> 'Client':
+        return self
+
+    def __exit__(self, *exit_info: Any) -> None:
+        self.close()
 
     def __add_context(self, user):
         user = user or {}
