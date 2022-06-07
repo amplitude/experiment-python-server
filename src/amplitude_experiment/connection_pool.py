@@ -40,7 +40,7 @@ class WrapperHTTPConnection:
 class HTTPConnectionPool:
 
     def __init__(self, host: str, port: int = None, max_size: int = None, idle_timeout: int = None,
-                 read_timeout: int = None, scheme: str = 'https') -> None:
+                 read_timeout: float = None, scheme: str = 'https') -> None:
         """
         A simple connection pool to reuse the http connections
         :param host: pass
