@@ -35,18 +35,19 @@ jobs:
         with:
           python-version: 3.7
 
+      - name: Install dependencies
+        run: python -m pip install build setuptools wheel twine python-semantic-release
+
       - name: Run Test
         run: python -m unittest discover -s ./tests -p '*_test.py'
 
       - name: Publish distribution PyPI --dry-run
         if: ${{ github.event.inputs.dryRun == 'true'}}
         run: |
-          python -m pip install python-semantic-release
           semantic-release publish --noop
       - name: Publish distribution PyPI
         if: ${{ github.event.inputs.dryRun == 'false'}}
         run: |
-          python -m pip install python-semantic-release
           git config user.name amplitude-sdk-bot
           git config user.email amplitude-sdk-bot@users.noreply.github.com
           semantic-release publish

@@ -45,7 +45,7 @@ if variant:
 experiment.fetch_async(user, fetch_callback)
 
 def fetch_callback(user, variants):
-    variant = variants['sdk-ci-test']
+    variant = variants['YOUR-FLAG-KEY']
     if variant:
         if variant.value == 'on':
             # Flag is on
