@@ -110,18 +110,20 @@ class Client:
             self.logger.warning(f"[Experiment] encoded user object length ${len(body)} "
                                 f"cannot be cached by CDN; must be < 8KB")
         self.logger.debug(f"[Experiment] Fetch variants for user: {str(user_context)}")
-        response = conn.request('POST', '/sdk/vardata', body, headers)
-        self._connection_pool.release(conn)
-        elapsed = '%.3f' % ((time.time() - start) * 1000)
-        self.logger.debug(f"[Experiment] Fetch complete in {elapsed} ms")
-        json_response = json.loads(response.read().decode("utf8"))
-        variants = self.__parse_json_variants(json_response)
-        self.logger.debug(f"[Experiment] Fetched variants: {json.dumps(variants, default=str)}")
-        return variants
+        try:
+            response = conn.request('POST', '/sdk/vardata', body, headers)
+            elapsed = '%.3f' % ((time.time() - start) * 1000)
+            self.logger.debug(f"[Experiment] Fetch complete in {elapsed} ms")
+            json_response = json.loads(response.read().decode("utf8"))
+            variants = self.__parse_json_variants(json_response)
+            self.logger.debug(f"[Experiment] Fetched variants: {json.dumps(variants, default=str)}")
+            return variants
+        finally:
+            self._connection_pool.release(conn)
 
     def __setup_connection_pool(self):
         scheme, _, host = self.config.server_url.split('/', 3)
-        timeout = int(self.config.fetch_timeout_millis / 1000)
+        timeout = self.config.fetch_timeout_millis / 1000
         self._connection_pool = HTTPConnectionPool(host, max_size=1, idle_timeout=30,
                                                    read_timeout=timeout, scheme=scheme)
 

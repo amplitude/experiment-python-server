@@ -35,6 +35,12 @@ class ClientTestCase(unittest.TestCase):
         user = User(user_id='test_user')
         self.client.fetch_async(user, self.callback_for_async)
 
+    def test_fetch_failed_with_retry(self):
+        with Client(API_KEY, Config(debug=False, fetch_retries=1, fetch_timeout_millis=1)) as client:
+            user = User(user_id='test_user')
+            variants = client.fetch(user)
+            self.assertEqual({}, variants)
+
 
 if __name__ == '__main__':
     unittest.main()
