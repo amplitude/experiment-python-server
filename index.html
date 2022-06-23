@@ -32,8 +32,53 @@
 </a>
 <br />
 </p>
-<h1 id="experiment-python-server">experiment-python-server</h1>
+<p><a href="https://badge.fury.io/py/amplitude-experiment"><img alt="PyPI version" src="https://badge.fury.io/py/amplitude-experiment.svg"></a></p>
+<h1 id="experiment-python-sdk">Experiment Python SDK</h1>
 <p>Amplitude Python Server SDK for Experiment.</p>
+<h2 id="installation">Installation</h2>
+<pre><code class="language-python">pip install amplitude-experiment
+</code></pre>
+<h2 id="quick-start">Quick Start</h2>
+<pre><code class="language-python">from amplitude_experiment import Experiment, Config, Client, User
+
+# (1) Get your deployment's API key
+apiKey = 'YOUR-API-KEY'
+
+ # (2) Initialize the experiment client
+experiment = Experiment.initialize(api_key)
+
+# (3) Fetch variants for a user
+user = User(device_id=&quot;abcdefg&quot;, user_id=&quot;user@company.com&quot;, user_properties={
+    'premium': True
+})
+
+# (4) Lookup a flag's variant
+#
+# To fetch synchronous
+variants = experiment.fetch(user)
+variant = variants['YOUR-FLAG-KEY']
+if variant:
+    if variant.value == 'on':
+        # Flag is on
+    else:
+        # Flag is off
+
+# To fetch asynchronous
+experiment.fetch_async(user, fetch_callback)
+
+def fetch_callback(user, variants):
+    variant = variants['YOUR-FLAG-KEY']
+    if variant:
+        if variant.value == 'on':
+            # Flag is on
+        else:
+            # Flag is off
+
+
+</code></pre>
+<h2 id="more-information">More Information</h2>
+<p>Please visit our :100:<a href="https://www.docs.developers.amplitude.com/experiment/sdks/python-sdk/">Developer Center</a> for more instructions on using our the SDK.</p>
+<p>See our <a href="https://amplitude.github.io/experiment-python-server/">Experiment Python SDK Docs</a> for a list and description of all available SDK methods.</p>
 <h2 id="need-help">Need Help?</h2>
 <p>If you have any problems or issues over our SDK, feel free to <a href="https://github.com/amplitude/experiments-python-server/issues/new">create a github issue</a> or submit a request on <a href="https://help.amplitude.com/hc/en-us/requests/new">Amplitude Help</a>.</p>
 <details class="source">
@@ -62,6 +107,10 @@ from .cookie import AmplitudeCookie</code></pre>
 <div class="desc"></div>
 </dd>
 <dt><code class="name"><a title="amplitude_experiment.config" href="config.html">amplitude_experiment.config</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="amplitude_experiment.connection_pool" href="connection_pool.html">amplitude_experiment.connection_pool</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -98,7 +147,10 @@ from .cookie import AmplitudeCookie</code></pre>
 <h1>Index</h1>
 <div class="toc">
 <ul>
-<li><a href="#experiment-python-server">experiment-python-server</a><ul>
+<li><a href="#experiment-python-sdk">Experiment Python SDK</a><ul>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#quick-start">Quick Start</a></li>
+<li><a href="#more-information">More Information</a></li>
 <li><a href="#need-help">Need Help?</a></li>
 </ul>
 </li>
@@ -109,6 +161,7 @@ from .cookie import AmplitudeCookie</code></pre>
 <ul>
 <li><code><a title="amplitude_experiment.client" href="client.html">amplitude_experiment.client</a></code></li>
 <li><code><a title="amplitude_experiment.config" href="config.html">amplitude_experiment.config</a></code></li>
+<li><code><a title="amplitude_experiment.connection_pool" href="connection_pool.html">amplitude_experiment.connection_pool</a></code></li>
 <li><code><a title="amplitude_experiment.cookie" href="cookie.html">amplitude_experiment.cookie</a></code></li>
 <li><code><a title="amplitude_experiment.factory" href="factory.html">amplitude_experiment.factory</a></code></li>
 <li><code><a title="amplitude_experiment.user" href="user.html">amplitude_experiment.user</a></code></li>

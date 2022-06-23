@@ -26,16 +26,18 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">import threading
+<pre><code class="python">import json
+import logging
+import threading
 import time
 from time import sleep
+from typing import Any
+
 from .config import Config
-from .version import __version__
-from .variant import Variant
+from .connection_pool import HTTPConnectionPool
 from .user import User
-import http.client
-import json
-import logging
+from .variant import Variant
+from .version import __version__
 
 
 class Client:
@@ -59,6 +61,7 @@ class Client:
         self.logger.addHandler(logging.StreamHandler())
         if self.config.debug:
             self.logger.setLevel(logging.DEBUG)
+        self.__setup_connection_pool()
 
     def fetch(self, user: User):
         &#34;&#34;&#34;
@@ -100,9 +103,9 @@ class Client:
     def __fetch_internal(self, user):
         self.logger.debug(f&#34;[Experiment] Fetching variants for user: {user}&#34;)
         try:
-            return self.__do_fetch(user, self.config.fetch_timeout_millis)
+            return self.__do_fetch(user)
         except Exception as e:
-            self.logger.error(f&#34;Experiment] Fetch failed: {e}&#34;)
+            self.logger.error(f&#34;[Experiment] Fetch failed: {e}&#34;)
             return self.__retry_fetch(user)
 
     def __retry_fetch(self, user):
@@ -114,7 +117,7 @@ class Client:
         for i in range(self.config.fetch_retries):
             sleep(delay_millis / 1000.0)
             try:
-                return self.__do_fetch(user, self.config.fetch_timeout_millis)
+                return self.__do_fetch(user)
             except Exception as e:
                 self.logger.error(f&#34;[Experiment] Retry failed: {e}&#34;)
                 err = e
@@ -122,31 +125,47 @@ class Client:
                                self.config.fetch_retry_backoff_max_millis)
         raise err
 
-    def __do_fetch(self, user, timeout_millis):
+    def __do_fetch(self, user):
         start = time.time()
         user_context = self.__add_context(user)
         headers = {
             &#39;Authorization&#39;: f&#34;Api-Key {self.api_key}&#34;,
             &#39;Content-Type&#39;: &#39;application/json;charset=utf-8&#39;
         }
-        scheme, _, host = self.config.server_url.split(&#39;/&#39;, 3)
-        Connection = http.client.HTTPConnection if scheme == &#39;http:&#39; else http.client.HTTPSConnection
-        conn = Connection(host, timeout=timeout_millis / 1000)
-        conn.connect()
+        conn = self._connection_pool.acquire()
         body = user_context.to_json().encode(&#39;utf8&#39;)
         if len(body) &gt; 8000:
             self.logger.warning(f&#34;[Experiment] encoded user object length ${len(body)} &#34;
                                 f&#34;cannot be cached by CDN; must be &lt; 8KB&#34;)
         self.logger.debug(f&#34;[Experiment] Fetch variants for user: {str(user_context)}&#34;)
-        conn.request(&#39;POST&#39;, &#39;/sdk/vardata&#39;, body, headers)
-        response = conn.getresponse()
-        elapsed = &#39;%.3f&#39; % ((time.time() - start) * 1000)
-        self.logger.debug(f&#34;[Experiment] Fetch complete in {elapsed} ms&#34;)
-        json_response = json.loads(response.read().decode(&#34;utf8&#34;))
-        variants = self.__parse_json_variants(json_response)
-        self.logger.debug(f&#34;[Experiment] Fetched variants: {json.dumps(variants, default=str)}&#34;)
-        conn.close()
-        return variants
+        try:
+            response = conn.request(&#39;POST&#39;, &#39;/sdk/vardata&#39;, body, headers)
+            elapsed = &#39;%.3f&#39; % ((time.time() - start) * 1000)
+            self.logger.debug(f&#34;[Experiment] Fetch complete in {elapsed} ms&#34;)
+            json_response = json.loads(response.read().decode(&#34;utf8&#34;))
+            variants = self.__parse_json_variants(json_response)
+            self.logger.debug(f&#34;[Experiment] Fetched variants: {json.dumps(variants, default=str)}&#34;)
+            return variants
+        finally:
+            self._connection_pool.release(conn)
+
+    def __setup_connection_pool(self):
+        scheme, _, host = self.config.server_url.split(&#39;/&#39;, 3)
+        timeout = self.config.fetch_timeout_millis / 1000
+        self._connection_pool = HTTPConnectionPool(host, max_size=1, idle_timeout=30,
+                                                   read_timeout=timeout, scheme=scheme)
+
+    def close(self) -&gt; None:
+        &#34;&#34;&#34;
+        Close resource like connection pool with client
+        &#34;&#34;&#34;
+        self._connection_pool.close()
+
+    def __enter__(self) -&gt; &#39;Client&#39;:
+        return self
+
+    def __exit__(self, *exit_info: Any) -&gt; None:
+        self.close()
 
     def __add_context(self, user):
         user = user or {}
@@ -212,6 +231,7 @@ config (Config): Config Object</p>
         self.logger.addHandler(logging.StreamHandler())
         if self.config.debug:
             self.logger.setLevel(logging.DEBUG)
+        self.__setup_connection_pool()
 
     def fetch(self, user: User):
         &#34;&#34;&#34;
@@ -253,9 +273,9 @@ config (Config): Config Object</p>
     def __fetch_internal(self, user):
         self.logger.debug(f&#34;[Experiment] Fetching variants for user: {user}&#34;)
         try:
-            return self.__do_fetch(user, self.config.fetch_timeout_millis)
+            return self.__do_fetch(user)
         except Exception as e:
-            self.logger.error(f&#34;Experiment] Fetch failed: {e}&#34;)
+            self.logger.error(f&#34;[Experiment] Fetch failed: {e}&#34;)
             return self.__retry_fetch(user)
 
     def __retry_fetch(self, user):
@@ -267,7 +287,7 @@ config (Config): Config Object</p>
         for i in range(self.config.fetch_retries):
             sleep(delay_millis / 1000.0)
             try:
-                return self.__do_fetch(user, self.config.fetch_timeout_millis)
+                return self.__do_fetch(user)
             except Exception as e:
                 self.logger.error(f&#34;[Experiment] Retry failed: {e}&#34;)
                 err = e
@@ -275,31 +295,47 @@ config (Config): Config Object</p>
                                self.config.fetch_retry_backoff_max_millis)
         raise err
 
-    def __do_fetch(self, user, timeout_millis):
+    def __do_fetch(self, user):
         start = time.time()
         user_context = self.__add_context(user)
         headers = {
             &#39;Authorization&#39;: f&#34;Api-Key {self.api_key}&#34;,
             &#39;Content-Type&#39;: &#39;application/json;charset=utf-8&#39;
         }
-        scheme, _, host = self.config.server_url.split(&#39;/&#39;, 3)
-        Connection = http.client.HTTPConnection if scheme == &#39;http:&#39; else http.client.HTTPSConnection
-        conn = Connection(host, timeout=timeout_millis / 1000)
-        conn.connect()
+        conn = self._connection_pool.acquire()
         body = user_context.to_json().encode(&#39;utf8&#39;)
         if len(body) &gt; 8000:
             self.logger.warning(f&#34;[Experiment] encoded user object length ${len(body)} &#34;
                                 f&#34;cannot be cached by CDN; must be &lt; 8KB&#34;)
         self.logger.debug(f&#34;[Experiment] Fetch variants for user: {str(user_context)}&#34;)
-        conn.request(&#39;POST&#39;, &#39;/sdk/vardata&#39;, body, headers)
-        response = conn.getresponse()
-        elapsed = &#39;%.3f&#39; % ((time.time() - start) * 1000)
-        self.logger.debug(f&#34;[Experiment] Fetch complete in {elapsed} ms&#34;)
-        json_response = json.loads(response.read().decode(&#34;utf8&#34;))
-        variants = self.__parse_json_variants(json_response)
-        self.logger.debug(f&#34;[Experiment] Fetched variants: {json.dumps(variants, default=str)}&#34;)
-        conn.close()
-        return variants
+        try:
+            response = conn.request(&#39;POST&#39;, &#39;/sdk/vardata&#39;, body, headers)
+            elapsed = &#39;%.3f&#39; % ((time.time() - start) * 1000)
+            self.logger.debug(f&#34;[Experiment] Fetch complete in {elapsed} ms&#34;)
+            json_response = json.loads(response.read().decode(&#34;utf8&#34;))
+            variants = self.__parse_json_variants(json_response)
+            self.logger.debug(f&#34;[Experiment] Fetched variants: {json.dumps(variants, default=str)}&#34;)
+            return variants
+        finally:
+            self._connection_pool.release(conn)
+
+    def __setup_connection_pool(self):
+        scheme, _, host = self.config.server_url.split(&#39;/&#39;, 3)
+        timeout = self.config.fetch_timeout_millis / 1000
+        self._connection_pool = HTTPConnectionPool(host, max_size=1, idle_timeout=30,
+                                                   read_timeout=timeout, scheme=scheme)
+
+    def close(self) -&gt; None:
+        &#34;&#34;&#34;
+        Close resource like connection pool with client
+        &#34;&#34;&#34;
+        self._connection_pool.close()
+
+    def __enter__(self) -&gt; &#39;Client&#39;:
+        return self
+
+    def __exit__(self, *exit_info: Any) -&gt; None:
+        self.close()
 
     def __add_context(self, user):
         user = user or {}
@@ -319,6 +355,22 @@ config (Config): Config Object</p>
 </details>
 <h3>Methods</h3>
 <dl>
+<dt id="amplitude_experiment.client.Client.close"><code class="name flex">
+<span>def <span class="ident">close</span></span>(<span>self) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Close resource like connection pool with client</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def close(self) -&gt; None:
+    &#34;&#34;&#34;
+    Close resource like connection pool with client
+    &#34;&#34;&#34;
+    self._connection_pool.close()</code></pre>
+</details>
+</dd>
 <dt id="amplitude_experiment.client.Client.fetch"><code class="name flex">
 <span>def <span class="ident">fetch</span></span>(<span>self, user: <a title="amplitude_experiment.user.User" href="user.html#amplitude_experiment.user.User">User</a>)</span>
 </code></dt>
@@ -393,6 +445,7 @@ callback (callable): Callback function, takes user and variants arguments</p></d
 <li>
 <h4><code><a title="amplitude_experiment.client.Client" href="#amplitude_experiment.client.Client">Client</a></code></h4>
 <ul class="">
+<li><code><a title="amplitude_experiment.client.Client.close" href="#amplitude_experiment.client.Client.close">close</a></code></li>
 <li><code><a title="amplitude_experiment.client.Client.fetch" href="#amplitude_experiment.client.Client.fetch">fetch</a></code></li>
 <li><code><a title="amplitude_experiment.client.Client.fetch_async" href="#amplitude_experiment.client.Client.fetch_async">fetch_async</a></code></li>
 </ul>
