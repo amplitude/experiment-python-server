@@ -805,7 +805,7 @@ del loaderclass
 
 # End loader
 
-add_library_search_dirs(['./lib'])
+add_library_search_dirs(['./src/amplitude_experiment/local/evaluation/lib'])
 
 # Begin libraries
 _libs["libevaluation_interop"] = load_library("libevaluation_interop")
