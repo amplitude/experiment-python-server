@@ -529,6 +529,7 @@ class LibraryLoader(object):
 
         for path in paths:
             try:
+                print(path)
                 return self.Lookup(path)
             except:
                 pass
