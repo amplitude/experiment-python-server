@@ -5,14 +5,14 @@ import time
 from time import sleep
 from typing import Any
 
-from .config import Config
-from .connection_pool import HTTPConnectionPool
-from .user import User
-from .variant import Variant
-from .version import __version__
+from .config import RemoteEvaluationConfig
+from ..connection_pool import HTTPConnectionPool
+from ..user import User
+from ..variant import Variant
+from ..version import __version__
 
 
-class Client:
+class RemoteEvaluationClient:
     """Main client for fetching variant data."""
 
     def __init__(self, api_key, config=None):
@@ -20,7 +20,7 @@ class Client:
         Creates a new Experiment Client instance.
             Parameters:
                 api_key (str): The environment API Key
-                config (Config): Config Object
+                config (RemoteEvaluationConfig): Config Object
 
             Returns:
                 Experiment Client instance.
@@ -28,7 +28,7 @@ class Client:
         if not api_key:
             raise ValueError("Experiment API key is empty")
         self.api_key = api_key
-        self.config = config or Config()
+        self.config = config or RemoteEvaluationConfig()
         self.logger = logging.getLogger("Amplitude")
         self.logger.addHandler(logging.StreamHandler())
         if self.config.debug:
@@ -133,7 +133,7 @@ class Client:
         """
         self._connection_pool.close()
 
-    def __enter__(self) -> 'Client':
+    def __enter__(self) -> 'RemoteEvaluationClient':
         return self
 
     def __exit__(self, *exit_info: Any) -> None:

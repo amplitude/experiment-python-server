@@ -601,6 +601,11 @@ class DarwinLibraryLoader(LibraryLoader):
             for name in names:
                 yield os.path.join(dir, name)
 
+        if platform.machine().startswith('arm'):
+            yield os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), f"./lib/macosArm64/{libname}.dylib"))
+        else:
+            yield os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), f"./lib/macosX64/{libname}.dylib"))
+
     def getdirs(self, libname):
         """Implements the dylib search as specified in Apple documentation:
 
@@ -760,6 +765,10 @@ class PosixLibraryLoader(LibraryLoader):
             # actually found multiple architectures or other library types that
             # may not load
             yield i
+        if platform.machine().startswith('arm'):
+            yield os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), f"./lib/linuxX64/{libname}.so"))
+        else:
+            yield os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), f"./lib/linuxX64/{libname}.so"))
 
 
 # Windows
