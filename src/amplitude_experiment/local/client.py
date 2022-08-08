@@ -1,6 +1,6 @@
 import json
 import logging
-from typing import Any
+from typing import Any, List
 
 from .config import LocalEvaluationConfig
 from ..user import User
@@ -28,7 +28,7 @@ class LocalEvaluationClient:
         self.__do_rules()
         self.poller.start()
 
-    def evaluate(self, user: User, flag_keys: list[str] = None):
+    def evaluate(self, user: User, flag_keys: List[str] = None):
         no_flag_keys = flag_keys is None or len(flag_keys) == 0
         rules = []
         for key, value in self.rules.items():
