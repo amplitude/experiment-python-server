@@ -1,5 +1,6 @@
 import json
 import logging
+from threading import Lock
 from typing import Any, List
 
 from .config import LocalEvaluationConfig
@@ -23,6 +24,7 @@ class LocalEvaluationClient:
         self.__setup_connection_pool()
         self.rules = {}
         self.poller = Poller(self.config.flag_config_polling_interval_millis / 1000, self.__do_rules)
+        self.lock = Lock()
 
     def start(self):
         self.__do_rules()
@@ -62,7 +64,10 @@ class LocalEvaluationClient:
             if response.status != 200:
                 raise Exception(f"flagConfigs - received error response: ${response.status}: ${response_body}")
             self.logger.debug(f"[Experiment] Got flag configs: {response_body}")
-            self.rules = self.__parse(json.loads(response_body))
+            parsed_rules = self.__parse(json.loads(response_body))
+            self.lock.acquire()
+            self.rules = parsed_rules
+            self.lock.release()
         finally:
             self._connection_pool.release(conn)
 
