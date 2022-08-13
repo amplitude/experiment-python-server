@@ -15,20 +15,24 @@ Amplitude Python Server SDK for Experiment.
 pip install amplitude-experiment
 ```
 
-## Quick Start
+## Remote Evaluation Quick Start
 ```python
-from amplitude_experiment import Experiment, Config, Client, User
+from amplitude_experiment import Experiment, RemoteEvaluationConfig, RemoteEvaluationClient, User
 
 # (1) Get your deployment's API key
 apiKey = 'YOUR-API-KEY'
 
- # (2) Initialize the experiment client
-experiment = Experiment.initialize(api_key)
+ # (2) Initialize the experiment remote evaluation
+experiment = Experiment.initialize_remote(api_key)
 
 # (3) Fetch variants for a user
-user = User(device_id="abcdefg", user_id="user@company.com", user_properties={
-    'premium': True
-})
+user = User(
+    device_id="abcdefg",
+    user_id="user@company.com",
+    user_properties={
+        'premium': True
+    }
+)
 
 # (4) Lookup a flag's variant
 #
@@ -52,8 +56,27 @@ def fetch_callback(user, variants):
         else:
             # Flag is off
 
-
 ```
+
+## Local Evaluation Quick Start
+```python
+# (1) Initialize the local evaluation client with a server deployment key.
+experiment = Experiment.initialize_local(api_key)
+
+# (2) Start the local evaluation client.
+experiment.start()
+
+# (3) Evaluate a user.
+user = User(
+    device_id="abcdefg",
+    user_id="user@company.com",
+    user_properties={
+        'premium': True
+    }
+)
+variants = experiment.evaluate(user)
+```
+
 ## More Information
 Please visit our :100:[Developer Center](https://www.docs.developers.amplitude.com/experiment/sdks/python-sdk/) for more instructions on using our the SDK.
 

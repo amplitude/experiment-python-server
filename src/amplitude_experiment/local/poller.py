@@ -3,6 +3,9 @@ import time
 
 
 class Poller:
+    """
+    Poller to run a function every interval
+    """
     def __init__(self, interval, function, *args, **kwargs):
         self._timer = None
         self.interval = interval
