@@ -130,7 +130,7 @@ class HTTPConnectionPool:
         self.stop_clear_conn()
         pool, self._pool = self._pool, None
         for conn in pool:
-            conn.stop()
+            conn.close()
 
     def clear_idle_conn(self) -> None:
         if self.is_closed:
