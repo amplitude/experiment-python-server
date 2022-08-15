@@ -15,7 +15,7 @@ class LocalEvaluationClientTestCase(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls) -> None:
-        cls._local_evaluation_client.close()
+        cls._local_evaluation_client.stop()
 
     def test_initialize_raise_error(self):
         self.assertRaises(ValueError, LocalEvaluationClient, "")

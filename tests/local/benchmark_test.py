@@ -62,7 +62,7 @@ class BenchmarkTestCase(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls) -> None:
-        cls._local_evaluation_client.close()
+        cls._local_evaluation_client.stop()
 
     def test_evaluate_benchmark_1_flag_smaller_than_10_ms(self):
         user = random_experiment_user()

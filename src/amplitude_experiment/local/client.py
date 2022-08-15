@@ -36,16 +36,12 @@ class LocalEvaluationClient:
         self.rules = {}
         self.poller = Poller(self.config.flag_config_polling_interval_millis / 1000, self.__do_rules)
         self.lock = Lock()
-        self.is_running = False
 
     def start(self):
         """
         Fetch initial flag configurations and start polling for updates. You must call this function to begin
         polling for flag config updates.
         """
-        if self.is_running:
-            return
-        self.is_running = True
         self.__do_rules()
         self.poller.start()
 
@@ -111,16 +107,15 @@ class LocalEvaluationClient:
         self._connection_pool = HTTPConnectionPool(host, max_size=1, idle_timeout=30,
                                                    read_timeout=timeout, scheme=scheme)
 
-    def close(self) -> None:
+    def stop(self) -> None:
         """
         Stop polling for flag configurations. Close resource like connection pool with client
         """
         self.poller.stop()
         self._connection_pool.close()
-        self.is_running = False
 
     def __enter__(self) -> 'LocalEvaluationClient':
         return self
 
     def __exit__(self, *exit_info: Any) -> None:
-        self.close()
+        self.stop()
