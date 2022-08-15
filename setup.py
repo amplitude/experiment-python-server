@@ -35,6 +35,7 @@ setup(
     keywords="amplitude, python, backend",
     package_dir={"": "src"},
     packages=["amplitude_experiment"],
+    include_package_data=True,
     python_requires=">=3.6, <4",
     license='MIT License',
     project_urls={

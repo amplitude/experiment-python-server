@@ -15,7 +15,7 @@ class FactoryTestCase(unittest.TestCase):
         client1 = Experiment.initialize_local(API_KEY)
         client2 = Experiment.initialize_local(API_KEY)
         self.assertEqual(client1, client2)
-        client1.close()
+        client1.stop()
 
 
 if __name__ == '__main__':

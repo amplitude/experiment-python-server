@@ -1,7 +1,7 @@
 import json
 import logging
 from threading import Lock
-from typing import Any, List
+from typing import Any, List, Dict
 
 from .config import LocalEvaluationConfig
 from ..user import User
@@ -12,7 +12,18 @@ from ..variant import Variant
 
 
 class LocalEvaluationClient:
-    def __init__(self, api_key, config=None):
+    """Experiment client for evaluating variants for a user locally."""
+
+    def __init__(self, api_key: str, config : LocalEvaluationConfig = None):
+        """
+        Creates a new Experiment LocalEvaluationClient instance.
+            Parameters:
+                api_key (str): The environment API Key
+                config (LocalEvaluationConfig): Config Object
+
+            Returns:
+                Experiment Client instance.
+        """
         if not api_key:
             raise ValueError("Experiment API key is empty")
         self.api_key = api_key
@@ -27,10 +38,23 @@ class LocalEvaluationClient:
         self.lock = Lock()
 
     def start(self):
+        """
+        Fetch initial flag configurations and start polling for updates. You must call this function to begin
+        polling for flag config updates.
+        """
         self.__do_rules()
         self.poller.start()
 
-    def evaluate(self, user: User, flag_keys: List[str] = None):
+    def evaluate(self, user: User, flag_keys: List[str] = None) -> Dict[str, Variant]:
+        """
+         Locally evaluates flag variants for a user.
+         Parameters:
+                user (User): The user to evaluate
+                flag_keys (List[str]): The flags to evaluate with the user. If empty, all flags from the flag cache are evaluated.
+
+            Returns:
+                The evaluated variants.
+        """
         no_flag_keys = flag_keys is None or len(flag_keys) == 0
         rules = []
         for key, value in self.rules.items():
@@ -59,10 +83,10 @@ class LocalEvaluationClient:
         body = None
         self.logger.debug('[Experiment] Get flag configs')
         try:
-            response = conn.request('POST', '/sdk/rules?eval_mode=local', body, headers)
+            response = conn.request('GET', '/sdk/rules?eval_mode=local', body, headers)
             response_body = response.read().decode("utf8")
             if response.status != 200:
-                raise Exception(f"flagConfigs - received error response: ${response.status}: ${response_body}")
+                raise Exception(f"[Experiment] Get flagConfigs - received error response: ${response.status}: ${response_body}")
             self.logger.debug(f"[Experiment] Got flag configs: {response_body}")
             parsed_rules = self.__parse(json.loads(response_body))
             self.lock.acquire()
@@ -83,9 +107,9 @@ class LocalEvaluationClient:
         self._connection_pool = HTTPConnectionPool(host, max_size=1, idle_timeout=30,
                                                    read_timeout=timeout, scheme=scheme)
 
-    def close(self) -> None:
+    def stop(self) -> None:
         """
-        Close resource like connection pool with client
+        Stop polling for flag configurations. Close resource like connection pool with client
         """
         self.poller.stop()
         self._connection_pool.close()
@@ -94,4 +118,4 @@ class LocalEvaluationClient:
         return self
 
     def __exit__(self, *exit_info: Any) -> None:
-        self.close()
+        self.stop()

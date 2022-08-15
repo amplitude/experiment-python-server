@@ -1,5 +1,5 @@
 class RemoteEvaluationConfig:
-    """Experiment Client Configuration"""
+    """Experiment Remote Client Configuration"""
 
     DEFAULT_SERVER_URL = 'https://api.lab.amplitude.com'
 
