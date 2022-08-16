@@ -2,6 +2,15 @@
 
 <!--next-version-placeholder-->
 
+## v0.2.0 (2022-08-16)
+### Feature
+* Testing, comments and prepare for release ([#13](https://github.com/amplitude/experiment-python-server/issues/13)) ([`1f38faf`](https://github.com/amplitude/experiment-python-server/commit/1f38faf19bd37e700fa587a738a35e797a6d847f))
+* Add local evaluation bootstrap ([#12](https://github.com/amplitude/experiment-python-server/issues/12)) ([`db8c20b`](https://github.com/amplitude/experiment-python-server/commit/db8c20b22317282bafa3955b5a6f98ad6fe05889))
+* Add local evaluation library ([#11](https://github.com/amplitude/experiment-python-server/issues/11)) ([`d6aea11`](https://github.com/amplitude/experiment-python-server/commit/d6aea11c806ff2525554631cba1a76522b4b4f31))
+
+### Fix
+* Quick fix for ide rename ([#14](https://github.com/amplitude/experiment-python-server/issues/14)) ([`c57610a`](https://github.com/amplitude/experiment-python-server/commit/c57610aac24a2c3202909b597c1f8c76f7bebec6))
+
 ## v0.1.0 (2022-06-08)
 ### Feature
 * Timeout tesst and minor fix ([#9](https://github.com/amplitude/experiment-python-server/issues/9)) ([`d6d6e1a`](https://github.com/amplitude/experiment-python-server/commit/d6d6e1aaed64c5486c5cb2a75c40536dadddd78c))
