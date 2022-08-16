@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
-<title>amplitude_experiment.version API documentation</title>
+<title>amplitude_experiment.local.evaluation.evaluation API documentation</title>
 <meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
@@ -19,14 +19,28 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>amplitude_experiment.version</code></h1>
+<h1 class="title">Module <code>amplitude_experiment.local.evaluation.evaluation</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">__version__ = &#34;0.2.0&#34;</code></pre>
+<pre><code class="python">from .libevaluation_interop import libevaluation_interop_symbols
+
+
+def evaluate(rules: str, user: str) -&gt; str:
+    &#34;&#34;&#34;
+    Local evaluation wrapper.
+        Parameters:
+            rules (str): rules JSON string
+            user (str): user JSON string
+
+        Returns:
+            Evaluation results with variants in JSON
+    &#34;&#34;&#34;
+    result = libevaluation_interop_symbols().contents.kotlin.root.evaluate(rules, user)
+    return str(result, &#39;utf-8&#39;)</code></pre>
 </details>
 </section>
 <section>
@@ -34,6 +48,38 @@
 <section>
 </section>
 <section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.evaluation.evaluate"><code class="name flex">
+<span>def <span class="ident">evaluate</span></span>(<span>rules: str, user: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Local evaluation wrapper.
+Parameters:
+rules (str): rules JSON string
+user (str): user JSON string</p>
+<pre><code>Returns:
+    Evaluation results with variants in JSON
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def evaluate(rules: str, user: str) -&gt; str:
+    &#34;&#34;&#34;
+    Local evaluation wrapper.
+        Parameters:
+            rules (str): rules JSON string
+            user (str): user JSON string
+
+        Returns:
+            Evaluation results with variants in JSON
+    &#34;&#34;&#34;
+    result = libevaluation_interop_symbols().contents.kotlin.root.evaluate(rules, user)
+    return str(result, &#39;utf-8&#39;)</code></pre>
+</details>
+</dd>
+</dl>
 </section>
 <section>
 </section>
@@ -46,7 +92,12 @@
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="amplitude_experiment" href="index.html">amplitude_experiment</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation" href="index.html">amplitude_experiment.local.evaluation</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="amplitude_experiment.local.evaluation.evaluation.evaluate" href="#amplitude_experiment.local.evaluation.evaluation.evaluate">evaluate</a></code></li>
 </ul>
 </li>
 </ul>

@@ -1,0 +1,3746 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>amplitude_experiment.local.evaluation.libevaluation_interop API documentation</title>
+<meta name="description" content="Wrapper for libevaluation_interop_api.h …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>amplitude_experiment.local.evaluation.libevaluation_interop</code></h1>
+</header>
+<section id="section-intro">
+<p>Wrapper for libevaluation_interop_api.h</p>
+<p>Do not modify this file.</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">r&#34;&#34;&#34;Wrapper for libevaluation_interop_api.h
+
+Do not modify this file.
+&#34;&#34;&#34;
+
+__docformat__ = &#34;restructuredtext&#34;
+
+# Begin preamble for Python v(3, 2)
+
+import ctypes, os, sys
+from ctypes import *
+
+_int_types = (c_int16, c_int32)
+if hasattr(ctypes, &#34;c_int64&#34;):
+    # Some builds of ctypes apparently do not have c_int64
+    # defined; it&#39;s a pretty good bet that these builds do not
+    # have 64-bit pointers.
+    _int_types += (c_int64,)
+for t in _int_types:
+    if sizeof(t) == sizeof(c_size_t):
+        c_ptrdiff_t = t
+del t
+del _int_types
+
+
+class UserString:
+    def __init__(self, seq):
+        if isinstance(seq, bytes):
+            self.data = seq
+        elif isinstance(seq, UserString):
+            self.data = seq.data[:]
+        else:
+            self.data = str(seq).encode()
+
+    def __bytes__(self):
+        return self.data
+
+    def __str__(self):
+        return self.data.decode()
+
+    def __repr__(self):
+        return repr(self.data)
+
+    def __int__(self):
+        return int(self.data.decode())
+
+    def __long__(self):
+        return int(self.data.decode())
+
+    def __float__(self):
+        return float(self.data.decode())
+
+    def __complex__(self):
+        return complex(self.data.decode())
+
+    def __hash__(self):
+        return hash(self.data)
+
+    def __cmp__(self, string):
+        if isinstance(string, UserString):
+            return cmp(self.data, string.data)
+        else:
+            return cmp(self.data, string)
+
+    def __le__(self, string):
+        if isinstance(string, UserString):
+            return self.data &lt;= string.data
+        else:
+            return self.data &lt;= string
+
+    def __lt__(self, string):
+        if isinstance(string, UserString):
+            return self.data &lt; string.data
+        else:
+            return self.data &lt; string
+
+    def __ge__(self, string):
+        if isinstance(string, UserString):
+            return self.data &gt;= string.data
+        else:
+            return self.data &gt;= string
+
+    def __gt__(self, string):
+        if isinstance(string, UserString):
+            return self.data &gt; string.data
+        else:
+            return self.data &gt; string
+
+    def __eq__(self, string):
+        if isinstance(string, UserString):
+            return self.data == string.data
+        else:
+            return self.data == string
+
+    def __ne__(self, string):
+        if isinstance(string, UserString):
+            return self.data != string.data
+        else:
+            return self.data != string
+
+    def __contains__(self, char):
+        return char in self.data
+
+    def __len__(self):
+        return len(self.data)
+
+    def __getitem__(self, index):
+        return self.__class__(self.data[index])
+
+    def __getslice__(self, start, end):
+        start = max(start, 0)
+        end = max(end, 0)
+        return self.__class__(self.data[start:end])
+
+    def __add__(self, other):
+        if isinstance(other, UserString):
+            return self.__class__(self.data + other.data)
+        elif isinstance(other, bytes):
+            return self.__class__(self.data + other)
+        else:
+            return self.__class__(self.data + str(other).encode())
+
+    def __radd__(self, other):
+        if isinstance(other, bytes):
+            return self.__class__(other + self.data)
+        else:
+            return self.__class__(str(other).encode() + self.data)
+
+    def __mul__(self, n):
+        return self.__class__(self.data * n)
+
+    __rmul__ = __mul__
+
+    def __mod__(self, args):
+        return self.__class__(self.data % args)
+
+    # the following methods are defined in alphabetical order:
+    def capitalize(self):
+        return self.__class__(self.data.capitalize())
+
+    def center(self, width, *args):
+        return self.__class__(self.data.center(width, *args))
+
+    def count(self, sub, start=0, end=sys.maxsize):
+        return self.data.count(sub, start, end)
+
+    def decode(self, encoding=None, errors=None):  # XXX improve this?
+        if encoding:
+            if errors:
+                return self.__class__(self.data.decode(encoding, errors))
+            else:
+                return self.__class__(self.data.decode(encoding))
+        else:
+            return self.__class__(self.data.decode())
+
+    def encode(self, encoding=None, errors=None):  # XXX improve this?
+        if encoding:
+            if errors:
+                return self.__class__(self.data.encode(encoding, errors))
+            else:
+                return self.__class__(self.data.encode(encoding))
+        else:
+            return self.__class__(self.data.encode())
+
+    def endswith(self, suffix, start=0, end=sys.maxsize):
+        return self.data.endswith(suffix, start, end)
+
+    def expandtabs(self, tabsize=8):
+        return self.__class__(self.data.expandtabs(tabsize))
+
+    def find(self, sub, start=0, end=sys.maxsize):
+        return self.data.find(sub, start, end)
+
+    def index(self, sub, start=0, end=sys.maxsize):
+        return self.data.index(sub, start, end)
+
+    def isalpha(self):
+        return self.data.isalpha()
+
+    def isalnum(self):
+        return self.data.isalnum()
+
+    def isdecimal(self):
+        return self.data.isdecimal()
+
+    def isdigit(self):
+        return self.data.isdigit()
+
+    def islower(self):
+        return self.data.islower()
+
+    def isnumeric(self):
+        return self.data.isnumeric()
+
+    def isspace(self):
+        return self.data.isspace()
+
+    def istitle(self):
+        return self.data.istitle()
+
+    def isupper(self):
+        return self.data.isupper()
+
+    def join(self, seq):
+        return self.data.join(seq)
+
+    def ljust(self, width, *args):
+        return self.__class__(self.data.ljust(width, *args))
+
+    def lower(self):
+        return self.__class__(self.data.lower())
+
+    def lstrip(self, chars=None):
+        return self.__class__(self.data.lstrip(chars))
+
+    def partition(self, sep):
+        return self.data.partition(sep)
+
+    def replace(self, old, new, maxsplit=-1):
+        return self.__class__(self.data.replace(old, new, maxsplit))
+
+    def rfind(self, sub, start=0, end=sys.maxsize):
+        return self.data.rfind(sub, start, end)
+
+    def rindex(self, sub, start=0, end=sys.maxsize):
+        return self.data.rindex(sub, start, end)
+
+    def rjust(self, width, *args):
+        return self.__class__(self.data.rjust(width, *args))
+
+    def rpartition(self, sep):
+        return self.data.rpartition(sep)
+
+    def rstrip(self, chars=None):
+        return self.__class__(self.data.rstrip(chars))
+
+    def split(self, sep=None, maxsplit=-1):
+        return self.data.split(sep, maxsplit)
+
+    def rsplit(self, sep=None, maxsplit=-1):
+        return self.data.rsplit(sep, maxsplit)
+
+    def splitlines(self, keepends=0):
+        return self.data.splitlines(keepends)
+
+    def startswith(self, prefix, start=0, end=sys.maxsize):
+        return self.data.startswith(prefix, start, end)
+
+    def strip(self, chars=None):
+        return self.__class__(self.data.strip(chars))
+
+    def swapcase(self):
+        return self.__class__(self.data.swapcase())
+
+    def title(self):
+        return self.__class__(self.data.title())
+
+    def translate(self, *args):
+        return self.__class__(self.data.translate(*args))
+
+    def upper(self):
+        return self.__class__(self.data.upper())
+
+    def zfill(self, width):
+        return self.__class__(self.data.zfill(width))
+
+
+class MutableString(UserString):
+    &#34;&#34;&#34;mutable string objects
+
+    Python strings are immutable objects.  This has the advantage, that
+    strings may be used as dictionary keys.  If this property isn&#39;t needed
+    and you insist on changing string values in place instead, you may cheat
+    and use MutableString.
+
+    But the purpose of this class is an educational one: to prevent
+    people from inventing their own mutable string class derived
+    from UserString and than forget thereby to remove (override) the
+    __hash__ method inherited from UserString.  This would lead to
+    errors that would be very hard to track down.
+
+    A faster and better solution is to rewrite your program using lists.&#34;&#34;&#34;
+
+    def __init__(self, string=&#34;&#34;):
+        self.data = string
+
+    def __hash__(self):
+        raise TypeError(&#34;unhashable type (it is mutable)&#34;)
+
+    def __setitem__(self, index, sub):
+        if index &lt; 0:
+            index += len(self.data)
+        if index &lt; 0 or index &gt;= len(self.data):
+            raise IndexError
+        self.data = self.data[:index] + sub + self.data[index + 1 :]
+
+    def __delitem__(self, index):
+        if index &lt; 0:
+            index += len(self.data)
+        if index &lt; 0 or index &gt;= len(self.data):
+            raise IndexError
+        self.data = self.data[:index] + self.data[index + 1 :]
+
+    def __setslice__(self, start, end, sub):
+        start = max(start, 0)
+        end = max(end, 0)
+        if isinstance(sub, UserString):
+            self.data = self.data[:start] + sub.data + self.data[end:]
+        elif isinstance(sub, bytes):
+            self.data = self.data[:start] + sub + self.data[end:]
+        else:
+            self.data = self.data[:start] + str(sub).encode() + self.data[end:]
+
+    def __delslice__(self, start, end):
+        start = max(start, 0)
+        end = max(end, 0)
+        self.data = self.data[:start] + self.data[end:]
+
+    def immutable(self):
+        return UserString(self.data)
+
+    def __iadd__(self, other):
+        if isinstance(other, UserString):
+            self.data += other.data
+        elif isinstance(other, bytes):
+            self.data += other
+        else:
+            self.data += str(other).encode()
+        return self
+
+    def __imul__(self, n):
+        self.data *= n
+        return self
+
+
+class String(MutableString, Union):
+
+    _fields_ = [(&#34;raw&#34;, POINTER(c_char)), (&#34;data&#34;, c_char_p)]
+
+    def __init__(self, obj=&#34;&#34;):
+        if isinstance(obj, (bytes, UserString)):
+            self.data = bytes(obj)
+        else:
+            self.raw = obj
+
+    def __len__(self):
+        return self.data and len(self.data) or 0
+
+    def from_param(cls, obj):
+        # Convert None or 0
+        if obj is None or obj == 0:
+            return cls(POINTER(c_char)())
+
+        # Convert from String
+        elif isinstance(obj, String):
+            return obj
+
+        # Convert from bytes
+        elif isinstance(obj, bytes):
+            return cls(obj)
+
+        # Convert from str
+        elif isinstance(obj, str):
+            return cls(obj.encode())
+
+        # Convert from c_char_p
+        elif isinstance(obj, c_char_p):
+            return obj
+
+        # Convert from POINTER(c_char)
+        elif isinstance(obj, POINTER(c_char)):
+            return obj
+
+        # Convert from raw pointer
+        elif isinstance(obj, int):
+            return cls(cast(obj, POINTER(c_char)))
+
+        # Convert from c_char array
+        elif isinstance(obj, c_char * len(obj)):
+            return obj
+
+        # Convert from object
+        else:
+            return String.from_param(obj._as_parameter_)
+
+    from_param = classmethod(from_param)
+
+
+def ReturnString(obj, func=None, arguments=None):
+    return String.from_param(obj)
+
+
+# As of ctypes 1.0, ctypes does not support custom error-checking
+# functions on callbacks, nor does it support custom datatypes on
+# callbacks, so we must ensure that all callbacks return
+# primitive datatypes.
+#
+# Non-primitive return values wrapped with UNCHECKED won&#39;t be
+# typechecked, and will be converted to c_void_p.
+def UNCHECKED(type):
+    if hasattr(type, &#34;_type_&#34;) and isinstance(type._type_, str) and type._type_ != &#34;P&#34;:
+        return type
+    else:
+        return c_void_p
+
+
+# ctypes doesn&#39;t have direct support for variadic functions, so we have to write
+# our own wrapper class
+class _variadic_function(object):
+    def __init__(self, func, restype, argtypes, errcheck):
+        self.func = func
+        self.func.restype = restype
+        self.argtypes = argtypes
+        if errcheck:
+            self.func.errcheck = errcheck
+
+    def _as_parameter_(self):
+        # So we can pass this variadic function as a function pointer
+        return self.func
+
+    def __call__(self, *args):
+        fixed_args = []
+        i = 0
+        for argtype in self.argtypes:
+            # Typecheck what we can
+            fixed_args.append(argtype.from_param(args[i]))
+            i += 1
+        return self.func(*fixed_args + list(args[i:]))
+
+
+def ord_if_char(value):
+    &#34;&#34;&#34;
+    Simple helper used for casts to simple builtin types:  if the argument is a
+    string type, it will be converted to it&#39;s ordinal value.
+
+    This function will raise an exception if the argument is string with more
+    than one characters.
+    &#34;&#34;&#34;
+    return ord(value) if (isinstance(value, bytes) or isinstance(value, str)) else value
+
+# End preamble
+
+_libs = {}
+_libdirs = [&#39;./lib&#39;]
+
+# Begin loader
+
+# ----------------------------------------------------------------------------
+# Copyright (c) 2008 David James
+# Copyright (c) 2006-2008 Alex Holkner
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+#  * Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+#  * Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in
+#    the documentation and/or other materials provided with the
+#    distribution.
+#  * Neither the name of pyglet nor the names of its
+#    contributors may be used to endorse or promote products
+#    derived from this software without specific prior written
+#    permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# &#34;AS IS&#34; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+# FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+# COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+# BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+# ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+# ----------------------------------------------------------------------------
+
+import os.path, re, sys, glob
+import platform
+import ctypes
+import ctypes.util
+
+
+def _environ_path(name):
+    if name in os.environ:
+        return os.environ[name].split(&#34;:&#34;)
+    else:
+        return []
+
+
+class LibraryLoader(object):
+    # library names formatted specifically for platforms
+    name_formats = [&#34;%s&#34;]
+
+    class Lookup(object):
+        mode = ctypes.DEFAULT_MODE
+
+        def __init__(self, path):
+            super(LibraryLoader.Lookup, self).__init__()
+            self.access = dict(cdecl=ctypes.CDLL(path, self.mode))
+
+        def get(self, name, calling_convention=&#34;cdecl&#34;):
+            if calling_convention not in self.access:
+                raise LookupError(
+                    &#34;Unknown calling convention &#39;{}&#39; for function &#39;{}&#39;&#34;.format(
+                        calling_convention, name
+                    )
+                )
+            return getattr(self.access[calling_convention], name)
+
+        def has(self, name, calling_convention=&#34;cdecl&#34;):
+            if calling_convention not in self.access:
+                return False
+            return hasattr(self.access[calling_convention], name)
+
+        def __getattr__(self, name):
+            return getattr(self.access[&#34;cdecl&#34;], name)
+
+    def __init__(self):
+        self.other_dirs = []
+
+    def __call__(self, libname):
+        &#34;&#34;&#34;Given the name of a library, load it.&#34;&#34;&#34;
+        paths = self.getpaths(libname)
+
+        for path in paths:
+            try:
+                return self.Lookup(path)
+            except:
+                pass
+
+        raise ImportError(&#34;Could not load %s.&#34; % libname)
+
+    def getpaths(self, libname):
+        &#34;&#34;&#34;Return a list of paths where the library might be found.&#34;&#34;&#34;
+        if os.path.isabs(libname):
+            yield libname
+        else:
+            # search through a prioritized series of locations for the library
+
+            # we first search any specific directories identified by user
+            for dir_i in self.other_dirs:
+                for fmt in self.name_formats:
+                    # dir_i should be absolute already
+                    yield os.path.join(dir_i, fmt % libname)
+
+            # then we search the directory where the generated python interface is stored
+            for fmt in self.name_formats:
+                yield os.path.abspath(os.path.join(os.path.dirname(__file__), fmt % libname))
+
+            # now, use the ctypes tools to try to find the library
+            for fmt in self.name_formats:
+                path = ctypes.util.find_library(fmt % libname)
+                if path:
+                    yield path
+
+            # then we search all paths identified as platform-specific lib paths
+            for path in self.getplatformpaths(libname):
+                yield path
+
+            # Finally, we&#39;ll try the users current working directory
+            for fmt in self.name_formats:
+                yield os.path.abspath(os.path.join(os.path.curdir, fmt % libname))
+
+    def getplatformpaths(self, libname):
+        return []
+
+
+# Darwin (Mac OS X)
+
+
+class DarwinLibraryLoader(LibraryLoader):
+    name_formats = [
+        &#34;lib%s.dylib&#34;,
+        &#34;lib%s.so&#34;,
+        &#34;lib%s.bundle&#34;,
+        &#34;%s.dylib&#34;,
+        &#34;%s.so&#34;,
+        &#34;%s.bundle&#34;,
+        &#34;%s&#34;,
+    ]
+
+    class Lookup(LibraryLoader.Lookup):
+        # Darwin requires dlopen to be called with mode RTLD_GLOBAL instead
+        # of the default RTLD_LOCAL.  Without this, you end up with
+        # libraries not being loadable, resulting in &#34;Symbol not found&#34;
+        # errors
+        mode = ctypes.RTLD_GLOBAL
+
+    def getplatformpaths(self, libname):
+        if os.path.pathsep in libname:
+            names = [libname]
+        else:
+            names = [format % libname for format in self.name_formats]
+
+        for dir in self.getdirs(libname):
+            for name in names:
+                yield os.path.join(dir, name)
+
+        if platform.machine().startswith(&#39;arm&#39;):
+            yield os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), f&#34;./lib/macosArm64/{libname}.dylib&#34;))
+        else:
+            yield os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), f&#34;./lib/macosX64/{libname}.dylib&#34;))
+
+    def getdirs(self, libname):
+        &#34;&#34;&#34;Implements the dylib search as specified in Apple documentation:
+
+        http://developer.apple.com/documentation/DeveloperTools/Conceptual/
+            DynamicLibraries/Articles/DynamicLibraryUsageGuidelines.html
+
+        Before commencing the standard search, the method first checks
+        the bundle&#39;s ``Frameworks`` directory if the application is running
+        within a bundle (OS X .app).
+        &#34;&#34;&#34;
+
+        dyld_fallback_library_path = _environ_path(&#34;DYLD_FALLBACK_LIBRARY_PATH&#34;)
+        if not dyld_fallback_library_path:
+            dyld_fallback_library_path = [os.path.expanduser(&#34;~/lib&#34;), &#34;/usr/local/lib&#34;, &#34;/usr/lib&#34;]
+
+        dirs = []
+
+        if &#34;/&#34; in libname:
+            dirs.extend(_environ_path(&#34;DYLD_LIBRARY_PATH&#34;))
+        else:
+            dirs.extend(_environ_path(&#34;LD_LIBRARY_PATH&#34;))
+            dirs.extend(_environ_path(&#34;DYLD_LIBRARY_PATH&#34;))
+
+        if hasattr(sys, &#34;frozen&#34;) and sys.frozen == &#34;macosx_app&#34;:
+            dirs.append(os.path.join(os.environ[&#34;RESOURCEPATH&#34;], &#34;..&#34;, &#34;Frameworks&#34;))
+
+        dirs.extend(dyld_fallback_library_path)
+
+        return dirs
+
+
+# Posix
+
+
+class PosixLibraryLoader(LibraryLoader):
+    _ld_so_cache = None
+
+    _include = re.compile(r&#34;^\s*include\s+(?P&lt;pattern&gt;.*)&#34;)
+
+    class _Directories(dict):
+        def __init__(self):
+            self.order = 0
+
+        def add(self, directory):
+            if len(directory) &gt; 1:
+                directory = directory.rstrip(os.path.sep)
+            # only adds and updates order if exists and not already in set
+            if not os.path.exists(directory):
+                return
+            o = self.setdefault(directory, self.order)
+            if o == self.order:
+                self.order += 1
+
+        def extend(self, directories):
+            for d in directories:
+                self.add(d)
+
+        def ordered(self):
+            return (i[0] for i in sorted(self.items(), key=lambda D: D[1]))
+
+    def _get_ld_so_conf_dirs(self, conf, dirs):
+        &#34;&#34;&#34;
+        Recursive funtion to help parse all ld.so.conf files, including proper
+        handling of the `include` directive.
+        &#34;&#34;&#34;
+
+        try:
+            with open(conf) as f:
+                for D in f:
+                    D = D.strip()
+                    if not D:
+                        continue
+
+                    m = self._include.match(D)
+                    if not m:
+                        dirs.add(D)
+                    else:
+                        for D2 in glob.glob(m.group(&#34;pattern&#34;)):
+                            self._get_ld_so_conf_dirs(D2, dirs)
+        except IOError:
+            pass
+
+    def _create_ld_so_cache(self):
+        # Recreate search path followed by ld.so.  This is going to be
+        # slow to build, and incorrect (ld.so uses ld.so.cache, which may
+        # not be up-to-date).  Used only as fallback for distros without
+        # /sbin/ldconfig.
+        #
+        # We assume the DT_RPATH and DT_RUNPATH binary sections are omitted.
+
+        directories = self._Directories()
+        for name in (
+            &#34;LD_LIBRARY_PATH&#34;,
+            &#34;SHLIB_PATH&#34;,  # HPUX
+            &#34;LIBPATH&#34;,  # OS/2, AIX
+            &#34;LIBRARY_PATH&#34;,  # BE/OS
+        ):
+            if name in os.environ:
+                directories.extend(os.environ[name].split(os.pathsep))
+
+        self._get_ld_so_conf_dirs(&#34;/etc/ld.so.conf&#34;, directories)
+
+        bitage = platform.architecture()[0]
+
+        unix_lib_dirs_list = []
+        if bitage.startswith(&#34;64&#34;):
+            # prefer 64 bit if that is our arch
+            unix_lib_dirs_list += [&#34;/lib64&#34;, &#34;/usr/lib64&#34;]
+
+        # must include standard libs, since those paths are also used by 64 bit
+        # installs
+        unix_lib_dirs_list += [&#34;/lib&#34;, &#34;/usr/lib&#34;]
+        if sys.platform.startswith(&#34;linux&#34;):
+            # Try and support multiarch work in Ubuntu
+            # https://wiki.ubuntu.com/MultiarchSpec
+            if bitage.startswith(&#34;32&#34;):
+                # Assume Intel/AMD x86 compat
+                unix_lib_dirs_list += [&#34;/lib/i386-linux-gnu&#34;, &#34;/usr/lib/i386-linux-gnu&#34;]
+            elif bitage.startswith(&#34;64&#34;):
+                # Assume Intel/AMD x86 compat
+                unix_lib_dirs_list += [&#34;/lib/x86_64-linux-gnu&#34;, &#34;/usr/lib/x86_64-linux-gnu&#34;]
+            else:
+                # guess...
+                unix_lib_dirs_list += glob.glob(&#34;/lib/*linux-gnu&#34;)
+        directories.extend(unix_lib_dirs_list)
+
+        cache = {}
+        lib_re = re.compile(r&#34;lib(.*)\.s[ol]&#34;)
+        ext_re = re.compile(r&#34;\.s[ol]$&#34;)
+        for dir in directories.ordered():
+            try:
+                for path in glob.glob(&#34;%s/*.s[ol]*&#34; % dir):
+                    file = os.path.basename(path)
+
+                    # Index by filename
+                    cache_i = cache.setdefault(file, set())
+                    cache_i.add(path)
+
+                    # Index by library name
+                    match = lib_re.match(file)
+                    if match:
+                        library = match.group(1)
+                        cache_i = cache.setdefault(library, set())
+                        cache_i.add(path)
+            except OSError:
+                pass
+
+        self._ld_so_cache = cache
+
+    def getplatformpaths(self, libname):
+        if self._ld_so_cache is None:
+            self._create_ld_so_cache()
+
+        result = self._ld_so_cache.get(libname, set())
+        for i in result:
+            # we iterate through all found paths for library, since we may have
+            # actually found multiple architectures or other library types that
+            # may not load
+            yield i
+        if platform.machine().startswith(&#39;arm&#39;):
+            yield os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), f&#34;./lib/linuxX64/{libname}.so&#34;))
+        else:
+            yield os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), f&#34;./lib/linuxX64/{libname}.so&#34;))
+
+
+# Windows
+
+
+class WindowsLibraryLoader(LibraryLoader):
+    name_formats = [&#34;%s.dll&#34;, &#34;lib%s.dll&#34;, &#34;%slib.dll&#34;, &#34;%s&#34;]
+
+    class Lookup(LibraryLoader.Lookup):
+        def __init__(self, path):
+            super(WindowsLibraryLoader.Lookup, self).__init__(path)
+            self.access[&#34;stdcall&#34;] = ctypes.windll.LoadLibrary(path)
+
+
+# Platform switching
+
+# If your value of sys.platform does not appear in this dict, please contact
+# the Ctypesgen maintainers.
+
+loaderclass = {
+    &#34;darwin&#34;: DarwinLibraryLoader,
+    &#34;cygwin&#34;: WindowsLibraryLoader,
+    &#34;win32&#34;: WindowsLibraryLoader,
+    &#34;msys&#34;: WindowsLibraryLoader,
+}
+
+load_library = loaderclass.get(sys.platform, PosixLibraryLoader)()
+
+
+def add_library_search_dirs(other_dirs):
+    &#34;&#34;&#34;
+    Add libraries to search paths.
+    If library paths are relative, convert them to absolute with respect to this
+    file&#39;s directory
+    &#34;&#34;&#34;
+    for F in other_dirs:
+        if not os.path.isabs(F):
+            F = os.path.abspath(F)
+        load_library.other_dirs.append(F)
+
+
+del loaderclass
+
+# End loader
+
+add_library_search_dirs([&#39;./lib&#39;])
+
+# Begin libraries
+_libs[&#34;libevaluation_interop&#34;] = load_library(&#34;libevaluation_interop&#34;)
+
+# 1 libraries
+# End libraries
+
+# No modules
+
+libevaluation_interop_KBoolean = c_bool# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 9
+
+libevaluation_interop_KChar = c_ushort# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 11
+
+libevaluation_interop_KByte = c_char# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 12
+
+libevaluation_interop_KShort = c_short# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 13
+
+libevaluation_interop_KInt = c_int# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 14
+
+libevaluation_interop_KLong = c_longlong# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 15
+
+libevaluation_interop_KUByte = c_ubyte# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 16
+
+libevaluation_interop_KUShort = c_ushort# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 17
+
+libevaluation_interop_KUInt = c_uint# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 18
+
+libevaluation_interop_KULong = c_ulonglong# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 19
+
+libevaluation_interop_KFloat = c_float# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 20
+
+libevaluation_interop_KDouble = c_double# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 21
+
+libevaluation_interop_KVector128 = c_float# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 22
+
+libevaluation_interop_KNativePtr = POINTER(None)# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 23
+
+# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 24
+class struct_libevaluation_interop_KType(Structure):
+    pass
+
+libevaluation_interop_KType = struct_libevaluation_interop_KType# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 25
+
+# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 29
+class struct_anon_1(Structure):
+    pass
+
+struct_anon_1.__slots__ = [
+    &#39;pinned&#39;,
+]
+struct_anon_1._fields_ = [
+    (&#39;pinned&#39;, libevaluation_interop_KNativePtr),
+]
+
+libevaluation_interop_kref_kotlin_Byte = struct_anon_1# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 29
+
+# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 32
+class struct_anon_2(Structure):
+    pass
+
+struct_anon_2.__slots__ = [
+    &#39;pinned&#39;,
+]
+struct_anon_2._fields_ = [
+    (&#39;pinned&#39;, libevaluation_interop_KNativePtr),
+]
+
+libevaluation_interop_kref_kotlin_Short = struct_anon_2# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 32
+
+# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 35
+class struct_anon_3(Structure):
+    pass
+
+struct_anon_3.__slots__ = [
+    &#39;pinned&#39;,
+]
+struct_anon_3._fields_ = [
+    (&#39;pinned&#39;, libevaluation_interop_KNativePtr),
+]
+
+libevaluation_interop_kref_kotlin_Int = struct_anon_3# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 35
+
+# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 38
+class struct_anon_4(Structure):
+    pass
+
+struct_anon_4.__slots__ = [
+    &#39;pinned&#39;,
+]
+struct_anon_4._fields_ = [
+    (&#39;pinned&#39;, libevaluation_interop_KNativePtr),
+]
+
+libevaluation_interop_kref_kotlin_Long = struct_anon_4# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 38
+
+# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 41
+class struct_anon_5(Structure):
+    pass
+
+struct_anon_5.__slots__ = [
+    &#39;pinned&#39;,
+]
+struct_anon_5._fields_ = [
+    (&#39;pinned&#39;, libevaluation_interop_KNativePtr),
+]
+
+libevaluation_interop_kref_kotlin_Float = struct_anon_5# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 41
+
+# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 44
+class struct_anon_6(Structure):
+    pass
+
+struct_anon_6.__slots__ = [
+    &#39;pinned&#39;,
+]
+struct_anon_6._fields_ = [
+    (&#39;pinned&#39;, libevaluation_interop_KNativePtr),
+]
+
+libevaluation_interop_kref_kotlin_Double = struct_anon_6# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 44
+
+# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 47
+class struct_anon_7(Structure):
+    pass
+
+struct_anon_7.__slots__ = [
+    &#39;pinned&#39;,
+]
+struct_anon_7._fields_ = [
+    (&#39;pinned&#39;, libevaluation_interop_KNativePtr),
+]
+
+libevaluation_interop_kref_kotlin_Char = struct_anon_7# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 47
+
+# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 50
+class struct_anon_8(Structure):
+    pass
+
+struct_anon_8.__slots__ = [
+    &#39;pinned&#39;,
+]
+struct_anon_8._fields_ = [
+    (&#39;pinned&#39;, libevaluation_interop_KNativePtr),
+]
+
+libevaluation_interop_kref_kotlin_Boolean = struct_anon_8# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 50
+
+# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 53
+class struct_anon_9(Structure):
+    pass
+
+struct_anon_9.__slots__ = [
+    &#39;pinned&#39;,
+]
+struct_anon_9._fields_ = [
+    (&#39;pinned&#39;, libevaluation_interop_KNativePtr),
+]
+
+libevaluation_interop_kref_kotlin_Unit = struct_anon_9# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 53
+
+# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 73
+class struct_anon_10(Structure):
+    pass
+
+struct_anon_10.__slots__ = [
+    &#39;evaluate&#39;,
+]
+struct_anon_10._fields_ = [
+    (&#39;evaluate&#39;, CFUNCTYPE(UNCHECKED(c_char_p), String, String)),
+]
+
+# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 72
+class struct_anon_11(Structure):
+    pass
+
+struct_anon_11.__slots__ = [
+    &#39;root&#39;,
+]
+struct_anon_11._fields_ = [
+    (&#39;root&#39;, struct_anon_10),
+]
+
+# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 77
+class struct_anon_12(Structure):
+    pass
+
+struct_anon_12.__slots__ = [
+    &#39;DisposeStablePointer&#39;,
+    &#39;DisposeString&#39;,
+    &#39;IsInstance&#39;,
+    &#39;createNullableByte&#39;,
+    &#39;createNullableShort&#39;,
+    &#39;createNullableInt&#39;,
+    &#39;createNullableLong&#39;,
+    &#39;createNullableFloat&#39;,
+    &#39;createNullableDouble&#39;,
+    &#39;createNullableChar&#39;,
+    &#39;createNullableBoolean&#39;,
+    &#39;createNullableUnit&#39;,
+    &#39;kotlin&#39;,
+]
+struct_anon_12._fields_ = [
+    (&#39;DisposeStablePointer&#39;, CFUNCTYPE(UNCHECKED(None), libevaluation_interop_KNativePtr)),
+    (&#39;DisposeString&#39;, CFUNCTYPE(UNCHECKED(None), String)),
+    (&#39;IsInstance&#39;, CFUNCTYPE(UNCHECKED(libevaluation_interop_KBoolean), libevaluation_interop_KNativePtr, POINTER(libevaluation_interop_KType))),
+    (&#39;createNullableByte&#39;, CFUNCTYPE(UNCHECKED(libevaluation_interop_kref_kotlin_Byte), libevaluation_interop_KByte)),
+    (&#39;createNullableShort&#39;, CFUNCTYPE(UNCHECKED(libevaluation_interop_kref_kotlin_Short), libevaluation_interop_KShort)),
+    (&#39;createNullableInt&#39;, CFUNCTYPE(UNCHECKED(libevaluation_interop_kref_kotlin_Int), libevaluation_interop_KInt)),
+    (&#39;createNullableLong&#39;, CFUNCTYPE(UNCHECKED(libevaluation_interop_kref_kotlin_Long), libevaluation_interop_KLong)),
+    (&#39;createNullableFloat&#39;, CFUNCTYPE(UNCHECKED(libevaluation_interop_kref_kotlin_Float), libevaluation_interop_KFloat)),
+    (&#39;createNullableDouble&#39;, CFUNCTYPE(UNCHECKED(libevaluation_interop_kref_kotlin_Double), libevaluation_interop_KDouble)),
+    (&#39;createNullableChar&#39;, CFUNCTYPE(UNCHECKED(libevaluation_interop_kref_kotlin_Char), libevaluation_interop_KChar)),
+    (&#39;createNullableBoolean&#39;, CFUNCTYPE(UNCHECKED(libevaluation_interop_kref_kotlin_Boolean), libevaluation_interop_KBoolean)),
+    (&#39;createNullableUnit&#39;, CFUNCTYPE(UNCHECKED(libevaluation_interop_kref_kotlin_Unit), )),
+    (&#39;kotlin&#39;, struct_anon_11),
+]
+
+libevaluation_interop_ExportedSymbols = struct_anon_12# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 77
+
+# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 78
+if _libs[&#34;libevaluation_interop&#34;].has(&#34;libevaluation_interop_symbols&#34;, &#34;cdecl&#34;):
+    libevaluation_interop_symbols = _libs[&#34;libevaluation_interop&#34;].get(&#34;libevaluation_interop_symbols&#34;, &#34;cdecl&#34;)
+    libevaluation_interop_symbols.argtypes = []
+    libevaluation_interop_symbols.restype = POINTER(libevaluation_interop_ExportedSymbols)
+
+libevaluation_interop_KType = struct_libevaluation_interop_KType# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 24
+
+# No inserted files
+
+# No prefix-stripping</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.ReturnString"><code class="name flex">
+<span>def <span class="ident">ReturnString</span></span>(<span>obj, func=None, arguments=None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def ReturnString(obj, func=None, arguments=None):
+    return String.from_param(obj)</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UNCHECKED"><code class="name flex">
+<span>def <span class="ident">UNCHECKED</span></span>(<span>type)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def UNCHECKED(type):
+    if hasattr(type, &#34;_type_&#34;) and isinstance(type._type_, str) and type._type_ != &#34;P&#34;:
+        return type
+    else:
+        return c_void_p</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.add_library_search_dirs"><code class="name flex">
+<span>def <span class="ident">add_library_search_dirs</span></span>(<span>other_dirs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Add libraries to search paths.
+If library paths are relative, convert them to absolute with respect to this
+file's directory</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_library_search_dirs(other_dirs):
+    &#34;&#34;&#34;
+    Add libraries to search paths.
+    If library paths are relative, convert them to absolute with respect to this
+    file&#39;s directory
+    &#34;&#34;&#34;
+    for F in other_dirs:
+        if not os.path.isabs(F):
+            F = os.path.abspath(F)
+        load_library.other_dirs.append(F)</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.ord_if_char"><code class="name flex">
+<span>def <span class="ident">ord_if_char</span></span>(<span>value)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Simple helper used for casts to simple builtin types:
+if the argument is a
+string type, it will be converted to it's ordinal value.</p>
+<p>This function will raise an exception if the argument is string with more
+than one characters.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def ord_if_char(value):
+    &#34;&#34;&#34;
+    Simple helper used for casts to simple builtin types:  if the argument is a
+    string type, it will be converted to it&#39;s ordinal value.
+
+    This function will raise an exception if the argument is string with more
+    than one characters.
+    &#34;&#34;&#34;
+    return ord(value) if (isinstance(value, bytes) or isinstance(value, str)) else value</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.DarwinLibraryLoader"><code class="flex name class">
+<span>class <span class="ident">DarwinLibraryLoader</span></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DarwinLibraryLoader(LibraryLoader):
+    name_formats = [
+        &#34;lib%s.dylib&#34;,
+        &#34;lib%s.so&#34;,
+        &#34;lib%s.bundle&#34;,
+        &#34;%s.dylib&#34;,
+        &#34;%s.so&#34;,
+        &#34;%s.bundle&#34;,
+        &#34;%s&#34;,
+    ]
+
+    class Lookup(LibraryLoader.Lookup):
+        # Darwin requires dlopen to be called with mode RTLD_GLOBAL instead
+        # of the default RTLD_LOCAL.  Without this, you end up with
+        # libraries not being loadable, resulting in &#34;Symbol not found&#34;
+        # errors
+        mode = ctypes.RTLD_GLOBAL
+
+    def getplatformpaths(self, libname):
+        if os.path.pathsep in libname:
+            names = [libname]
+        else:
+            names = [format % libname for format in self.name_formats]
+
+        for dir in self.getdirs(libname):
+            for name in names:
+                yield os.path.join(dir, name)
+
+        if platform.machine().startswith(&#39;arm&#39;):
+            yield os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), f&#34;./lib/macosArm64/{libname}.dylib&#34;))
+        else:
+            yield os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), f&#34;./lib/macosX64/{libname}.dylib&#34;))
+
+    def getdirs(self, libname):
+        &#34;&#34;&#34;Implements the dylib search as specified in Apple documentation:
+
+        http://developer.apple.com/documentation/DeveloperTools/Conceptual/
+            DynamicLibraries/Articles/DynamicLibraryUsageGuidelines.html
+
+        Before commencing the standard search, the method first checks
+        the bundle&#39;s ``Frameworks`` directory if the application is running
+        within a bundle (OS X .app).
+        &#34;&#34;&#34;
+
+        dyld_fallback_library_path = _environ_path(&#34;DYLD_FALLBACK_LIBRARY_PATH&#34;)
+        if not dyld_fallback_library_path:
+            dyld_fallback_library_path = [os.path.expanduser(&#34;~/lib&#34;), &#34;/usr/local/lib&#34;, &#34;/usr/lib&#34;]
+
+        dirs = []
+
+        if &#34;/&#34; in libname:
+            dirs.extend(_environ_path(&#34;DYLD_LIBRARY_PATH&#34;))
+        else:
+            dirs.extend(_environ_path(&#34;LD_LIBRARY_PATH&#34;))
+            dirs.extend(_environ_path(&#34;DYLD_LIBRARY_PATH&#34;))
+
+        if hasattr(sys, &#34;frozen&#34;) and sys.frozen == &#34;macosx_app&#34;:
+            dirs.append(os.path.join(os.environ[&#34;RESOURCEPATH&#34;], &#34;..&#34;, &#34;Frameworks&#34;))
+
+        dirs.extend(dyld_fallback_library_path)
+
+        return dirs</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader" href="#amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader">LibraryLoader</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.DarwinLibraryLoader.Lookup"><code class="name">var <span class="ident">Lookup</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.DarwinLibraryLoader.name_formats"><code class="name">var <span class="ident">name_formats</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.DarwinLibraryLoader.getdirs"><code class="name flex">
+<span>def <span class="ident">getdirs</span></span>(<span>self, libname)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Implements the dylib search as specified in Apple documentation:</p>
+<p><a href="http://developer.apple.com/documentation/DeveloperTools/Conceptual/">http://developer.apple.com/documentation/DeveloperTools/Conceptual/</a>
+DynamicLibraries/Articles/DynamicLibraryUsageGuidelines.html</p>
+<p>Before commencing the standard search, the method first checks
+the bundle's <code>Frameworks</code> directory if the application is running
+within a bundle (OS X .app).</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getdirs(self, libname):
+    &#34;&#34;&#34;Implements the dylib search as specified in Apple documentation:
+
+    http://developer.apple.com/documentation/DeveloperTools/Conceptual/
+        DynamicLibraries/Articles/DynamicLibraryUsageGuidelines.html
+
+    Before commencing the standard search, the method first checks
+    the bundle&#39;s ``Frameworks`` directory if the application is running
+    within a bundle (OS X .app).
+    &#34;&#34;&#34;
+
+    dyld_fallback_library_path = _environ_path(&#34;DYLD_FALLBACK_LIBRARY_PATH&#34;)
+    if not dyld_fallback_library_path:
+        dyld_fallback_library_path = [os.path.expanduser(&#34;~/lib&#34;), &#34;/usr/local/lib&#34;, &#34;/usr/lib&#34;]
+
+    dirs = []
+
+    if &#34;/&#34; in libname:
+        dirs.extend(_environ_path(&#34;DYLD_LIBRARY_PATH&#34;))
+    else:
+        dirs.extend(_environ_path(&#34;LD_LIBRARY_PATH&#34;))
+        dirs.extend(_environ_path(&#34;DYLD_LIBRARY_PATH&#34;))
+
+    if hasattr(sys, &#34;frozen&#34;) and sys.frozen == &#34;macosx_app&#34;:
+        dirs.append(os.path.join(os.environ[&#34;RESOURCEPATH&#34;], &#34;..&#34;, &#34;Frameworks&#34;))
+
+    dirs.extend(dyld_fallback_library_path)
+
+    return dirs</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.DarwinLibraryLoader.getplatformpaths"><code class="name flex">
+<span>def <span class="ident">getplatformpaths</span></span>(<span>self, libname)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getplatformpaths(self, libname):
+    if os.path.pathsep in libname:
+        names = [libname]
+    else:
+        names = [format % libname for format in self.name_formats]
+
+    for dir in self.getdirs(libname):
+        for name in names:
+            yield os.path.join(dir, name)
+
+    if platform.machine().startswith(&#39;arm&#39;):
+        yield os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), f&#34;./lib/macosArm64/{libname}.dylib&#34;))
+    else:
+        yield os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), f&#34;./lib/macosX64/{libname}.dylib&#34;))</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader" href="#amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader">LibraryLoader</a></b></code>:
+<ul class="hlist">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader.getpaths" href="#amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader.getpaths">getpaths</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader"><code class="flex name class">
+<span>class <span class="ident">LibraryLoader</span></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class LibraryLoader(object):
+    # library names formatted specifically for platforms
+    name_formats = [&#34;%s&#34;]
+
+    class Lookup(object):
+        mode = ctypes.DEFAULT_MODE
+
+        def __init__(self, path):
+            super(LibraryLoader.Lookup, self).__init__()
+            self.access = dict(cdecl=ctypes.CDLL(path, self.mode))
+
+        def get(self, name, calling_convention=&#34;cdecl&#34;):
+            if calling_convention not in self.access:
+                raise LookupError(
+                    &#34;Unknown calling convention &#39;{}&#39; for function &#39;{}&#39;&#34;.format(
+                        calling_convention, name
+                    )
+                )
+            return getattr(self.access[calling_convention], name)
+
+        def has(self, name, calling_convention=&#34;cdecl&#34;):
+            if calling_convention not in self.access:
+                return False
+            return hasattr(self.access[calling_convention], name)
+
+        def __getattr__(self, name):
+            return getattr(self.access[&#34;cdecl&#34;], name)
+
+    def __init__(self):
+        self.other_dirs = []
+
+    def __call__(self, libname):
+        &#34;&#34;&#34;Given the name of a library, load it.&#34;&#34;&#34;
+        paths = self.getpaths(libname)
+
+        for path in paths:
+            try:
+                return self.Lookup(path)
+            except:
+                pass
+
+        raise ImportError(&#34;Could not load %s.&#34; % libname)
+
+    def getpaths(self, libname):
+        &#34;&#34;&#34;Return a list of paths where the library might be found.&#34;&#34;&#34;
+        if os.path.isabs(libname):
+            yield libname
+        else:
+            # search through a prioritized series of locations for the library
+
+            # we first search any specific directories identified by user
+            for dir_i in self.other_dirs:
+                for fmt in self.name_formats:
+                    # dir_i should be absolute already
+                    yield os.path.join(dir_i, fmt % libname)
+
+            # then we search the directory where the generated python interface is stored
+            for fmt in self.name_formats:
+                yield os.path.abspath(os.path.join(os.path.dirname(__file__), fmt % libname))
+
+            # now, use the ctypes tools to try to find the library
+            for fmt in self.name_formats:
+                path = ctypes.util.find_library(fmt % libname)
+                if path:
+                    yield path
+
+            # then we search all paths identified as platform-specific lib paths
+            for path in self.getplatformpaths(libname):
+                yield path
+
+            # Finally, we&#39;ll try the users current working directory
+            for fmt in self.name_formats:
+                yield os.path.abspath(os.path.join(os.path.curdir, fmt % libname))
+
+    def getplatformpaths(self, libname):
+        return []</code></pre>
+</details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="amplitude_experiment.local.evaluation.libevaluation_interop.DarwinLibraryLoader" href="#amplitude_experiment.local.evaluation.libevaluation_interop.DarwinLibraryLoader">DarwinLibraryLoader</a></li>
+<li><a title="amplitude_experiment.local.evaluation.libevaluation_interop.PosixLibraryLoader" href="#amplitude_experiment.local.evaluation.libevaluation_interop.PosixLibraryLoader">PosixLibraryLoader</a></li>
+<li><a title="amplitude_experiment.local.evaluation.libevaluation_interop.WindowsLibraryLoader" href="#amplitude_experiment.local.evaluation.libevaluation_interop.WindowsLibraryLoader">WindowsLibraryLoader</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader.Lookup"><code class="name">var <span class="ident">Lookup</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader.name_formats"><code class="name">var <span class="ident">name_formats</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader.getpaths"><code class="name flex">
+<span>def <span class="ident">getpaths</span></span>(<span>self, libname)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Return a list of paths where the library might be found.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getpaths(self, libname):
+    &#34;&#34;&#34;Return a list of paths where the library might be found.&#34;&#34;&#34;
+    if os.path.isabs(libname):
+        yield libname
+    else:
+        # search through a prioritized series of locations for the library
+
+        # we first search any specific directories identified by user
+        for dir_i in self.other_dirs:
+            for fmt in self.name_formats:
+                # dir_i should be absolute already
+                yield os.path.join(dir_i, fmt % libname)
+
+        # then we search the directory where the generated python interface is stored
+        for fmt in self.name_formats:
+            yield os.path.abspath(os.path.join(os.path.dirname(__file__), fmt % libname))
+
+        # now, use the ctypes tools to try to find the library
+        for fmt in self.name_formats:
+            path = ctypes.util.find_library(fmt % libname)
+            if path:
+                yield path
+
+        # then we search all paths identified as platform-specific lib paths
+        for path in self.getplatformpaths(libname):
+            yield path
+
+        # Finally, we&#39;ll try the users current working directory
+        for fmt in self.name_formats:
+            yield os.path.abspath(os.path.join(os.path.curdir, fmt % libname))</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader.getplatformpaths"><code class="name flex">
+<span>def <span class="ident">getplatformpaths</span></span>(<span>self, libname)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getplatformpaths(self, libname):
+    return []</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.MutableString"><code class="flex name class">
+<span>class <span class="ident">MutableString</span></span>
+<span>(</span><span>string='')</span>
+</code></dt>
+<dd>
+<div class="desc"><p>mutable string objects</p>
+<p>Python strings are immutable objects.
+This has the advantage, that
+strings may be used as dictionary keys.
+If this property isn't needed
+and you insist on changing string values in place instead, you may cheat
+and use MutableString.</p>
+<p>But the purpose of this class is an educational one: to prevent
+people from inventing their own mutable string class derived
+from UserString and than forget thereby to remove (override) the
+<strong>hash</strong> method inherited from UserString.
+This would lead to
+errors that would be very hard to track down.</p>
+<p>A faster and better solution is to rewrite your program using lists.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MutableString(UserString):
+    &#34;&#34;&#34;mutable string objects
+
+    Python strings are immutable objects.  This has the advantage, that
+    strings may be used as dictionary keys.  If this property isn&#39;t needed
+    and you insist on changing string values in place instead, you may cheat
+    and use MutableString.
+
+    But the purpose of this class is an educational one: to prevent
+    people from inventing their own mutable string class derived
+    from UserString and than forget thereby to remove (override) the
+    __hash__ method inherited from UserString.  This would lead to
+    errors that would be very hard to track down.
+
+    A faster and better solution is to rewrite your program using lists.&#34;&#34;&#34;
+
+    def __init__(self, string=&#34;&#34;):
+        self.data = string
+
+    def __hash__(self):
+        raise TypeError(&#34;unhashable type (it is mutable)&#34;)
+
+    def __setitem__(self, index, sub):
+        if index &lt; 0:
+            index += len(self.data)
+        if index &lt; 0 or index &gt;= len(self.data):
+            raise IndexError
+        self.data = self.data[:index] + sub + self.data[index + 1 :]
+
+    def __delitem__(self, index):
+        if index &lt; 0:
+            index += len(self.data)
+        if index &lt; 0 or index &gt;= len(self.data):
+            raise IndexError
+        self.data = self.data[:index] + self.data[index + 1 :]
+
+    def __setslice__(self, start, end, sub):
+        start = max(start, 0)
+        end = max(end, 0)
+        if isinstance(sub, UserString):
+            self.data = self.data[:start] + sub.data + self.data[end:]
+        elif isinstance(sub, bytes):
+            self.data = self.data[:start] + sub + self.data[end:]
+        else:
+            self.data = self.data[:start] + str(sub).encode() + self.data[end:]
+
+    def __delslice__(self, start, end):
+        start = max(start, 0)
+        end = max(end, 0)
+        self.data = self.data[:start] + self.data[end:]
+
+    def immutable(self):
+        return UserString(self.data)
+
+    def __iadd__(self, other):
+        if isinstance(other, UserString):
+            self.data += other.data
+        elif isinstance(other, bytes):
+            self.data += other
+        else:
+            self.data += str(other).encode()
+        return self
+
+    def __imul__(self, n):
+        self.data *= n
+        return self</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString">UserString</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="amplitude_experiment.local.evaluation.libevaluation_interop.String" href="#amplitude_experiment.local.evaluation.libevaluation_interop.String">String</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.MutableString.immutable"><code class="name flex">
+<span>def <span class="ident">immutable</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def immutable(self):
+    return UserString(self.data)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.PosixLibraryLoader"><code class="flex name class">
+<span>class <span class="ident">PosixLibraryLoader</span></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class PosixLibraryLoader(LibraryLoader):
+    _ld_so_cache = None
+
+    _include = re.compile(r&#34;^\s*include\s+(?P&lt;pattern&gt;.*)&#34;)
+
+    class _Directories(dict):
+        def __init__(self):
+            self.order = 0
+
+        def add(self, directory):
+            if len(directory) &gt; 1:
+                directory = directory.rstrip(os.path.sep)
+            # only adds and updates order if exists and not already in set
+            if not os.path.exists(directory):
+                return
+            o = self.setdefault(directory, self.order)
+            if o == self.order:
+                self.order += 1
+
+        def extend(self, directories):
+            for d in directories:
+                self.add(d)
+
+        def ordered(self):
+            return (i[0] for i in sorted(self.items(), key=lambda D: D[1]))
+
+    def _get_ld_so_conf_dirs(self, conf, dirs):
+        &#34;&#34;&#34;
+        Recursive funtion to help parse all ld.so.conf files, including proper
+        handling of the `include` directive.
+        &#34;&#34;&#34;
+
+        try:
+            with open(conf) as f:
+                for D in f:
+                    D = D.strip()
+                    if not D:
+                        continue
+
+                    m = self._include.match(D)
+                    if not m:
+                        dirs.add(D)
+                    else:
+                        for D2 in glob.glob(m.group(&#34;pattern&#34;)):
+                            self._get_ld_so_conf_dirs(D2, dirs)
+        except IOError:
+            pass
+
+    def _create_ld_so_cache(self):
+        # Recreate search path followed by ld.so.  This is going to be
+        # slow to build, and incorrect (ld.so uses ld.so.cache, which may
+        # not be up-to-date).  Used only as fallback for distros without
+        # /sbin/ldconfig.
+        #
+        # We assume the DT_RPATH and DT_RUNPATH binary sections are omitted.
+
+        directories = self._Directories()
+        for name in (
+            &#34;LD_LIBRARY_PATH&#34;,
+            &#34;SHLIB_PATH&#34;,  # HPUX
+            &#34;LIBPATH&#34;,  # OS/2, AIX
+            &#34;LIBRARY_PATH&#34;,  # BE/OS
+        ):
+            if name in os.environ:
+                directories.extend(os.environ[name].split(os.pathsep))
+
+        self._get_ld_so_conf_dirs(&#34;/etc/ld.so.conf&#34;, directories)
+
+        bitage = platform.architecture()[0]
+
+        unix_lib_dirs_list = []
+        if bitage.startswith(&#34;64&#34;):
+            # prefer 64 bit if that is our arch
+            unix_lib_dirs_list += [&#34;/lib64&#34;, &#34;/usr/lib64&#34;]
+
+        # must include standard libs, since those paths are also used by 64 bit
+        # installs
+        unix_lib_dirs_list += [&#34;/lib&#34;, &#34;/usr/lib&#34;]
+        if sys.platform.startswith(&#34;linux&#34;):
+            # Try and support multiarch work in Ubuntu
+            # https://wiki.ubuntu.com/MultiarchSpec
+            if bitage.startswith(&#34;32&#34;):
+                # Assume Intel/AMD x86 compat
+                unix_lib_dirs_list += [&#34;/lib/i386-linux-gnu&#34;, &#34;/usr/lib/i386-linux-gnu&#34;]
+            elif bitage.startswith(&#34;64&#34;):
+                # Assume Intel/AMD x86 compat
+                unix_lib_dirs_list += [&#34;/lib/x86_64-linux-gnu&#34;, &#34;/usr/lib/x86_64-linux-gnu&#34;]
+            else:
+                # guess...
+                unix_lib_dirs_list += glob.glob(&#34;/lib/*linux-gnu&#34;)
+        directories.extend(unix_lib_dirs_list)
+
+        cache = {}
+        lib_re = re.compile(r&#34;lib(.*)\.s[ol]&#34;)
+        ext_re = re.compile(r&#34;\.s[ol]$&#34;)
+        for dir in directories.ordered():
+            try:
+                for path in glob.glob(&#34;%s/*.s[ol]*&#34; % dir):
+                    file = os.path.basename(path)
+
+                    # Index by filename
+                    cache_i = cache.setdefault(file, set())
+                    cache_i.add(path)
+
+                    # Index by library name
+                    match = lib_re.match(file)
+                    if match:
+                        library = match.group(1)
+                        cache_i = cache.setdefault(library, set())
+                        cache_i.add(path)
+            except OSError:
+                pass
+
+        self._ld_so_cache = cache
+
+    def getplatformpaths(self, libname):
+        if self._ld_so_cache is None:
+            self._create_ld_so_cache()
+
+        result = self._ld_so_cache.get(libname, set())
+        for i in result:
+            # we iterate through all found paths for library, since we may have
+            # actually found multiple architectures or other library types that
+            # may not load
+            yield i
+        if platform.machine().startswith(&#39;arm&#39;):
+            yield os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), f&#34;./lib/linuxX64/{libname}.so&#34;))
+        else:
+            yield os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), f&#34;./lib/linuxX64/{libname}.so&#34;))</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader" href="#amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader">LibraryLoader</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.PosixLibraryLoader.getplatformpaths"><code class="name flex">
+<span>def <span class="ident">getplatformpaths</span></span>(<span>self, libname)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getplatformpaths(self, libname):
+    if self._ld_so_cache is None:
+        self._create_ld_so_cache()
+
+    result = self._ld_so_cache.get(libname, set())
+    for i in result:
+        # we iterate through all found paths for library, since we may have
+        # actually found multiple architectures or other library types that
+        # may not load
+        yield i
+    if platform.machine().startswith(&#39;arm&#39;):
+        yield os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), f&#34;./lib/linuxX64/{libname}.so&#34;))
+    else:
+        yield os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), f&#34;./lib/linuxX64/{libname}.so&#34;))</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader" href="#amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader">LibraryLoader</a></b></code>:
+<ul class="hlist">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader.getpaths" href="#amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader.getpaths">getpaths</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.String"><code class="flex name class">
+<span>class <span class="ident">String</span></span>
+<span>(</span><span>obj='')</span>
+</code></dt>
+<dd>
+<div class="desc"><p>mutable string objects</p>
+<p>Python strings are immutable objects.
+This has the advantage, that
+strings may be used as dictionary keys.
+If this property isn't needed
+and you insist on changing string values in place instead, you may cheat
+and use MutableString.</p>
+<p>But the purpose of this class is an educational one: to prevent
+people from inventing their own mutable string class derived
+from UserString and than forget thereby to remove (override) the
+<strong>hash</strong> method inherited from UserString.
+This would lead to
+errors that would be very hard to track down.</p>
+<p>A faster and better solution is to rewrite your program using lists.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class String(MutableString, Union):
+
+    _fields_ = [(&#34;raw&#34;, POINTER(c_char)), (&#34;data&#34;, c_char_p)]
+
+    def __init__(self, obj=&#34;&#34;):
+        if isinstance(obj, (bytes, UserString)):
+            self.data = bytes(obj)
+        else:
+            self.raw = obj
+
+    def __len__(self):
+        return self.data and len(self.data) or 0
+
+    def from_param(cls, obj):
+        # Convert None or 0
+        if obj is None or obj == 0:
+            return cls(POINTER(c_char)())
+
+        # Convert from String
+        elif isinstance(obj, String):
+            return obj
+
+        # Convert from bytes
+        elif isinstance(obj, bytes):
+            return cls(obj)
+
+        # Convert from str
+        elif isinstance(obj, str):
+            return cls(obj.encode())
+
+        # Convert from c_char_p
+        elif isinstance(obj, c_char_p):
+            return obj
+
+        # Convert from POINTER(c_char)
+        elif isinstance(obj, POINTER(c_char)):
+            return obj
+
+        # Convert from raw pointer
+        elif isinstance(obj, int):
+            return cls(cast(obj, POINTER(c_char)))
+
+        # Convert from c_char array
+        elif isinstance(obj, c_char * len(obj)):
+            return obj
+
+        # Convert from object
+        else:
+            return String.from_param(obj._as_parameter_)
+
+    from_param = classmethod(from_param)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="amplitude_experiment.local.evaluation.libevaluation_interop.MutableString" href="#amplitude_experiment.local.evaluation.libevaluation_interop.MutableString">MutableString</a></li>
+<li><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString">UserString</a></li>
+<li>_ctypes.Union</li>
+<li>_ctypes._CData</li>
+</ul>
+<h3>Static methods</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.String.from_param"><code class="name flex">
+<span>def <span class="ident">from_param</span></span>(<span>obj)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Convert a Python object into a function call parameter.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def from_param(cls, obj):
+    # Convert None or 0
+    if obj is None or obj == 0:
+        return cls(POINTER(c_char)())
+
+    # Convert from String
+    elif isinstance(obj, String):
+        return obj
+
+    # Convert from bytes
+    elif isinstance(obj, bytes):
+        return cls(obj)
+
+    # Convert from str
+    elif isinstance(obj, str):
+        return cls(obj.encode())
+
+    # Convert from c_char_p
+    elif isinstance(obj, c_char_p):
+        return obj
+
+    # Convert from POINTER(c_char)
+    elif isinstance(obj, POINTER(c_char)):
+        return obj
+
+    # Convert from raw pointer
+    elif isinstance(obj, int):
+        return cls(cast(obj, POINTER(c_char)))
+
+    # Convert from c_char array
+    elif isinstance(obj, c_char * len(obj)):
+        return obj
+
+    # Convert from object
+    else:
+        return String.from_param(obj._as_parameter_)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.String.data"><code class="name">var <span class="ident">data</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.String.raw"><code class="name">var <span class="ident">raw</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString"><code class="flex name class">
+<span>class <span class="ident">UserString</span></span>
+<span>(</span><span>seq)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class UserString:
+    def __init__(self, seq):
+        if isinstance(seq, bytes):
+            self.data = seq
+        elif isinstance(seq, UserString):
+            self.data = seq.data[:]
+        else:
+            self.data = str(seq).encode()
+
+    def __bytes__(self):
+        return self.data
+
+    def __str__(self):
+        return self.data.decode()
+
+    def __repr__(self):
+        return repr(self.data)
+
+    def __int__(self):
+        return int(self.data.decode())
+
+    def __long__(self):
+        return int(self.data.decode())
+
+    def __float__(self):
+        return float(self.data.decode())
+
+    def __complex__(self):
+        return complex(self.data.decode())
+
+    def __hash__(self):
+        return hash(self.data)
+
+    def __cmp__(self, string):
+        if isinstance(string, UserString):
+            return cmp(self.data, string.data)
+        else:
+            return cmp(self.data, string)
+
+    def __le__(self, string):
+        if isinstance(string, UserString):
+            return self.data &lt;= string.data
+        else:
+            return self.data &lt;= string
+
+    def __lt__(self, string):
+        if isinstance(string, UserString):
+            return self.data &lt; string.data
+        else:
+            return self.data &lt; string
+
+    def __ge__(self, string):
+        if isinstance(string, UserString):
+            return self.data &gt;= string.data
+        else:
+            return self.data &gt;= string
+
+    def __gt__(self, string):
+        if isinstance(string, UserString):
+            return self.data &gt; string.data
+        else:
+            return self.data &gt; string
+
+    def __eq__(self, string):
+        if isinstance(string, UserString):
+            return self.data == string.data
+        else:
+            return self.data == string
+
+    def __ne__(self, string):
+        if isinstance(string, UserString):
+            return self.data != string.data
+        else:
+            return self.data != string
+
+    def __contains__(self, char):
+        return char in self.data
+
+    def __len__(self):
+        return len(self.data)
+
+    def __getitem__(self, index):
+        return self.__class__(self.data[index])
+
+    def __getslice__(self, start, end):
+        start = max(start, 0)
+        end = max(end, 0)
+        return self.__class__(self.data[start:end])
+
+    def __add__(self, other):
+        if isinstance(other, UserString):
+            return self.__class__(self.data + other.data)
+        elif isinstance(other, bytes):
+            return self.__class__(self.data + other)
+        else:
+            return self.__class__(self.data + str(other).encode())
+
+    def __radd__(self, other):
+        if isinstance(other, bytes):
+            return self.__class__(other + self.data)
+        else:
+            return self.__class__(str(other).encode() + self.data)
+
+    def __mul__(self, n):
+        return self.__class__(self.data * n)
+
+    __rmul__ = __mul__
+
+    def __mod__(self, args):
+        return self.__class__(self.data % args)
+
+    # the following methods are defined in alphabetical order:
+    def capitalize(self):
+        return self.__class__(self.data.capitalize())
+
+    def center(self, width, *args):
+        return self.__class__(self.data.center(width, *args))
+
+    def count(self, sub, start=0, end=sys.maxsize):
+        return self.data.count(sub, start, end)
+
+    def decode(self, encoding=None, errors=None):  # XXX improve this?
+        if encoding:
+            if errors:
+                return self.__class__(self.data.decode(encoding, errors))
+            else:
+                return self.__class__(self.data.decode(encoding))
+        else:
+            return self.__class__(self.data.decode())
+
+    def encode(self, encoding=None, errors=None):  # XXX improve this?
+        if encoding:
+            if errors:
+                return self.__class__(self.data.encode(encoding, errors))
+            else:
+                return self.__class__(self.data.encode(encoding))
+        else:
+            return self.__class__(self.data.encode())
+
+    def endswith(self, suffix, start=0, end=sys.maxsize):
+        return self.data.endswith(suffix, start, end)
+
+    def expandtabs(self, tabsize=8):
+        return self.__class__(self.data.expandtabs(tabsize))
+
+    def find(self, sub, start=0, end=sys.maxsize):
+        return self.data.find(sub, start, end)
+
+    def index(self, sub, start=0, end=sys.maxsize):
+        return self.data.index(sub, start, end)
+
+    def isalpha(self):
+        return self.data.isalpha()
+
+    def isalnum(self):
+        return self.data.isalnum()
+
+    def isdecimal(self):
+        return self.data.isdecimal()
+
+    def isdigit(self):
+        return self.data.isdigit()
+
+    def islower(self):
+        return self.data.islower()
+
+    def isnumeric(self):
+        return self.data.isnumeric()
+
+    def isspace(self):
+        return self.data.isspace()
+
+    def istitle(self):
+        return self.data.istitle()
+
+    def isupper(self):
+        return self.data.isupper()
+
+    def join(self, seq):
+        return self.data.join(seq)
+
+    def ljust(self, width, *args):
+        return self.__class__(self.data.ljust(width, *args))
+
+    def lower(self):
+        return self.__class__(self.data.lower())
+
+    def lstrip(self, chars=None):
+        return self.__class__(self.data.lstrip(chars))
+
+    def partition(self, sep):
+        return self.data.partition(sep)
+
+    def replace(self, old, new, maxsplit=-1):
+        return self.__class__(self.data.replace(old, new, maxsplit))
+
+    def rfind(self, sub, start=0, end=sys.maxsize):
+        return self.data.rfind(sub, start, end)
+
+    def rindex(self, sub, start=0, end=sys.maxsize):
+        return self.data.rindex(sub, start, end)
+
+    def rjust(self, width, *args):
+        return self.__class__(self.data.rjust(width, *args))
+
+    def rpartition(self, sep):
+        return self.data.rpartition(sep)
+
+    def rstrip(self, chars=None):
+        return self.__class__(self.data.rstrip(chars))
+
+    def split(self, sep=None, maxsplit=-1):
+        return self.data.split(sep, maxsplit)
+
+    def rsplit(self, sep=None, maxsplit=-1):
+        return self.data.rsplit(sep, maxsplit)
+
+    def splitlines(self, keepends=0):
+        return self.data.splitlines(keepends)
+
+    def startswith(self, prefix, start=0, end=sys.maxsize):
+        return self.data.startswith(prefix, start, end)
+
+    def strip(self, chars=None):
+        return self.__class__(self.data.strip(chars))
+
+    def swapcase(self):
+        return self.__class__(self.data.swapcase())
+
+    def title(self):
+        return self.__class__(self.data.title())
+
+    def translate(self, *args):
+        return self.__class__(self.data.translate(*args))
+
+    def upper(self):
+        return self.__class__(self.data.upper())
+
+    def zfill(self, width):
+        return self.__class__(self.data.zfill(width))</code></pre>
+</details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="amplitude_experiment.local.evaluation.libevaluation_interop.MutableString" href="#amplitude_experiment.local.evaluation.libevaluation_interop.MutableString">MutableString</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.capitalize"><code class="name flex">
+<span>def <span class="ident">capitalize</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def capitalize(self):
+    return self.__class__(self.data.capitalize())</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.center"><code class="name flex">
+<span>def <span class="ident">center</span></span>(<span>self, width, *args)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def center(self, width, *args):
+    return self.__class__(self.data.center(width, *args))</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.count"><code class="name flex">
+<span>def <span class="ident">count</span></span>(<span>self, sub, start=0, end=9223372036854775807)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def count(self, sub, start=0, end=sys.maxsize):
+    return self.data.count(sub, start, end)</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.decode"><code class="name flex">
+<span>def <span class="ident">decode</span></span>(<span>self, encoding=None, errors=None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def decode(self, encoding=None, errors=None):  # XXX improve this?
+    if encoding:
+        if errors:
+            return self.__class__(self.data.decode(encoding, errors))
+        else:
+            return self.__class__(self.data.decode(encoding))
+    else:
+        return self.__class__(self.data.decode())</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.encode"><code class="name flex">
+<span>def <span class="ident">encode</span></span>(<span>self, encoding=None, errors=None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def encode(self, encoding=None, errors=None):  # XXX improve this?
+    if encoding:
+        if errors:
+            return self.__class__(self.data.encode(encoding, errors))
+        else:
+            return self.__class__(self.data.encode(encoding))
+    else:
+        return self.__class__(self.data.encode())</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.endswith"><code class="name flex">
+<span>def <span class="ident">endswith</span></span>(<span>self, suffix, start=0, end=9223372036854775807)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def endswith(self, suffix, start=0, end=sys.maxsize):
+    return self.data.endswith(suffix, start, end)</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.expandtabs"><code class="name flex">
+<span>def <span class="ident">expandtabs</span></span>(<span>self, tabsize=8)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def expandtabs(self, tabsize=8):
+    return self.__class__(self.data.expandtabs(tabsize))</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.find"><code class="name flex">
+<span>def <span class="ident">find</span></span>(<span>self, sub, start=0, end=9223372036854775807)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find(self, sub, start=0, end=sys.maxsize):
+    return self.data.find(sub, start, end)</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.index"><code class="name flex">
+<span>def <span class="ident">index</span></span>(<span>self, sub, start=0, end=9223372036854775807)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def index(self, sub, start=0, end=sys.maxsize):
+    return self.data.index(sub, start, end)</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.isalnum"><code class="name flex">
+<span>def <span class="ident">isalnum</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def isalnum(self):
+    return self.data.isalnum()</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.isalpha"><code class="name flex">
+<span>def <span class="ident">isalpha</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def isalpha(self):
+    return self.data.isalpha()</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.isdecimal"><code class="name flex">
+<span>def <span class="ident">isdecimal</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def isdecimal(self):
+    return self.data.isdecimal()</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.isdigit"><code class="name flex">
+<span>def <span class="ident">isdigit</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def isdigit(self):
+    return self.data.isdigit()</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.islower"><code class="name flex">
+<span>def <span class="ident">islower</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def islower(self):
+    return self.data.islower()</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.isnumeric"><code class="name flex">
+<span>def <span class="ident">isnumeric</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def isnumeric(self):
+    return self.data.isnumeric()</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.isspace"><code class="name flex">
+<span>def <span class="ident">isspace</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def isspace(self):
+    return self.data.isspace()</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.istitle"><code class="name flex">
+<span>def <span class="ident">istitle</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def istitle(self):
+    return self.data.istitle()</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.isupper"><code class="name flex">
+<span>def <span class="ident">isupper</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def isupper(self):
+    return self.data.isupper()</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.join"><code class="name flex">
+<span>def <span class="ident">join</span></span>(<span>self, seq)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def join(self, seq):
+    return self.data.join(seq)</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.ljust"><code class="name flex">
+<span>def <span class="ident">ljust</span></span>(<span>self, width, *args)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def ljust(self, width, *args):
+    return self.__class__(self.data.ljust(width, *args))</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.lower"><code class="name flex">
+<span>def <span class="ident">lower</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def lower(self):
+    return self.__class__(self.data.lower())</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.lstrip"><code class="name flex">
+<span>def <span class="ident">lstrip</span></span>(<span>self, chars=None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def lstrip(self, chars=None):
+    return self.__class__(self.data.lstrip(chars))</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.partition"><code class="name flex">
+<span>def <span class="ident">partition</span></span>(<span>self, sep)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def partition(self, sep):
+    return self.data.partition(sep)</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.replace"><code class="name flex">
+<span>def <span class="ident">replace</span></span>(<span>self, old, new, maxsplit=-1)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def replace(self, old, new, maxsplit=-1):
+    return self.__class__(self.data.replace(old, new, maxsplit))</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.rfind"><code class="name flex">
+<span>def <span class="ident">rfind</span></span>(<span>self, sub, start=0, end=9223372036854775807)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def rfind(self, sub, start=0, end=sys.maxsize):
+    return self.data.rfind(sub, start, end)</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.rindex"><code class="name flex">
+<span>def <span class="ident">rindex</span></span>(<span>self, sub, start=0, end=9223372036854775807)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def rindex(self, sub, start=0, end=sys.maxsize):
+    return self.data.rindex(sub, start, end)</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.rjust"><code class="name flex">
+<span>def <span class="ident">rjust</span></span>(<span>self, width, *args)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def rjust(self, width, *args):
+    return self.__class__(self.data.rjust(width, *args))</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.rpartition"><code class="name flex">
+<span>def <span class="ident">rpartition</span></span>(<span>self, sep)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def rpartition(self, sep):
+    return self.data.rpartition(sep)</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.rsplit"><code class="name flex">
+<span>def <span class="ident">rsplit</span></span>(<span>self, sep=None, maxsplit=-1)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def rsplit(self, sep=None, maxsplit=-1):
+    return self.data.rsplit(sep, maxsplit)</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.rstrip"><code class="name flex">
+<span>def <span class="ident">rstrip</span></span>(<span>self, chars=None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def rstrip(self, chars=None):
+    return self.__class__(self.data.rstrip(chars))</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.split"><code class="name flex">
+<span>def <span class="ident">split</span></span>(<span>self, sep=None, maxsplit=-1)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def split(self, sep=None, maxsplit=-1):
+    return self.data.split(sep, maxsplit)</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.splitlines"><code class="name flex">
+<span>def <span class="ident">splitlines</span></span>(<span>self, keepends=0)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def splitlines(self, keepends=0):
+    return self.data.splitlines(keepends)</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.startswith"><code class="name flex">
+<span>def <span class="ident">startswith</span></span>(<span>self, prefix, start=0, end=9223372036854775807)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def startswith(self, prefix, start=0, end=sys.maxsize):
+    return self.data.startswith(prefix, start, end)</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.strip"><code class="name flex">
+<span>def <span class="ident">strip</span></span>(<span>self, chars=None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def strip(self, chars=None):
+    return self.__class__(self.data.strip(chars))</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.swapcase"><code class="name flex">
+<span>def <span class="ident">swapcase</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def swapcase(self):
+    return self.__class__(self.data.swapcase())</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.title"><code class="name flex">
+<span>def <span class="ident">title</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def title(self):
+    return self.__class__(self.data.title())</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.translate"><code class="name flex">
+<span>def <span class="ident">translate</span></span>(<span>self, *args)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def translate(self, *args):
+    return self.__class__(self.data.translate(*args))</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.upper"><code class="name flex">
+<span>def <span class="ident">upper</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def upper(self):
+    return self.__class__(self.data.upper())</code></pre>
+</details>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.zfill"><code class="name flex">
+<span>def <span class="ident">zfill</span></span>(<span>self, width)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def zfill(self, width):
+    return self.__class__(self.data.zfill(width))</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.WindowsLibraryLoader"><code class="flex name class">
+<span>class <span class="ident">WindowsLibraryLoader</span></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class WindowsLibraryLoader(LibraryLoader):
+    name_formats = [&#34;%s.dll&#34;, &#34;lib%s.dll&#34;, &#34;%slib.dll&#34;, &#34;%s&#34;]
+
+    class Lookup(LibraryLoader.Lookup):
+        def __init__(self, path):
+            super(WindowsLibraryLoader.Lookup, self).__init__(path)
+            self.access[&#34;stdcall&#34;] = ctypes.windll.LoadLibrary(path)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader" href="#amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader">LibraryLoader</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.WindowsLibraryLoader.Lookup"><code class="name">var <span class="ident">Lookup</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.WindowsLibraryLoader.name_formats"><code class="name">var <span class="ident">name_formats</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader" href="#amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader">LibraryLoader</a></b></code>:
+<ul class="hlist">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader.getpaths" href="#amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader.getpaths">getpaths</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_1"><code class="flex name class">
+<span>class <span class="ident">struct_anon_1</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Structure base class</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class struct_anon_1(Structure):
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>_ctypes.Structure</li>
+<li>_ctypes._CData</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_1.pinned"><code class="name">var <span class="ident">pinned</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_1"><code class="flex name class">
+<span>class <span class="ident">libevaluation_interop_kref_kotlin_Byte</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Structure base class</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class struct_anon_1(Structure):
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>_ctypes.Structure</li>
+<li>_ctypes._CData</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_1.pinned"><code class="name">var <span class="ident">pinned</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_10"><code class="flex name class">
+<span>class <span class="ident">struct_anon_10</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Structure base class</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class struct_anon_10(Structure):
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>_ctypes.Structure</li>
+<li>_ctypes._CData</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_10.evaluate"><code class="name">var <span class="ident">evaluate</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_11"><code class="flex name class">
+<span>class <span class="ident">struct_anon_11</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Structure base class</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class struct_anon_11(Structure):
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>_ctypes.Structure</li>
+<li>_ctypes._CData</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_11.root"><code class="name">var <span class="ident">root</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12"><code class="flex name class">
+<span>class <span class="ident">struct_anon_12</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Structure base class</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class struct_anon_12(Structure):
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>_ctypes.Structure</li>
+<li>_ctypes._CData</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.DisposeStablePointer"><code class="name">var <span class="ident">DisposeStablePointer</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.DisposeString"><code class="name">var <span class="ident">DisposeString</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.IsInstance"><code class="name">var <span class="ident">IsInstance</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableBoolean"><code class="name">var <span class="ident">createNullableBoolean</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableByte"><code class="name">var <span class="ident">createNullableByte</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableChar"><code class="name">var <span class="ident">createNullableChar</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableDouble"><code class="name">var <span class="ident">createNullableDouble</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableFloat"><code class="name">var <span class="ident">createNullableFloat</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableInt"><code class="name">var <span class="ident">createNullableInt</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableLong"><code class="name">var <span class="ident">createNullableLong</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableShort"><code class="name">var <span class="ident">createNullableShort</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableUnit"><code class="name">var <span class="ident">createNullableUnit</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.kotlin"><code class="name">var <span class="ident">kotlin</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12"><code class="flex name class">
+<span>class <span class="ident">libevaluation_interop_ExportedSymbols</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Structure base class</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class struct_anon_12(Structure):
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>_ctypes.Structure</li>
+<li>_ctypes._CData</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.DisposeStablePointer"><code class="name">var <span class="ident">DisposeStablePointer</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.DisposeString"><code class="name">var <span class="ident">DisposeString</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.IsInstance"><code class="name">var <span class="ident">IsInstance</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableBoolean"><code class="name">var <span class="ident">createNullableBoolean</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableByte"><code class="name">var <span class="ident">createNullableByte</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableChar"><code class="name">var <span class="ident">createNullableChar</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableDouble"><code class="name">var <span class="ident">createNullableDouble</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableFloat"><code class="name">var <span class="ident">createNullableFloat</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableInt"><code class="name">var <span class="ident">createNullableInt</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableLong"><code class="name">var <span class="ident">createNullableLong</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableShort"><code class="name">var <span class="ident">createNullableShort</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableUnit"><code class="name">var <span class="ident">createNullableUnit</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.kotlin"><code class="name">var <span class="ident">kotlin</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_2"><code class="flex name class">
+<span>class <span class="ident">struct_anon_2</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Structure base class</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class struct_anon_2(Structure):
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>_ctypes.Structure</li>
+<li>_ctypes._CData</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_2.pinned"><code class="name">var <span class="ident">pinned</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_2"><code class="flex name class">
+<span>class <span class="ident">libevaluation_interop_kref_kotlin_Short</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Structure base class</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class struct_anon_2(Structure):
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>_ctypes.Structure</li>
+<li>_ctypes._CData</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_2.pinned"><code class="name">var <span class="ident">pinned</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_3"><code class="flex name class">
+<span>class <span class="ident">struct_anon_3</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Structure base class</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class struct_anon_3(Structure):
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>_ctypes.Structure</li>
+<li>_ctypes._CData</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_3.pinned"><code class="name">var <span class="ident">pinned</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_3"><code class="flex name class">
+<span>class <span class="ident">libevaluation_interop_kref_kotlin_Int</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Structure base class</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class struct_anon_3(Structure):
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>_ctypes.Structure</li>
+<li>_ctypes._CData</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_3.pinned"><code class="name">var <span class="ident">pinned</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_4"><code class="flex name class">
+<span>class <span class="ident">struct_anon_4</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Structure base class</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class struct_anon_4(Structure):
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>_ctypes.Structure</li>
+<li>_ctypes._CData</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_4.pinned"><code class="name">var <span class="ident">pinned</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_4"><code class="flex name class">
+<span>class <span class="ident">libevaluation_interop_kref_kotlin_Long</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Structure base class</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class struct_anon_4(Structure):
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>_ctypes.Structure</li>
+<li>_ctypes._CData</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_4.pinned"><code class="name">var <span class="ident">pinned</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_5"><code class="flex name class">
+<span>class <span class="ident">struct_anon_5</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Structure base class</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class struct_anon_5(Structure):
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>_ctypes.Structure</li>
+<li>_ctypes._CData</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_5.pinned"><code class="name">var <span class="ident">pinned</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_5"><code class="flex name class">
+<span>class <span class="ident">libevaluation_interop_kref_kotlin_Float</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Structure base class</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class struct_anon_5(Structure):
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>_ctypes.Structure</li>
+<li>_ctypes._CData</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_5.pinned"><code class="name">var <span class="ident">pinned</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_6"><code class="flex name class">
+<span>class <span class="ident">struct_anon_6</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Structure base class</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class struct_anon_6(Structure):
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>_ctypes.Structure</li>
+<li>_ctypes._CData</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_6.pinned"><code class="name">var <span class="ident">pinned</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_6"><code class="flex name class">
+<span>class <span class="ident">libevaluation_interop_kref_kotlin_Double</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Structure base class</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class struct_anon_6(Structure):
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>_ctypes.Structure</li>
+<li>_ctypes._CData</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_6.pinned"><code class="name">var <span class="ident">pinned</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_7"><code class="flex name class">
+<span>class <span class="ident">struct_anon_7</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Structure base class</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class struct_anon_7(Structure):
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>_ctypes.Structure</li>
+<li>_ctypes._CData</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_7.pinned"><code class="name">var <span class="ident">pinned</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_7"><code class="flex name class">
+<span>class <span class="ident">libevaluation_interop_kref_kotlin_Char</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Structure base class</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class struct_anon_7(Structure):
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>_ctypes.Structure</li>
+<li>_ctypes._CData</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_7.pinned"><code class="name">var <span class="ident">pinned</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_8"><code class="flex name class">
+<span>class <span class="ident">struct_anon_8</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Structure base class</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class struct_anon_8(Structure):
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>_ctypes.Structure</li>
+<li>_ctypes._CData</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_8.pinned"><code class="name">var <span class="ident">pinned</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_8"><code class="flex name class">
+<span>class <span class="ident">libevaluation_interop_kref_kotlin_Boolean</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Structure base class</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class struct_anon_8(Structure):
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>_ctypes.Structure</li>
+<li>_ctypes._CData</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_8.pinned"><code class="name">var <span class="ident">pinned</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_9"><code class="flex name class">
+<span>class <span class="ident">struct_anon_9</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Structure base class</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class struct_anon_9(Structure):
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>_ctypes.Structure</li>
+<li>_ctypes._CData</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_9.pinned"><code class="name">var <span class="ident">pinned</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_9"><code class="flex name class">
+<span>class <span class="ident">libevaluation_interop_kref_kotlin_Unit</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Structure base class</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class struct_anon_9(Structure):
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>_ctypes.Structure</li>
+<li>_ctypes._CData</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_9.pinned"><code class="name">var <span class="ident">pinned</span></code></dt>
+<dd>
+<div class="desc"><p>Structure/Union member</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_libevaluation_interop_KType"><code class="flex name class">
+<span>class <span class="ident">struct_libevaluation_interop_KType</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Structure base class</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class struct_libevaluation_interop_KType(Structure):
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>_ctypes.Structure</li>
+<li>_ctypes._CData</li>
+</ul>
+</dd>
+<dt id="amplitude_experiment.local.evaluation.libevaluation_interop.struct_libevaluation_interop_KType"><code class="flex name class">
+<span>class <span class="ident">libevaluation_interop_KType</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Structure base class</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class struct_libevaluation_interop_KType(Structure):
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>_ctypes.Structure</li>
+<li>_ctypes._CData</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="amplitude_experiment.local.evaluation" href="index.html">amplitude_experiment.local.evaluation</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.ReturnString" href="#amplitude_experiment.local.evaluation.libevaluation_interop.ReturnString">ReturnString</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UNCHECKED" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UNCHECKED">UNCHECKED</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.add_library_search_dirs" href="#amplitude_experiment.local.evaluation.libevaluation_interop.add_library_search_dirs">add_library_search_dirs</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.ord_if_char" href="#amplitude_experiment.local.evaluation.libevaluation_interop.ord_if_char">ord_if_char</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.DarwinLibraryLoader" href="#amplitude_experiment.local.evaluation.libevaluation_interop.DarwinLibraryLoader">DarwinLibraryLoader</a></code></h4>
+<ul class="">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.DarwinLibraryLoader.Lookup" href="#amplitude_experiment.local.evaluation.libevaluation_interop.DarwinLibraryLoader.Lookup">Lookup</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.DarwinLibraryLoader.getdirs" href="#amplitude_experiment.local.evaluation.libevaluation_interop.DarwinLibraryLoader.getdirs">getdirs</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.DarwinLibraryLoader.getplatformpaths" href="#amplitude_experiment.local.evaluation.libevaluation_interop.DarwinLibraryLoader.getplatformpaths">getplatformpaths</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.DarwinLibraryLoader.name_formats" href="#amplitude_experiment.local.evaluation.libevaluation_interop.DarwinLibraryLoader.name_formats">name_formats</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader" href="#amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader">LibraryLoader</a></code></h4>
+<ul class="">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader.Lookup" href="#amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader.Lookup">Lookup</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader.getpaths" href="#amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader.getpaths">getpaths</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader.getplatformpaths" href="#amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader.getplatformpaths">getplatformpaths</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader.name_formats" href="#amplitude_experiment.local.evaluation.libevaluation_interop.LibraryLoader.name_formats">name_formats</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.MutableString" href="#amplitude_experiment.local.evaluation.libevaluation_interop.MutableString">MutableString</a></code></h4>
+<ul class="">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.MutableString.immutable" href="#amplitude_experiment.local.evaluation.libevaluation_interop.MutableString.immutable">immutable</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.PosixLibraryLoader" href="#amplitude_experiment.local.evaluation.libevaluation_interop.PosixLibraryLoader">PosixLibraryLoader</a></code></h4>
+<ul class="">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.PosixLibraryLoader.getplatformpaths" href="#amplitude_experiment.local.evaluation.libevaluation_interop.PosixLibraryLoader.getplatformpaths">getplatformpaths</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.String" href="#amplitude_experiment.local.evaluation.libevaluation_interop.String">String</a></code></h4>
+<ul class="">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.String.data" href="#amplitude_experiment.local.evaluation.libevaluation_interop.String.data">data</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.String.from_param" href="#amplitude_experiment.local.evaluation.libevaluation_interop.String.from_param">from_param</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.String.raw" href="#amplitude_experiment.local.evaluation.libevaluation_interop.String.raw">raw</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString">UserString</a></code></h4>
+<ul class="two-column">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.capitalize" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.capitalize">capitalize</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.center" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.center">center</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.count" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.count">count</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.decode" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.decode">decode</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.encode" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.encode">encode</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.endswith" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.endswith">endswith</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.expandtabs" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.expandtabs">expandtabs</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.find" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.find">find</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.index" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.index">index</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.isalnum" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.isalnum">isalnum</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.isalpha" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.isalpha">isalpha</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.isdecimal" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.isdecimal">isdecimal</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.isdigit" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.isdigit">isdigit</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.islower" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.islower">islower</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.isnumeric" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.isnumeric">isnumeric</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.isspace" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.isspace">isspace</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.istitle" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.istitle">istitle</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.isupper" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.isupper">isupper</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.join" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.join">join</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.ljust" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.ljust">ljust</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.lower" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.lower">lower</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.lstrip" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.lstrip">lstrip</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.partition" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.partition">partition</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.replace" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.replace">replace</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.rfind" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.rfind">rfind</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.rindex" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.rindex">rindex</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.rjust" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.rjust">rjust</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.rpartition" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.rpartition">rpartition</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.rsplit" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.rsplit">rsplit</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.rstrip" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.rstrip">rstrip</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.split" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.split">split</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.splitlines" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.splitlines">splitlines</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.startswith" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.startswith">startswith</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.strip" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.strip">strip</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.swapcase" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.swapcase">swapcase</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.title" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.title">title</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.translate" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.translate">translate</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.upper" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.upper">upper</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.UserString.zfill" href="#amplitude_experiment.local.evaluation.libevaluation_interop.UserString.zfill">zfill</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.WindowsLibraryLoader" href="#amplitude_experiment.local.evaluation.libevaluation_interop.WindowsLibraryLoader">WindowsLibraryLoader</a></code></h4>
+<ul class="">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.WindowsLibraryLoader.Lookup" href="#amplitude_experiment.local.evaluation.libevaluation_interop.WindowsLibraryLoader.Lookup">Lookup</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.WindowsLibraryLoader.name_formats" href="#amplitude_experiment.local.evaluation.libevaluation_interop.WindowsLibraryLoader.name_formats">name_formats</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_1" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_1">struct_anon_1</a></code></h4>
+<ul class="">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_1.pinned" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_1.pinned">pinned</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_1" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_1">struct_anon_1</a></code></h4>
+<ul class="">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_1.pinned" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_1.pinned">pinned</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_10" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_10">struct_anon_10</a></code></h4>
+<ul class="">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_10.evaluate" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_10.evaluate">evaluate</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_11" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_11">struct_anon_11</a></code></h4>
+<ul class="">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_11.root" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_11.root">root</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12">struct_anon_12</a></code></h4>
+<ul class="">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.DisposeStablePointer" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.DisposeStablePointer">DisposeStablePointer</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.DisposeString" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.DisposeString">DisposeString</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.IsInstance" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.IsInstance">IsInstance</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableBoolean" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableBoolean">createNullableBoolean</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableByte" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableByte">createNullableByte</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableChar" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableChar">createNullableChar</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableDouble" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableDouble">createNullableDouble</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableFloat" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableFloat">createNullableFloat</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableInt" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableInt">createNullableInt</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableLong" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableLong">createNullableLong</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableShort" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableShort">createNullableShort</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableUnit" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableUnit">createNullableUnit</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.kotlin" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.kotlin">kotlin</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12">struct_anon_12</a></code></h4>
+<ul class="">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.DisposeStablePointer" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.DisposeStablePointer">DisposeStablePointer</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.DisposeString" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.DisposeString">DisposeString</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.IsInstance" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.IsInstance">IsInstance</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableBoolean" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableBoolean">createNullableBoolean</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableByte" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableByte">createNullableByte</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableChar" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableChar">createNullableChar</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableDouble" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableDouble">createNullableDouble</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableFloat" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableFloat">createNullableFloat</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableInt" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableInt">createNullableInt</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableLong" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableLong">createNullableLong</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableShort" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableShort">createNullableShort</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableUnit" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.createNullableUnit">createNullableUnit</a></code></li>
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.kotlin" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_12.kotlin">kotlin</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_2" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_2">struct_anon_2</a></code></h4>
+<ul class="">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_2.pinned" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_2.pinned">pinned</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_2" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_2">struct_anon_2</a></code></h4>
+<ul class="">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_2.pinned" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_2.pinned">pinned</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_3" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_3">struct_anon_3</a></code></h4>
+<ul class="">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_3.pinned" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_3.pinned">pinned</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_3" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_3">struct_anon_3</a></code></h4>
+<ul class="">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_3.pinned" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_3.pinned">pinned</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_4" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_4">struct_anon_4</a></code></h4>
+<ul class="">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_4.pinned" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_4.pinned">pinned</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_4" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_4">struct_anon_4</a></code></h4>
+<ul class="">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_4.pinned" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_4.pinned">pinned</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_5" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_5">struct_anon_5</a></code></h4>
+<ul class="">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_5.pinned" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_5.pinned">pinned</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_5" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_5">struct_anon_5</a></code></h4>
+<ul class="">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_5.pinned" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_5.pinned">pinned</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_6" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_6">struct_anon_6</a></code></h4>
+<ul class="">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_6.pinned" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_6.pinned">pinned</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_6" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_6">struct_anon_6</a></code></h4>
+<ul class="">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_6.pinned" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_6.pinned">pinned</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_7" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_7">struct_anon_7</a></code></h4>
+<ul class="">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_7.pinned" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_7.pinned">pinned</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_7" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_7">struct_anon_7</a></code></h4>
+<ul class="">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_7.pinned" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_7.pinned">pinned</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_8" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_8">struct_anon_8</a></code></h4>
+<ul class="">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_8.pinned" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_8.pinned">pinned</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_8" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_8">struct_anon_8</a></code></h4>
+<ul class="">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_8.pinned" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_8.pinned">pinned</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_9" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_9">struct_anon_9</a></code></h4>
+<ul class="">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_9.pinned" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_9.pinned">pinned</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_9" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_9">struct_anon_9</a></code></h4>
+<ul class="">
+<li><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_9.pinned" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_anon_9.pinned">pinned</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_libevaluation_interop_KType" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_libevaluation_interop_KType">struct_libevaluation_interop_KType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="amplitude_experiment.local.evaluation.libevaluation_interop.struct_libevaluation_interop_KType" href="#amplitude_experiment.local.evaluation.libevaluation_interop.struct_libevaluation_interop_KType">struct_libevaluation_interop_KType</a></code></h4>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

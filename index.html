@@ -38,19 +38,23 @@
 <h2 id="installation">Installation</h2>
 <pre><code class="language-python">pip install amplitude-experiment
 </code></pre>
-<h2 id="quick-start">Quick Start</h2>
-<pre><code class="language-python">from amplitude_experiment import Experiment, Config, Client, User
+<h2 id="remote-evaluation-quick-start">Remote Evaluation Quick Start</h2>
+<pre><code class="language-python">from amplitude_experiment import Experiment, RemoteEvaluationConfig, RemoteEvaluationClient, User
 
 # (1) Get your deployment's API key
 apiKey = 'YOUR-API-KEY'
 
- # (2) Initialize the experiment client
-experiment = Experiment.initialize(api_key)
+ # (2) Initialize the experiment remote evaluation
+experiment = Experiment.initialize_remote(api_key)
 
 # (3) Fetch variants for a user
-user = User(device_id=&quot;abcdefg&quot;, user_id=&quot;user@company.com&quot;, user_properties={
-    'premium': True
-})
+user = User(
+    device_id=&quot;abcdefg&quot;,
+    user_id=&quot;user@company.com&quot;,
+    user_properties={
+        'premium': True
+    }
+)
 
 # (4) Lookup a flag's variant
 #
@@ -74,7 +78,23 @@ def fetch_callback(user, variants):
         else:
             # Flag is off
 
+</code></pre>
+<h2 id="local-evaluation-quick-start">Local Evaluation Quick Start</h2>
+<pre><code class="language-python"># (1) Initialize the local evaluation client with a server deployment key.
+experiment = Experiment.initialize_local(api_key)
 
+# (2) Start the local evaluation client.
+experiment.start()
+
+# (3) Evaluate a user.
+user = User(
+    device_id=&quot;abcdefg&quot;,
+    user_id=&quot;user@company.com&quot;,
+    user_properties={
+        'premium': True
+    }
+)
+variants = experiment.evaluate(user)
 </code></pre>
 <h2 id="more-information">More Information</h2>
 <p>Please visit our :100:<a href="https://www.docs.developers.amplitude.com/experiment/sdks/python-sdk/">Developer Center</a> for more instructions on using our the SDK.</p>
@@ -90,26 +110,20 @@ The official Amplitude Experiment Python Server SDK
 .. include:: ../../README.md
 &#34;&#34;&#34;
 
-from .client import Client
-from .config import Config
+from .remote.client import RemoteEvaluationClient
+from .remote.config import RemoteEvaluationConfig
 from .variant import Variant
 from .user import User
 from .version import __version__
 from .factory import Experiment
-from .cookie import AmplitudeCookie</code></pre>
+from .cookie import AmplitudeCookie
+from .local.client import LocalEvaluationClient
+from .local.config import LocalEvaluationConfig</code></pre>
 </details>
 </section>
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
-<dt><code class="name"><a title="amplitude_experiment.client" href="client.html">amplitude_experiment.client</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="amplitude_experiment.config" href="config.html">amplitude_experiment.config</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
 <dt><code class="name"><a title="amplitude_experiment.connection_pool" href="connection_pool.html">amplitude_experiment.connection_pool</a></code></dt>
 <dd>
 <div class="desc"></div>
@@ -119,6 +133,14 @@ from .cookie import AmplitudeCookie</code></pre>
 <div class="desc"></div>
 </dd>
 <dt><code class="name"><a title="amplitude_experiment.factory" href="factory.html">amplitude_experiment.factory</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="amplitude_experiment.local" href="local/index.html">amplitude_experiment.local</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="amplitude_experiment.remote" href="remote/index.html">amplitude_experiment.remote</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -149,7 +171,8 @@ from .cookie import AmplitudeCookie</code></pre>
 <ul>
 <li><a href="#experiment-python-sdk">Experiment Python SDK</a><ul>
 <li><a href="#installation">Installation</a></li>
-<li><a href="#quick-start">Quick Start</a></li>
+<li><a href="#remote-evaluation-quick-start">Remote Evaluation Quick Start</a></li>
+<li><a href="#local-evaluation-quick-start">Local Evaluation Quick Start</a></li>
 <li><a href="#more-information">More Information</a></li>
 <li><a href="#need-help">Need Help?</a></li>
 </ul>
@@ -159,11 +182,11 @@ from .cookie import AmplitudeCookie</code></pre>
 <ul id="index">
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
-<li><code><a title="amplitude_experiment.client" href="client.html">amplitude_experiment.client</a></code></li>
-<li><code><a title="amplitude_experiment.config" href="config.html">amplitude_experiment.config</a></code></li>
 <li><code><a title="amplitude_experiment.connection_pool" href="connection_pool.html">amplitude_experiment.connection_pool</a></code></li>
 <li><code><a title="amplitude_experiment.cookie" href="cookie.html">amplitude_experiment.cookie</a></code></li>
 <li><code><a title="amplitude_experiment.factory" href="factory.html">amplitude_experiment.factory</a></code></li>
+<li><code><a title="amplitude_experiment.local" href="local/index.html">amplitude_experiment.local</a></code></li>
+<li><code><a title="amplitude_experiment.remote" href="remote/index.html">amplitude_experiment.remote</a></code></li>
 <li><code><a title="amplitude_experiment.user" href="user.html">amplitude_experiment.user</a></code></li>
 <li><code><a title="amplitude_experiment.variant" href="variant.html">amplitude_experiment.variant</a></code></li>
 <li><code><a title="amplitude_experiment.version" href="version.html">amplitude_experiment.version</a></code></li>
