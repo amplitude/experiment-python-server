@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.0 (2022-09-08)
+### Feature
+* Add local evaluation library header ([#16](https://github.com/amplitude/experiment-python-server/issues/16)) ([`513f61a`](https://github.com/amplitude/experiment-python-server/commit/513f61af70d971256691afe5b61a119f6fe2b9c7))
+
+### Fix
+* Patch for pdoc for local evaluation lib ([#15](https://github.com/amplitude/experiment-python-server/issues/15)) ([`7217110`](https://github.com/amplitude/experiment-python-server/commit/7217110d7bc22169e1ad46ebb01cce029534e5d0))
+
 ## v0.2.0 (2022-08-16)
 ### Feature
 * Testing, comments and prepare for release ([#13](https://github.com/amplitude/experiment-python-server/issues/13)) ([`1f38faf`](https://github.com/amplitude/experiment-python-server/commit/1f38faf19bd37e700fa587a738a35e797a6d847f))
