@@ -9,6 +9,7 @@ from ..connection_pool import HTTPConnectionPool
 from .poller import Poller
 from .evaluation.evaluation import evaluate
 from ..variant import Variant
+from ..version import __version__
 
 
 class LocalEvaluationClient:
@@ -78,7 +79,8 @@ class LocalEvaluationClient:
         conn = self._connection_pool.acquire()
         headers = {
             'Authorization': f"Api-Key {self.api_key}",
-            'Content-Type': 'application/json;charset=utf-8'
+            'Content-Type': 'application/json;charset=utf-8',
+            'X-Amp-Exp-Library': f"experiment-python-server/{__version__}"
         }
         body = None
         self.logger.debug('[Experiment] Get flag configs')
