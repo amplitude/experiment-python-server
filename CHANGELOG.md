@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.1 (2022-11-21)
+### Fix
+* Fix linux arm64 load path ([#17](https://github.com/amplitude/experiment-python-server/issues/17)) ([`a6b3de0`](https://github.com/amplitude/experiment-python-server/commit/a6b3de014ea3a6cd219a51a9930af55734b2f146))
+
 ## v0.3.0 (2022-09-08)
 ### Feature
 * Add local evaluation library header ([#16](https://github.com/amplitude/experiment-python-server/issues/16)) ([`513f61a`](https://github.com/amplitude/experiment-python-server/commit/513f61af70d971256691afe5b61a119f6fe2b9c7))
