@@ -765,7 +765,7 @@ class PosixLibraryLoader(LibraryLoader):
             # actually found multiple architectures or other library types that
             # may not load
             yield i
-        if platform.machine().startswith('arm'):
+        if platform.machine().startswith(('arm', 'aarch64')):
             yield os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), f"./lib/linuxX64/{libname}.so"))
         else:
             yield os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), f"./lib/linuxX64/{libname}.so"))
