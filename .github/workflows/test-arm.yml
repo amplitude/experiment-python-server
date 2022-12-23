@@ -15,7 +15,8 @@ jobs:
           distro: ubuntu20.04
           githubToken: ${{ github.token }}
           install: |
-            apt-get install software-properties-common
+            apt update
+            apt -y install python
           run: |
             python -m unittest discover -s ./tests -p '*_test.py'
             echo ::set-output result=$(python -m unittest discover -s ./tests -p '*_test.py')
