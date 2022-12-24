@@ -16,9 +16,9 @@ jobs:
           githubToken: ${{ github.token }}
           install: |
             apt update
-            apt -y install python
+            apt -y install python3
           run: |
-            python -m unittest discover -s ./tests -p '*_test.py'
+            python3 -m unittest discover -s ./tests -p '*_test.py'
             echo ::set-output result=$(python -m unittest discover -s ./tests -p '*_test.py')
 
       - name: Get the output
