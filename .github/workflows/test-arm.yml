@@ -4,11 +4,11 @@ on: [pull_request]
 jobs:
   aarch_job:
     runs-on: ubuntu-latest
-    name: Build on ubuntu aarch64
+    name: Test on ubuntu aarch64
     steps:
       - uses: actions/checkout@v3
       - uses: uraimo/run-on-arch-action@v2
-        name: Run commands
+        name: Run Unit Test
         id: runcmd
         with:
           arch: aarch64
@@ -19,7 +19,7 @@ jobs:
             apt -y install python3
           run: |
             python3 -m unittest discover -s ./tests -p '*_test.py'
-            echo ::set-output result=$(python -m unittest discover -s ./tests -p '*_test.py')
+            echo ::set-output result=$(python3 -m unittest discover -s ./tests -p '*_test.py')
 
       - name: Get the output
         run: |
