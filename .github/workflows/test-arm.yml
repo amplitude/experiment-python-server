@@ -19,8 +19,3 @@ jobs:
             apt -y install python3
           run: |
             python3 -m unittest discover -s ./tests -p '*_test.py'
-            echo ::set-output result=$(python3 -m unittest discover -s ./tests -p '*_test.py')
-
-      - name: Get the output
-        run: |
-          echo "The test result was ${{ steps.runcmd.outputs.result }}"
