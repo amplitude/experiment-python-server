@@ -44,13 +44,13 @@ jobs:
       - name: Publish distribution PyPI --dry-run
         if: ${{ github.event.inputs.dryRun == 'true'}}
         run: |
-          semantic-release publish --major --noop
+          semantic-release publish --noop
       - name: Publish distribution PyPI
         if: ${{ github.event.inputs.dryRun == 'false'}}
         run: |
           git config user.name amplitude-sdk-bot
           git config user.email amplitude-sdk-bot@users.noreply.github.com
-          semantic-release publish --major
+          semantic-release publish
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPOSITORY_USERNAME: __token__
