@@ -1,0 +1,21 @@
+name: Unit Test on Arm
+on: [pull_request]
+
+jobs:
+  aarch_job:
+    runs-on: ubuntu-latest
+    name: Test on ubuntu aarch64
+    steps:
+      - uses: actions/checkout@v3
+      - uses: uraimo/run-on-arch-action@v2
+        name: Run Unit Test
+        id: runcmd
+        with:
+          arch: aarch64
+          distro: ubuntu20.04
+          githubToken: ${{ github.token }}
+          install: |
+            apt update
+            apt -y install python3
+          run: |
+            python3 -m unittest discover -s ./tests -p '*_test.py'
