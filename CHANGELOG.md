@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.0.0 (2022-12-31)
+### Fix
+* Fix aarch64 ([#18](https://github.com/amplitude/experiment-python-server/issues/18)) ([`546dc8f`](https://github.com/amplitude/experiment-python-server/commit/546dc8f89d30e92a3ddf86189ed4dd1e8e2098a9))
+
 ## v0.3.1 (2022-11-21)
 ### Fix
 * Fix linux arm64 load path ([#17](https://github.com/amplitude/experiment-python-server/issues/17)) ([`a6b3de0`](https://github.com/amplitude/experiment-python-server/commit/a6b3de014ea3a6cd219a51a9930af55734b2f146))
