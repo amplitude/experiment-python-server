@@ -1,7 +1,7 @@
 r"""Wrapper for libevaluation_interop_api.h
 
 Generated with:
-/usr/local/bin/ctypesgen -llibevaluation_interop ./lib/macosX64/libevaluation_interop_api.h -o libevaluation_interop.py --libdir=./lib
+/usr/local/bin/ctypesgen -llibevaluation_interop ./src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h -o ./src/amplitude_experiment/local/evaluation/libevaluation_interop.py --libdir=./src/amplitude_experiment/local/evaluation/lib/macosX64 --libdir=./src/amplitude_experiment/local/evaluation/lib/macosArm64 --libdir=./src/amplitude_experiment/local/evaluation/lib/linuxX64 --libdir=./src/amplitude_experiment/local/evaluation/lib/linuxArm64
 
 Do not modify this file.
 """
@@ -440,7 +440,7 @@ def ord_if_char(value):
 # End preamble
 
 _libs = {}
-_libdirs = ['./lib']
+_libdirs = ['./src/amplitude_experiment/local/evaluation/lib/macosX64', './src/amplitude_experiment/local/evaluation/lib/macosArm64', './src/amplitude_experiment/local/evaluation/lib/linuxX64', './src/amplitude_experiment/local/evaluation/lib/linuxArm64']
 
 # Begin loader
 
@@ -857,7 +857,7 @@ del loaderclass
 
 # End loader
 
-add_library_search_dirs(['./lib'])
+add_library_search_dirs(['./src/amplitude_experiment/local/evaluation/lib/macosX64', './src/amplitude_experiment/local/evaluation/lib/macosArm64', './src/amplitude_experiment/local/evaluation/lib/linuxX64', './src/amplitude_experiment/local/evaluation/lib/linuxArm64'])
 
 # Begin libraries
 _libs["libevaluation_interop"] = load_library("libevaluation_interop")
@@ -1162,13 +1162,10 @@ struct_anon_16._fields_ = [
 libevaluation_interop_ExportedSymbols = struct_anon_16# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 105
 
 # src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 106
-for _lib in _libs.values():
-    if not _lib.has("libevaluation_interop_symbols", "cdecl"):
-        continue
-    libevaluation_interop_symbols = _lib.get("libevaluation_interop_symbols", "cdecl")
+if _libs["libevaluation_interop"].has("libevaluation_interop_symbols", "cdecl"):
+    libevaluation_interop_symbols = _libs["libevaluation_interop"].get("libevaluation_interop_symbols", "cdecl")
     libevaluation_interop_symbols.argtypes = []
     libevaluation_interop_symbols.restype = POINTER(libevaluation_interop_ExportedSymbols)
-    break
 
 libevaluation_interop_KType = struct_libevaluation_interop_KType# src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 24
 
