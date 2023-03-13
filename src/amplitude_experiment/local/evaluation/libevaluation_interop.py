@@ -1,8 +1,5 @@
 r"""Wrapper for libevaluation_interop_api.h
 
-Generated with:
-/usr/local/bin/ctypesgen -llibevaluation_interop ./src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h -o ./src/amplitude_experiment/local/evaluation/libevaluation_interop.py --libdir=./src/amplitude_experiment/local/evaluation/lib/macosX64 --libdir=./src/amplitude_experiment/local/evaluation/lib/macosArm64 --libdir=./src/amplitude_experiment/local/evaluation/lib/linuxX64 --libdir=./src/amplitude_experiment/local/evaluation/lib/linuxArm64
-
 Do not modify this file.
 """
 
@@ -440,7 +437,7 @@ def ord_if_char(value):
 # End preamble
 
 _libs = {}
-_libdirs = ['./src/amplitude_experiment/local/evaluation/lib/macosX64', './src/amplitude_experiment/local/evaluation/lib/macosArm64', './src/amplitude_experiment/local/evaluation/lib/linuxX64', './src/amplitude_experiment/local/evaluation/lib/linuxArm64']
+_libdirs = ['./lib']
 
 # Begin loader
 
@@ -630,6 +627,13 @@ class DarwinLibraryLoader(LibraryLoader):
             for name in names:
                 yield os.path.join(directory, name)
 
+        if platform.machine().startswith('arm'):
+            yield os.path.abspath(
+                os.path.join(os.path.dirname(os.path.realpath(__file__)), f"./lib/macosArm64/{libname}.dylib"))
+        else:
+            yield os.path.abspath(
+                os.path.join(os.path.dirname(os.path.realpath(__file__)), f"./lib/macosX64/{libname}.dylib"))
+
     @staticmethod
     def getdirs(libname):
         """Implements the dylib search as specified in Apple documentation:
@@ -808,6 +812,10 @@ class PosixLibraryLoader(LibraryLoader):
             # actually found multiple architectures or other library types that
             # may not load
             yield i
+        if platform.machine().startswith(('arm', 'aarch64')):
+            yield os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), f"./lib/linuxArm64/{libname}.so"))
+        else:
+            yield os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), f"./lib/linuxX64/{libname}.so"))
 
 
 # Windows
@@ -857,7 +865,7 @@ del loaderclass
 
 # End loader
 
-add_library_search_dirs(['./src/amplitude_experiment/local/evaluation/lib/macosX64', './src/amplitude_experiment/local/evaluation/lib/macosArm64', './src/amplitude_experiment/local/evaluation/lib/linuxX64', './src/amplitude_experiment/local/evaluation/lib/linuxArm64'])
+add_library_search_dirs(['./lib'])
 
 # Begin libraries
 _libs["libevaluation_interop"] = load_library("libevaluation_interop")

@@ -1,6 +1,5 @@
 from .libevaluation_interop import libevaluation_interop_symbols
 
-
 def evaluate(rules: str, user: str) -> str:
     """
     Local evaluation wrapper.
