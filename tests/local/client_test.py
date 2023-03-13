@@ -47,6 +47,7 @@ class LocalEvaluationClientTestCase(unittest.TestCase):
         self.assertEqual(expected_variant, variants.get('sdk-ci-local-dependencies-test'))
 
     def test_evaluate_with_dependencies_and_flag_keys_not_exist_no_variant(self):
+        self.assertEqual("a", "b")
         variants = self._local_evaluation_client.evaluate(test_user_2, ['does-not-exist'])
         expected_variant = None
         self.assertEqual(expected_variant, variants.get('sdk-ci-local-dependencies-test'))
