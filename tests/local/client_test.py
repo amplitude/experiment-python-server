@@ -3,6 +3,7 @@ from src.amplitude_experiment import LocalEvaluationClient, LocalEvaluationConfi
 
 API_KEY = 'server-qz35UwzJ5akieoAdIgzM4m9MIiOLXLoz'
 test_user = User(user_id='test_user')
+test_user_2 = User(user_id='user_id', device_id='device_id')
 
 
 class LocalEvaluationClientTestCase(unittest.TestCase):
@@ -34,6 +35,26 @@ class LocalEvaluationClientTestCase(unittest.TestCase):
         invalid_local_api_key = 'client-DvWljIjiiuqLbyjqdvBaLFfEBrAvGuA3'
         with LocalEvaluationClient(invalid_local_api_key) as test_client:
             self.assertRaises(Exception, test_client.start, "[Experiment] Get flagConfigs - received error response")
+
+    def test_evaluate_with_dependencies_success(self):
+        variants = self._local_evaluation_client.evaluate(test_user_2)
+        expected_variant = Variant('control', None)
+        self.assertEqual(expected_variant, variants.get('sdk-ci-local-dependencies-test'))
+
+    def test_evaluate_with_dependencies_and_flag_keys_success(self):
+        variants = self._local_evaluation_client.evaluate(test_user_2, ['sdk-ci-local-dependencies-test'])
+        expected_variant = Variant('control', None)
+        self.assertEqual(expected_variant, variants.get('sdk-ci-local-dependencies-test'))
+
+    def test_evaluate_with_dependencies_and_flag_keys_not_exist_no_variant(self):
+        variants = self._local_evaluation_client.evaluate(test_user_2, ['does-not-exist'])
+        expected_variant = None
+        self.assertEqual(expected_variant, variants.get('sdk-ci-local-dependencies-test'))
+
+    def test_evaluate_with_dependencies_variant_holdout(self):
+        variants = self._local_evaluation_client.evaluate(test_user_2)
+        expected_variant = None
+        self.assertEqual(expected_variant, variants.get('sdk-local-evaluation-ci-test-holdout'))
 
 
 if __name__ == '__main__':
