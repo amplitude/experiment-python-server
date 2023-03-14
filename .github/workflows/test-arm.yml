@@ -17,5 +17,6 @@ jobs:
           install: |
             apt update
             apt -y install python3
+            apt -y install ca-certificates
           run: |
             python3 -m unittest discover -s ./tests -p '*_test.py'

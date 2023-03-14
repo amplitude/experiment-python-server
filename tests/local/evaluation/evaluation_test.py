@@ -127,8 +127,9 @@ class EvaluationTestCase(unittest.TestCase):
         '''
 
         expected_result = '{"brian-bug-safari":{"variant":{"key":"treatment","payload":["array"]},"description":' \
-                          '"default-segment","isDefaultVariant":false},"brian-bug-safari-2":{"variant":{"key":"off"},' \
-                          '"description":"default-segment","isDefaultVariant":true}}'
+                          '"default-segment","isDefaultVariant":false,"deployed":true,"type":"release"},' \
+                          '"brian-bug-safari-2":{"variant":{"key":"off"},' \
+                          '"description":"default-segment","isDefaultVariant":true,"deployed":true,"type":"release"}}'
         self.assertEqual(expected_result, evaluate(rules_json, user_json))
 
 

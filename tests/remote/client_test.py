@@ -31,7 +31,7 @@ class RemoteEvaluationClientTestCase(unittest.TestCase):
         self.client.close()
 
     def test_fetch_async(self):
-        self.client = RemoteEvaluationClient(API_KEY, RemoteEvaluationConfig(debug=True))
+        self.client = RemoteEvaluationClient(API_KEY, RemoteEvaluationConfig(debug=False))
         user = User(user_id='test_user')
         self.client.fetch_async(user, self.callback_for_async)
 
