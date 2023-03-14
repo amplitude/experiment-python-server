@@ -15,7 +15,7 @@ from ..version import __version__
 class LocalEvaluationClient:
     """Experiment client for evaluating variants for a user locally."""
 
-    def __init__(self, api_key: str, config : LocalEvaluationConfig = None):
+    def __init__(self, api_key: str, config: LocalEvaluationConfig = None):
         """
         Creates a new Experiment LocalEvaluationClient instance.
             Parameters:

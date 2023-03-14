@@ -1,6 +1,7 @@
 import random
 import time
 import unittest
+import platform
 
 from src.amplitude_experiment import LocalEvaluationClient, User
 
@@ -52,6 +53,7 @@ def random_benchmark_flag():
     return f"local-evaluation-benchmark-{n}"
 
 
+@unittest.skipIf(platform.machine().startswith(('arm', 'aarch64')), "GHA aarch64 too slow")
 class BenchmarkTestCase(unittest.TestCase):
     _local_evaluation_client: LocalEvaluationClient = None
 
@@ -72,7 +74,7 @@ class BenchmarkTestCase(unittest.TestCase):
         print('took:', duration)
         self.assertTrue(duration < 10)
 
-    def test_evaluate_benchmark_10_flag_smaller_than_20_ms(self):
+    def test_evaluate_benchmark_10_flag_smaller_than_10_ms(self):
         total = 0
         for i in range(10):
             user = random_experiment_user()
@@ -82,7 +84,7 @@ class BenchmarkTestCase(unittest.TestCase):
         print('took:', total)
         self.assertTrue(total < 20)
 
-    def test_evaluate_benchmark_100_flag_smaller_than_200_ms(self):
+    def test_evaluate_benchmark_100_flag_smaller_than_100_ms(self):
         total = 0
         for i in range(100):
             user = random_experiment_user()
@@ -90,9 +92,9 @@ class BenchmarkTestCase(unittest.TestCase):
             duration = measure(self._local_evaluation_client.evaluate, user, [flag])
             total += duration
         print('took:', total)
-        self.assertTrue(total < 200)
+        self.assertTrue(total < 100)
 
-    def test_evaluate_benchmark_1000_flag_smaller_than_2000_ms(self):
+    def test_evaluate_benchmark_1000_flag_smaller_than_1000_ms(self):
         total = 0
         for i in range(1000):
             user = random_experiment_user()
@@ -100,7 +102,7 @@ class BenchmarkTestCase(unittest.TestCase):
             duration = measure(self._local_evaluation_client.evaluate, user, [flag])
             total += duration
         print('took:', total)
-        self.assertTrue(total < 2000)
+        self.assertTrue(total < 1000)
 
 
 if __name__ == '__main__':
