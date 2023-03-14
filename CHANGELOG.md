@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.1.0 (2023-03-14)
+### Feature
+* Flag dependencies ([#19](https://github.com/amplitude/experiment-python-server/issues/19)) ([`948ecd8`](https://github.com/amplitude/experiment-python-server/commit/948ecd814b373cbe80424bd986fd654e5f83401e))
+
 ## v1.0.0 (2022-12-31)
 ### Fix
 * Fix aarch64 ([#18](https://github.com/amplitude/experiment-python-server/issues/18)) ([`546dc8f`](https://github.com/amplitude/experiment-python-server/commit/546dc8f89d30e92a3ddf86189ed4dd1e8e2098a9))
