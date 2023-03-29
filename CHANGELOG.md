@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.1.1 (2023-03-29)
+### Fix
+* Use daemon threads for conn pool and poller ([#20](https://github.com/amplitude/experiment-python-server/issues/20)) ([`fd8360a`](https://github.com/amplitude/experiment-python-server/commit/fd8360a7a8eeff20a97ae41682f794a19c2f568e))
+
 ## v1.1.0 (2023-03-14)
 ### Feature
 * Flag dependencies ([#19](https://github.com/amplitude/experiment-python-server/issues/19)) ([`948ecd8`](https://github.com/amplitude/experiment-python-server/commit/948ecd814b373cbe80424bd986fd654e5f83401e))
