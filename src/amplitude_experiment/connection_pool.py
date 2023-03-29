@@ -164,6 +164,7 @@ class HTTPConnectionPool:
             return
         self.clear_idle_conn()
         self._clearer = threading.Timer(self.idle_timeout, self.start_clear_conn)
+        self._clearer.daemon = True
         self._clearer.start()
 
     def stop_clear_conn(self) -> None:
