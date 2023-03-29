@@ -26,6 +26,7 @@ class Poller:
                 self.next_call = time.time()
             self.next_call += self.interval
             self._timer = threading.Timer(self.next_call - time.time(), self._run)
+            self._timer.daemon = True
             self._timer.start()
             self.is_running = True
 
