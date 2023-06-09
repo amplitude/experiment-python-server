@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v1.1.2 (2023-06-09)
+
+### Fix
+
+* Close http connection when request throws exception ([#23](https://github.com/amplitude/experiment-python-server/issues/23)) ([`40c4dbb`](https://github.com/amplitude/experiment-python-server/commit/40c4dbb03961bffaa56138ba5411efda9f2ccd45))
+
 ## v1.1.1 (2023-03-29)
 ### Fix
 * Use daemon threads for conn pool and poller ([#20](https://github.com/amplitude/experiment-python-server/issues/20)) ([`fd8360a`](https://github.com/amplitude/experiment-python-server/commit/fd8360a7a8eeff20a97ae41682f794a19c2f568e))
