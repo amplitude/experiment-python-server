@@ -1,5 +1,6 @@
 import threading
 import time
+import logging
 from typing import Any
 
 from http.client import HTTPConnection, HTTPResponse, HTTPSConnection
@@ -28,9 +29,13 @@ class WrapperHTTPConnection:
         self.pool.release(self)
 
     def request(self, *args: Any, **kwargs: Any) -> HTTPResponse:
-        self.conn.request(*args, **kwargs)
-        self.response = self.conn.getresponse()
-        return self.response
+        try:
+            self.conn.request(*args, **kwargs)
+            self.response = self.conn.getresponse()
+            return self.response
+        except Exception as e:
+            self.close()
+            raise e
 
     def close(self) -> None:
         self.conn.close()
