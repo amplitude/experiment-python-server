@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v1.1.3 (2023-07-07)
+
+### Fix
+
+* Update evaluation 1.1.1 ([#24](https://github.com/amplitude/experiment-python-server/issues/24)) ([`ed5924a`](https://github.com/amplitude/experiment-python-server/commit/ed5924af26c93fc9abad6064d0117513dfb3aa2d))
+
 ## v1.1.2 (2023-06-09)
 
 ### Fix
