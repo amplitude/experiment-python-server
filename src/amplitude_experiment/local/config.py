@@ -1,3 +1,6 @@
+from src.amplitude_experiment.assignment.assignment_config import AssignmentConfig
+
+
 class LocalEvaluationConfig:
     """Experiment Local Client Configuration"""
 
@@ -6,7 +9,8 @@ class LocalEvaluationConfig:
     def __init__(self, debug: bool = False,
                  server_url: str = DEFAULT_SERVER_URL,
                  flag_config_polling_interval_millis: int = 30000,
-                 flag_config_poller_request_timeout_millis: int = 10000):
+                 flag_config_poller_request_timeout_millis: int = 10000,
+                 assignment_config: AssignmentConfig = None):
         """
         Initialize a config
            Parameters:
@@ -25,3 +29,4 @@ class LocalEvaluationConfig:
         self.server_url = server_url
         self.flag_config_polling_interval_millis = flag_config_polling_interval_millis
         self.flag_config_poller_request_timeout_millis = flag_config_poller_request_timeout_millis
+        self.assignment_config = assignment_config

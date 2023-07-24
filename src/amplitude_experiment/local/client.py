@@ -3,7 +3,10 @@ import logging
 from threading import Lock
 from typing import Any, List, Dict
 
+from amplitude import Amplitude
+
 from .config import LocalEvaluationConfig
+from ..assignment import Assignment, AssignmentFilter, AssignmentService
 from ..user import User
 from ..connection_pool import HTTPConnectionPool
 from .poller import Poller
@@ -25,10 +28,17 @@ class LocalEvaluationClient:
             Returns:
                 Experiment Client instance.
         """
+
         if not api_key:
             raise ValueError("Experiment API key is empty")
         self.api_key = api_key
         self.config = config or LocalEvaluationConfig()
+        self.assignment_service = None
+        if config and config.assignment_config:
+            print('set assignment service')
+            instance = Amplitude(config.assignment_config.api_key, config.assignment_config)
+            self.assignment_service = AssignmentService(instance, AssignmentFilter(
+                config.assignment_config.filter_capacity))
         self.logger = logging.getLogger("Amplitude")
         self.logger.addHandler(logging.StreamHandler())
         if self.config.debug:
@@ -58,12 +68,16 @@ class LocalEvaluationClient:
         """
         variants = {}
         if self.flags is None or len(self.flags) == 0:
+            if self.assignment_service:
+                self.assignment_service.track(Assignment(user, {}))
             return variants
         user_json = str(user)
         self.logger.debug(f"[Experiment] Evaluate: User: {user_json} - Flags: {self.flags}")
         result_json = evaluate(self.flags, user_json)
         self.logger.debug(f"[Experiment] Evaluate Result: {result_json}")
         evaluation_result = json.loads(result_json)
+        if self.assignment_service:
+            self.assignment_service.track(Assignment(user, {}))
         filter_result = flag_keys is not None
         for key, value in evaluation_result.items():
             if value.get('isDefaultVariant') or (filter_result and key not in flag_keys):
@@ -84,7 +98,8 @@ class LocalEvaluationClient:
             response = conn.request('GET', '/sdk/v1/flags', body, headers)
             response_body = response.read().decode("utf8")
             if response.status != 200:
-                raise Exception(f"[Experiment] Get flagConfigs - received error response: ${response.status}: ${response_body}")
+                raise Exception(
+                    f"[Experiment] Get flagConfigs - received error response: ${response.status}: ${response_body}")
             self.logger.debug(f"[Experiment] Got flag configs: {response_body}")
             self.lock.acquire()
             self.flags = response_body

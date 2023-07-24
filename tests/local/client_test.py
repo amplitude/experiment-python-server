@@ -1,5 +1,6 @@
+import time
 import unittest
-from src.amplitude_experiment import LocalEvaluationClient, LocalEvaluationConfig, User, Variant
+from src.amplitude_experiment import LocalEvaluationClient, LocalEvaluationConfig, User, Variant, AssignmentConfig
 
 API_KEY = 'server-qz35UwzJ5akieoAdIgzM4m9MIiOLXLoz'
 test_user = User(user_id='test_user')
@@ -55,6 +56,19 @@ class LocalEvaluationClientTestCase(unittest.TestCase):
         variants = self._local_evaluation_client.evaluate(test_user_2)
         expected_variant = None
         self.assertEqual(expected_variant, variants.get('sdk-local-evaluation-ci-test-holdout'))
+
+    def test_eval_with_assignment_config(self):
+        client = LocalEvaluationClient(API_KEY, LocalEvaluationConfig(
+            assignment_config=AssignmentConfig(api_key='a6dd847b9d2f03c816d4f3f8458cdc1d')))
+        client.start()
+        client.evaluate(User(user_id='tim.yiu@amplitude.com'))
+        time.sleep(4)
+
+    def test_eval_without_assignment_config(self):
+        client = LocalEvaluationClient(API_KEY)
+        client.start()
+        client.evaluate(User(user_id='tim.yiu@amplitude.com'))
+        time.sleep(4)
 
 
 if __name__ == '__main__':
