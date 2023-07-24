@@ -19,6 +19,9 @@ jobs:
           cache: 'pip'
         run: pip install -r requirements.txt
 
+      - name: Install requirements
+        run: pip install -r requirements.txt
+
       - name: Unit Test
         uses: actions/setup-python@v3
         run: python -m unittest discover -s ./tests -p '*_test.py'
