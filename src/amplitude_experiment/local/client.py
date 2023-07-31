@@ -35,7 +35,6 @@ class LocalEvaluationClient:
         self.config = config or LocalEvaluationConfig()
         self.assignment_service = None
         if config and config.assignment_config:
-            print('set assignment service')
             instance = Amplitude(config.assignment_config.api_key, config.assignment_config)
             self.assignment_service = AssignmentService(instance, AssignmentFilter(
                 config.assignment_config.filter_capacity))

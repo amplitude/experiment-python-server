@@ -2,7 +2,6 @@ import time
 import unittest
 from src.amplitude_experiment import User, FlagResult
 from src.amplitude_experiment.assignment import Assignment, AssignmentFilter
-from tests.local.util.mock_assignment_filter import MockAssignmentFilter
 
 
 class AssignmentFilterTestCase(unittest.TestCase):
@@ -107,7 +106,7 @@ class AssignmentFilterTestCase(unittest.TestCase):
         self.assertTrue(assignment_filter.should_track(assignment1))
 
     def test_lru_expiration(self):
-        assignment_filter = MockAssignmentFilter(100, 1000)
+        assignment_filter = AssignmentFilter(100, 1000)
         user1 = User(user_id='user1', device_id='device')
         user2 = User(user_id='user2', device_id='device')
         results = {}

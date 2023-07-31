@@ -17,8 +17,8 @@ class Assignment:
     def canonicalize(self) -> str:
         user = self.user.user_id.strip() if self.user.user_id else 'undefined'
         device = self.user.device_id.strip() if self.user.device_id else 'undefined'
-        sb = user + ' ' + device + ' '
+        canonical = user + ' ' + device + ' '
         for key in sorted(self.results):
             value = self.results[key].value.strip() if self.results[key] else 'undefined'
-            sb += key.strip() + ' ' + value + ' '
-        return sb
+            canonical += key.strip() + ' ' + value + ' '
+        return canonical

@@ -6,8 +6,8 @@ from ..util.cache import Cache
 
 
 class AssignmentFilter:
-    def __init__(self, size: int):
-        self.cache = Cache(size, DAY_MILLIS)
+    def __init__(self, size: int, ttl_millis: int = DAY_MILLIS):
+        self.cache = Cache(size, ttl_millis)
 
     def should_track(self, assignment: Assignment) -> bool:
         now = time.time()
