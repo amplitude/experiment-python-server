@@ -76,7 +76,7 @@ class LocalEvaluationClient:
         self.logger.debug(f"[Experiment] Evaluate Result: {result_json}")
         evaluation_result = json.loads(result_json)
         if self.assignment_service:
-            self.assignment_service.track(Assignment(user, {}))
+            self.assignment_service.track(Assignment(user, evaluation_result))
         filter_result = flag_keys is not None
         for key, value in evaluation_result.items():
             if value.get('isDefaultVariant') or (filter_result and key not in flag_keys):
