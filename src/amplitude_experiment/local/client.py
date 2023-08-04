@@ -7,6 +7,7 @@ from amplitude import Amplitude
 
 from .config import LocalEvaluationConfig
 from ..assignment import Assignment, AssignmentFilter, AssignmentService
+from ..assignment.assignment_service import FLAG_TYPE_MUTUAL_EXCLUSION_GROUP, FLAG_TYPE_HOLDOUT_GROUP
 from ..user import User
 from ..connection_pool import HTTPConnectionPool
 from .poller import Poller
@@ -75,13 +76,18 @@ class LocalEvaluationClient:
         result_json = evaluate(self.flags, user_json)
         self.logger.debug(f"[Experiment] Evaluate Result: {result_json}")
         evaluation_result = json.loads(result_json)
-        if self.assignment_service:
-            self.assignment_service.track(Assignment(user, evaluation_result))
         filter_result = flag_keys is not None
+        assignment_result = {}
         for key, value in evaluation_result.items():
-            if value.get('isDefaultVariant') or (filter_result and key not in flag_keys):
-                continue
-            variants[key] = Variant(value['variant'].get('key'), value['variant'].get('payload'))
+            included = not filter_result or key in flag_keys
+            if not value.get('isDefaultVariant') and included:
+                variants[key] = Variant(value['variant'].get('key'), value['variant'].get('payload'))
+            if included or evaluation_result[key].type == FLAG_TYPE_MUTUAL_EXCLUSION_GROUP or \
+                    evaluation_result[key].type == FLAG_TYPE_HOLDOUT_GROUP:
+                assignment_result[key] = evaluation_result[key]
+
+        if self.assignment_service:
+            self.assignment_service.track(Assignment(user, assignment_result))
         return variants
 
     def __do_flags(self):

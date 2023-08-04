@@ -4,6 +4,7 @@ from ..assignment.assignment import DAY_MILLIS
 from ..assignment.assignment_filter import AssignmentFilter
 
 FLAG_TYPE_MUTUAL_EXCLUSION_GROUP = "mutual-exclusion-group"
+FLAG_TYPE_HOLDOUT_GROUP = "holdout-group"
 
 
 def to_event(assignment: Assignment) -> BaseEvent:
