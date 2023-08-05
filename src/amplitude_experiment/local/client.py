@@ -82,8 +82,8 @@ class LocalEvaluationClient:
             included = not filter_result or key in flag_keys
             if not value.get('isDefaultVariant') and included:
                 variants[key] = Variant(value['variant'].get('key'), value['variant'].get('payload'))
-            if included or evaluation_result[key].type == FLAG_TYPE_MUTUAL_EXCLUSION_GROUP or \
-                    evaluation_result[key].type == FLAG_TYPE_HOLDOUT_GROUP:
+            if included or evaluation_result[key]['type'] == FLAG_TYPE_MUTUAL_EXCLUSION_GROUP or \
+                    evaluation_result[key]['type'] == FLAG_TYPE_HOLDOUT_GROUP:
                 assignment_result[key] = evaluation_result[key]
 
         if self.assignment_service:
