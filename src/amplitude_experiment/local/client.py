@@ -38,7 +38,7 @@ class LocalEvaluationClient:
         if config and config.assignment_config:
             instance = Amplitude(config.assignment_config.api_key, config.assignment_config)
             self.assignment_service = AssignmentService(instance, AssignmentFilter(
-                config.assignment_config.filter_capacity))
+                config.assignment_config.cache_capacity))
         self.logger = logging.getLogger("Amplitude")
         self.logger.addHandler(logging.StreamHandler())
         if self.config.debug:
