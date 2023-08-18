@@ -1,8 +1,8 @@
 import time
 from typing import Dict
 
-from src.amplitude_experiment.flagresult import FlagResult
-from src.amplitude_experiment.user import User
+from ..flagresult import FlagResult
+from ..user import User
 
 DAY_MILLIS = 24 * 60 * 60 * 1000
 
