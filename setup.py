@@ -33,7 +33,7 @@ setup(
         "Programming Language :: Python :: 3.10",
     ],
     keywords="amplitude, python, backend",
-    install_requires=["<amplitude_analytics> >= <1.1.1>"],
+    install_requires=["amplitude_analytics>=1.1.1"],
     package_dir={"": "src"},
     packages=["amplitude_experiment"],
     include_package_data=True,
