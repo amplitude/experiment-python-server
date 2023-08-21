@@ -27,7 +27,7 @@ jobs:
           python-version: 3.7
 
       - name: Install dependencies
-        run: python -m pip install build setuptools wheel twine
+        run: python -m pip install build setuptools wheel twine amplitude_analytics
 
       - name: Build a binary wheel and a source tarball
         run: python -m build --sdist --wheel --outdir dist/ .
