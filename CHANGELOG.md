@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v1.2.0 (2023-08-22)
+
+### Feature
+
+* Automatic assignment tracking ([#25](https://github.com/amplitude/experiment-python-server/issues/25)) ([`f3988fd`](https://github.com/amplitude/experiment-python-server/commit/f3988fded773c06888787339f4cfa1a9e8297867))
+
 ## v1.1.3 (2023-07-07)
 
 ### Fix
