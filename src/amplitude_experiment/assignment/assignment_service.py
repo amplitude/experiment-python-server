@@ -29,7 +29,6 @@ def to_event(assignment: Assignment) -> BaseEvent:
     event.user_properties['$unset'] = unset_props
 
     event.insert_id = f'{event.user_id} {event.device_id} {hash_code(assignment.canonicalize())} {int(assignment.timestamp / DAY_MILLIS)}'
-    print(event.insert_id)
 
     return event
 
