@@ -1,5 +1,3 @@
-import time
-
 from .assignment import Assignment
 from .assignment import DAY_MILLIS
 from ..util.cache import Cache

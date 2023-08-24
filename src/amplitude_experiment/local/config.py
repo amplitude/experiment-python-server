@@ -1,4 +1,4 @@
-from src.amplitude_experiment.assignment.assignment_config import AssignmentConfig
+from ..assignment import AssignmentConfig
 
 
 class LocalEvaluationConfig:
