@@ -15,8 +15,8 @@ class Assignment:
         self.timestamp = time.time() * 1000
 
     def canonicalize(self) -> str:
-        user = self.user.user_id.strip() if self.user.user_id else 'undefined'
-        device = self.user.device_id.strip() if self.user.device_id else 'undefined'
+        user = self.user.user_id.strip() if self.user.user_id else 'None'
+        device = self.user.device_id.strip() if self.user.device_id else 'None'
         canonical = user + ' ' + device + ' '
         for key in sorted(self.results):
             value = self.results[key].variant['key'].strip() if self.results[key] and self.results[key].variant and \
