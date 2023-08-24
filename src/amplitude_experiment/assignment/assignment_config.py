@@ -2,7 +2,6 @@ import amplitude
 
 
 class AssignmentConfig(amplitude.Config):
-    def __init__(self, api_key: str, cache_capacity: int = 65536, **kw):
-        self.api_key = api_key
-        self.cache_capacity = cache_capacity
+    def __init__(self, cache_capacity: int = 65536, **kw):
         super(AssignmentConfig, self).__init__(**kw)
+        self.cache_capacity = cache_capacity

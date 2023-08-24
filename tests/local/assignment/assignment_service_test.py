@@ -1,3 +1,4 @@
+import hashlib
 import unittest
 from unittest.mock import MagicMock
 
@@ -5,6 +6,7 @@ from amplitude import Amplitude
 
 from src.amplitude_experiment import User, FlagResult
 from src.amplitude_experiment.assignment import AssignmentFilter, Assignment, DAY_MILLIS, to_event, AssignmentService
+from src.amplitude_experiment.util import hash_code
 
 user = User(user_id='user', device_id='device')
 
@@ -31,7 +33,7 @@ class AssignmentServiceTestCase(unittest.TestCase):
         self.assertEqual(1, len(user_properties['$set']))
         self.assertEqual(1, len(user_properties['$unset']))
         canonicalization = 'user device flag-key-1 on flag-key-2 control '
-        expected = f'user device {hash(canonicalization)} {int(assignment.timestamp / DAY_MILLIS)}'
+        expected = f'user device {hash_code(canonicalization)} {int(assignment.timestamp / DAY_MILLIS)}'
         self.assertEqual(expected, event.insert_id)
 
     def test_tracking_called(self):

@@ -1,7 +1,5 @@
-import time
 import unittest
 from src.amplitude_experiment import LocalEvaluationClient, LocalEvaluationConfig, User, Variant
-from src.amplitude_experiment.assignment import AssignmentConfig
 
 API_KEY = 'server-qz35UwzJ5akieoAdIgzM4m9MIiOLXLoz'
 test_user = User(user_id='test_user')

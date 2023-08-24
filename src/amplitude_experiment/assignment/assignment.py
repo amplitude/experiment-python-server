@@ -20,6 +20,6 @@ class Assignment:
         canonical = user + ' ' + device + ' '
         for key in sorted(self.results):
             value = self.results[key].variant['key'].strip() if self.results[key] and self.results[key].variant and \
-                                                                self.results[key].variant.get('key') else 'undefined'
+                                                                self.results[key].variant.get('key') else 'None'
             canonical += key.strip() + ' ' + value + ' '
         return canonical

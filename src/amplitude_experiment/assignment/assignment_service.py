@@ -2,6 +2,7 @@ from amplitude import Amplitude, BaseEvent
 from ..assignment.assignment import Assignment
 from ..assignment.assignment import DAY_MILLIS
 from ..assignment.assignment_filter import AssignmentFilter
+from ..util import hash_code
 
 FLAG_TYPE_MUTUAL_EXCLUSION_GROUP = "mutual-exclusion-group"
 FLAG_TYPE_HOLDOUT_GROUP = "holdout-group"
@@ -27,7 +28,8 @@ def to_event(assignment: Assignment) -> BaseEvent:
     event.user_properties['$set'] = set_props
     event.user_properties['$unset'] = unset_props
 
-    event.insert_id = f'{event.user_id} {event.device_id} {hash(assignment.canonicalize())} {int(assignment.timestamp / DAY_MILLIS)}'
+    event.insert_id = f'{event.user_id} {event.device_id} {hash_code(assignment.canonicalize())} {int(assignment.timestamp / DAY_MILLIS)}'
+    print(event.insert_id)
 
     return event
 
