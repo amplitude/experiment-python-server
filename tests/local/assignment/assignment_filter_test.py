@@ -10,8 +10,8 @@ class AssignmentFilterTestCase(unittest.TestCase):
         assignment_filter = AssignmentFilter(100)
         user = User(user_id='user', device_id='device')
         results = {}
-        result1 = FlagResult(value='on', is_default_variant=False)
-        result2 = FlagResult(value='control', is_default_variant=True)
+        result1 = FlagResult({'variant': {'key': 'on'}, 'isDefaultVariant': False})
+        result2 = FlagResult({'variant': {'key': 'control'}, 'isDefaultVariant': True})
         results['flag-key-1'] = result1
         results['flag-key-2'] = result2
         assignment = Assignment(user, results)
@@ -21,8 +21,8 @@ class AssignmentFilterTestCase(unittest.TestCase):
         assignment_filter = AssignmentFilter(100)
         user = User(user_id='user', device_id='device')
         results = {}
-        result1 = FlagResult(value='on', is_default_variant=False)
-        result2 = FlagResult(value='control', is_default_variant=True)
+        result1 = FlagResult({'variant': {'key': 'on'}, 'isDefaultVariant': False})
+        result2 = FlagResult({'variant': {'key': 'control'}, 'isDefaultVariant': True})
         results['flag-key-1'] = result1
         results['flag-key-2'] = result2
         assignment1 = Assignment(user, results)
@@ -35,8 +35,8 @@ class AssignmentFilterTestCase(unittest.TestCase):
         user = User(user_id='user', device_id='device')
         results1 = {}
         results2 = {}
-        result1 = FlagResult(value='on', is_default_variant=False)
-        result2 = FlagResult(value='control', is_default_variant=True)
+        result1 = FlagResult({'variant': {'key': 'on'}, 'isDefaultVariant': False})
+        result2 = FlagResult({'variant': {'key': 'control'}, 'isDefaultVariant': True})
         results1['flag-key-1'] = result1
         results1['flag-key-2'] = result2
         results2['flag-key-2'] = result1
@@ -51,8 +51,8 @@ class AssignmentFilterTestCase(unittest.TestCase):
         user1 = User(user_id='user', device_id='device')
         user2 = User(user_id='different user', device_id='device')
         results = {}
-        result1 = FlagResult(value='on', is_default_variant=False)
-        result2 = FlagResult(value='control', is_default_variant=True)
+        result1 = FlagResult({'variant': {'key': 'on'}, 'isDefaultVariant': False})
+        result2 = FlagResult({'variant': {'key': 'control'}, 'isDefaultVariant': True})
         results['flag-key-1'] = result1
         results['flag-key-2'] = result2
         assignment1 = Assignment(user1, results)
@@ -76,8 +76,8 @@ class AssignmentFilterTestCase(unittest.TestCase):
         user = User(user_id='user', device_id='device')
         results1 = {}
         results2 = {}
-        result1 = FlagResult(value='on', is_default_variant=False)
-        result2 = FlagResult(value='control', is_default_variant=True)
+        result1 = FlagResult({'variant': {'key': 'on'}, 'isDefaultVariant': False})
+        result2 = FlagResult({'variant': {'key': 'control'}, 'isDefaultVariant': True})
         results1['flag-key-1'] = result1
         results1['flag-key-2'] = result2
         results2['flag-key-2'] = result2
@@ -93,8 +93,8 @@ class AssignmentFilterTestCase(unittest.TestCase):
         user2 = User(user_id='user2', device_id='device')
         user3 = User(user_id='user3', device_id='device')
         results = {}
-        result1 = FlagResult(value='on', is_default_variant=False)
-        result2 = FlagResult(value='control', is_default_variant=True)
+        result1 = FlagResult({'variant': {'key': 'on'}, 'isDefaultVariant': False})
+        result2 = FlagResult({'variant': {'key': 'control'}, 'isDefaultVariant': True})
         results['flag-key-1'] = result1
         results['flag-key-2'] = result2
         assignment1 = Assignment(user1, results)
@@ -110,8 +110,8 @@ class AssignmentFilterTestCase(unittest.TestCase):
         user1 = User(user_id='user1', device_id='device')
         user2 = User(user_id='user2', device_id='device')
         results = {}
-        result1 = FlagResult(value='on', is_default_variant=False)
-        result2 = FlagResult(value='control', is_default_variant=True)
+        result1 = FlagResult({'variant': {'key': 'on'}, 'isDefaultVariant': False})
+        result2 = FlagResult({'variant': {'key': 'control'}, 'isDefaultVariant': True})
         results['flag-key-1'] = result1
         results['flag-key-2'] = result2
         assignment1 = Assignment(user1, results)

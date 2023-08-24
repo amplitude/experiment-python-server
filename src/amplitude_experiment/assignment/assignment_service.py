@@ -11,7 +11,7 @@ def to_event(assignment: Assignment) -> BaseEvent:
     event = BaseEvent(event_type='[Experiment] Assignment', user_id=assignment.user.user_id,
                       device_id=assignment.user.device_id, event_properties={}, user_properties={})
     for key in sorted(assignment.results):
-        event.event_properties[key + '.variant'] = assignment.results[key].value
+        event.event_properties[key + '.variant'] = assignment.results[key].variant['key']
 
     set_props = {}
     unset_props = {}
@@ -22,12 +22,14 @@ def to_event(assignment: Assignment) -> BaseEvent:
         elif assignment.results[key].is_default_variant:
             unset_props[f'[Experiment] {key}'] = '-'
         else:
-            set_props[f'[Experiment] {key}'] = assignment.results[key].value
+            set_props[f'[Experiment] {key}'] = assignment.results[key].variant['key']
 
     event.user_properties['$set'] = set_props
     event.user_properties['$unset'] = unset_props
 
-    event.insert_id = f'{event.user_id} {event.device_id} {hash(assignment.canonicalize())} {assignment.timestamp / DAY_MILLIS}'
+    event.insert_id = f'{event.user_id} {event.device_id} {hash(assignment.canonicalize())} {int(assignment.timestamp / DAY_MILLIS)}'
+    print(event.insert_id)
+    print(assignment.canonicalize())
 
     return event
 

@@ -13,8 +13,8 @@ class AssignmentServiceTestCase(unittest.TestCase):
 
     def test_to_event(self):
         results = {}
-        result1 = FlagResult(value='on', is_default_variant=False)
-        result2 = FlagResult(value='control', is_default_variant=True)
+        result1 = FlagResult({'variant': {'key': 'on'}, 'isDefaultVariant': False})
+        result2 = FlagResult({'variant': {'key': 'control'}, 'isDefaultVariant': True})
         results['flag-key-1'] = result1
         results['flag-key-2'] = result2
         assignment = Assignment(user, results)
