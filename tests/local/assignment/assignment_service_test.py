@@ -31,7 +31,7 @@ class AssignmentServiceTestCase(unittest.TestCase):
         self.assertEqual(1, len(user_properties['$set']))
         self.assertEqual(1, len(user_properties['$unset']))
         canonicalization = 'user device flag-key-1 on flag-key-2 control '
-        expected = f'user device {hash(canonicalization)} {assignment.timestamp / DAY_MILLIS}'
+        expected = f'user device {hash(canonicalization)} {int(assignment.timestamp / DAY_MILLIS)}'
         self.assertEqual(expected, event.insert_id)
 
     def test_tracking_called(self):
