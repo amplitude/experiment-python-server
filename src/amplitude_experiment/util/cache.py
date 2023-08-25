@@ -1,5 +1,6 @@
 import time
 
+
 class Cache:
     class Node:
         def __init__(self, key, value):
@@ -64,4 +65,3 @@ class Cache:
             new_node = self.Node(key, value)
             self._add_node(new_node)
             self.cache[key] = new_node
-

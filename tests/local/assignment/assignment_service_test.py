@@ -5,6 +5,7 @@ from amplitude import Amplitude
 
 from src.amplitude_experiment import User, FlagResult
 from src.amplitude_experiment.assignment import AssignmentFilter, Assignment, DAY_MILLIS, to_event, AssignmentService
+from src.amplitude_experiment.util import hash_code
 
 user = User(user_id='user', device_id='device')
 
@@ -13,8 +14,8 @@ class AssignmentServiceTestCase(unittest.TestCase):
 
     def test_to_event(self):
         results = {}
-        result1 = FlagResult(value='on', is_default_variant=False)
-        result2 = FlagResult(value='control', is_default_variant=True)
+        result1 = FlagResult({'variant': {'key': 'on'}, 'isDefaultVariant': False})
+        result2 = FlagResult({'variant': {'key': 'control'}, 'isDefaultVariant': True})
         results['flag-key-1'] = result1
         results['flag-key-2'] = result2
         assignment = Assignment(user, results)
@@ -31,7 +32,7 @@ class AssignmentServiceTestCase(unittest.TestCase):
         self.assertEqual(1, len(user_properties['$set']))
         self.assertEqual(1, len(user_properties['$unset']))
         canonicalization = 'user device flag-key-1 on flag-key-2 control '
-        expected = f'user device {hash(canonicalization)} {assignment.timestamp / DAY_MILLIS}'
+        expected = f'user device {hash_code(canonicalization)} {int(assignment.timestamp / DAY_MILLIS)}'
         self.assertEqual(expected, event.insert_id)
 
     def test_tracking_called(self):

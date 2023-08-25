@@ -6,6 +6,7 @@ from typing import Any, List, Dict
 from amplitude import Amplitude
 
 from .config import LocalEvaluationConfig
+from ..flagresult import FlagResult
 from ..assignment import Assignment, AssignmentFilter, AssignmentService
 from ..assignment.assignment_service import FLAG_TYPE_MUTUAL_EXCLUSION_GROUP, FLAG_TYPE_HOLDOUT_GROUP
 from ..user import User
@@ -84,8 +85,7 @@ class LocalEvaluationClient:
                 variants[key] = Variant(value['variant'].get('key'), value['variant'].get('payload'))
             if included or evaluation_result[key]['type'] == FLAG_TYPE_MUTUAL_EXCLUSION_GROUP or \
                     evaluation_result[key]['type'] == FLAG_TYPE_HOLDOUT_GROUP:
-                assignment_result[key] = evaluation_result[key]
-
+                assignment_result[key] = FlagResult(value)
         if self.assignment_service:
             self.assignment_service.track(Assignment(user, assignment_result))
         return variants
