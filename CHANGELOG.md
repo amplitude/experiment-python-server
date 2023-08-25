@@ -2,6 +2,14 @@
 
 <!--next-version-placeholder-->
 
+## v1.2.1 (2023-08-25)
+
+### Fix
+
+* Update FlagResult class and fix assignment tracking issue ([#37](https://github.com/amplitude/experiment-python-server/issues/37)) ([`6a097cf`](https://github.com/amplitude/experiment-python-server/commit/6a097cfebdd3546d2041679c49ecff81c9482588))
+* Provide AssignmentConfig class for use ([#36](https://github.com/amplitude/experiment-python-server/issues/36)) ([`afbd36c`](https://github.com/amplitude/experiment-python-server/commit/afbd36c80048b9e8d9a4c8fd9dbb211d1fc4b9b1))
+* Use relative import in LocalEvaluationConfig ([#35](https://github.com/amplitude/experiment-python-server/issues/35)) ([`f5b7897`](https://github.com/amplitude/experiment-python-server/commit/f5b789703b3abb77387ac530526f1550a5a048ed))
+
 ## v1.2.0 (2023-08-22)
 
 ### Feature
