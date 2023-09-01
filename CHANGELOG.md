@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v1.2.2 (2023-09-01)
+
+### Fix
+
+* Allow creation of multiple client instances based on api key ([#38](https://github.com/amplitude/experiment-python-server/issues/38)) ([`b8defe4`](https://github.com/amplitude/experiment-python-server/commit/b8defe43126d48e25e025f1262b0fd01dde19b7f))
+
 ## v1.2.1 (2023-08-25)
 
 ### Fix
