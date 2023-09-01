@@ -8,19 +8,18 @@ local_evaluation_instances = {}
 
 
 class Experiment:
-    """Provides factory methods for storing singleton instance of Client"""
+    """Provides factory methods for storing instances of Client"""
 
     @staticmethod
     def initialize_remote(api_key: str, config: RemoteEvaluationConfig = None) -> RemoteEvaluationClient:
         """
-        Initializes a singleton Client. This method returns a default singleton instance, subsequent calls to
-        init will return the initial instance regardless of input.
+        Initializes a remote evaluation client.
             Parameters:
                 api_key (str): The Amplitude API Key
                 config (RemoteEvaluationConfig): Optional Config
 
             Returns:
-                The remote evaluation client.
+                A remote evaluation client.
         """
         if remote_evaluation_instances.get(api_key) is None:
             remote_evaluation_instances[api_key] = RemoteEvaluationClient(api_key, config)
@@ -37,7 +36,7 @@ class Experiment:
                 config (RemoteEvaluationConfig): Optional Config
 
             Returns:
-                The local evaluation client.
+                A local evaluation client.
         """
         if local_evaluation_instances.get(api_key) is None:
             local_evaluation_instances[api_key] = LocalEvaluationClient(api_key, config)
