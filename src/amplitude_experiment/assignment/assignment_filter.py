@@ -8,6 +8,8 @@ class AssignmentFilter:
         self.cache = Cache(size, ttl_millis)
 
     def should_track(self, assignment: Assignment) -> bool:
+        if not assignment.results:
+            return False
         canonical_assignment = assignment.canonicalize()
         track = self.cache.get(canonical_assignment) is None
         if track:

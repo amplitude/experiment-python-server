@@ -69,8 +69,6 @@ class LocalEvaluationClient:
         """
         variants = {}
         if self.flags is None or len(self.flags) == 0:
-            if self.assignment_service:
-                self.assignment_service.track(Assignment(user, {}))
             return variants
         user_json = str(user)
         self.logger.debug(f"[Experiment] Evaluate: User: {user_json} - Flags: {self.flags}")
