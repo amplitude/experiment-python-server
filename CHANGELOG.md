@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v1.2.3 (2023-09-19)
+
+### Fix
+
+* Do not track empty assignment events ([#39](https://github.com/amplitude/experiment-python-server/issues/39)) ([`e2fb39a`](https://github.com/amplitude/experiment-python-server/commit/e2fb39a2642d96278b43a4109ee3adb651f91e3a))
+
 ## v1.2.2 (2023-09-01)
 
 ### Fix
