@@ -39,5 +39,8 @@ class AssignmentServiceTestCase(unittest.TestCase):
         instance = Amplitude('')
         instance.track = MagicMock()
         service = AssignmentService(instance, AssignmentFilter(2))
-        service.track(Assignment(user, {}))
+        results = {}
+        result = FlagResult({'variant': {'key': 'on'}, 'isDefaultVariant': False})
+        results['flag-key-1'] = result
+        service.track(Assignment(user, results))
         self.assertTrue(instance.track.called)

@@ -67,9 +67,9 @@ class AssignmentFilterTestCase(unittest.TestCase):
         assignment1 = Assignment(user1, {})
         assignment2 = Assignment(user1, {})
         assignment3 = Assignment(user2, {})
-        self.assertTrue(assignment_filter.should_track(assignment1))
+        self.assertFalse(assignment_filter.should_track(assignment1))
         self.assertFalse(assignment_filter.should_track(assignment2))
-        self.assertTrue(assignment_filter.should_track(assignment3))
+        self.assertFalse(assignment_filter.should_track(assignment3))
 
     def test_duplicate_assignments_with_different_ordering(self):
         assignment_filter = AssignmentFilter(100)
