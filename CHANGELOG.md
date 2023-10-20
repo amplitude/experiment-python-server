@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v1.2.4 (2023-10-20)
+
+### Fix
+
+* Memory leak from string cstring disposal ([#40](https://github.com/amplitude/experiment-python-server/issues/40)) ([`93c647f`](https://github.com/amplitude/experiment-python-server/commit/93c647f4da429b75be6eea6c7611b771d4d786cf))
+
 ## v1.2.3 (2023-09-19)
 
 ### Fix
