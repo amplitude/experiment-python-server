@@ -1,4 +1,5 @@
 from .libevaluation_interop import libevaluation_interop_symbols
+from ctypes import cast, c_char_p
 
 def evaluate(rules: str, user: str) -> str:
     """
@@ -11,4 +12,6 @@ def evaluate(rules: str, user: str) -> str:
             Evaluation results with variants in JSON
     """
     result = libevaluation_interop_symbols().contents.kotlin.root.evaluate(rules, user)
-    return str(result, 'utf-8')
+    py_result = cast(result, c_char_p).value
+    libevaluation_interop_symbols().contents.DisposeString(result)
+    return str(py_result, 'utf-8')
