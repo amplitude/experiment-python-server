@@ -1086,7 +1086,11 @@ struct_anon_14.__slots__ = [
     'evaluate',
 ]
 struct_anon_14._fields_ = [
-    ('evaluate', CFUNCTYPE(UNCHECKED(c_char_p), String, String)),
+    # NOTE(bgiori): Changed this line from `UNCHECKED(c_char_p)` to `UNCHECKED(c_void_p)`
+    #               to help fix a memory leak. Strings returned from kotlin/native must
+    #               be freed using the DisposeString function, but c_char_p converts the
+    #               c value making it incompatible with the dispose function.
+    ('evaluate', CFUNCTYPE(UNCHECKED(c_void_p), String, String)),
 ]
 
 # src/amplitude_experiment/local/evaluation/lib/macosX64/libevaluation_interop_api.h: 100
