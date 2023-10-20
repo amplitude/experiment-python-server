@@ -1,5 +1,5 @@
 import unittest
-from src.amplitude_experiment import Experiment, LocalEvaluationClient, LocalEvaluationConfig, User, Variant, AssignmentConfig
+from src.amplitude_experiment import LocalEvaluationClient, LocalEvaluationConfig, User, Variant
 
 API_KEY = 'server-qz35UwzJ5akieoAdIgzM4m9MIiOLXLoz'
 test_user = User(user_id='test_user')
@@ -55,11 +55,6 @@ class LocalEvaluationClientTestCase(unittest.TestCase):
         variants = self._local_evaluation_client.evaluate(test_user_2)
         expected_variant = None
         self.assertEqual(expected_variant, variants.get('sdk-local-evaluation-ci-test-holdout'))
-
-    def test(self):
-        variants = self._local_evaluation_client.evaluate(test_user)
-        v = variants.get('character-test')
-        print(v)
 
 
 if __name__ == '__main__':
