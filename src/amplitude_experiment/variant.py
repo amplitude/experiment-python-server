@@ -4,7 +4,7 @@ from typing import Dict, Any
 class Variant:
     """Variant Class"""
 
-    def __init__(self, value: str, payload: Any = None, key: str = None, metadata: Dict[str, Any] = None):
+    def __init__(self, value: str = None, payload: Any = None, key: str = None, metadata: Dict[str, Any] = None):
         """
         Initialize a Variant
             Parameters:

@@ -19,7 +19,9 @@ class Assignment:
         device = self.user.device_id.strip() if self.user.device_id else 'None'
         canonical = user + ' ' + device + ' '
         for flag_key in sorted(self.results):
-            value = self.results[flag_key].key.strip() if self.results[flag_key] and self.results[flag_key] and \
-                                                                self.results[flag_key].key else 'None'
+            variant = self.results[flag_key]
+            if variant.key is None:
+                continue
+            value = self.results[flag_key].key.strip()
             canonical += flag_key.strip() + ' ' + value + ' '
         return canonical
