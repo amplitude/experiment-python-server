@@ -16,7 +16,7 @@ class RemoteEvaluationClientTestCase(unittest.TestCase):
 
     def test_fetch(self):
         with RemoteEvaluationClient(API_KEY) as client:
-            expected_variant = Variant('on', 'payload')
+            expected_variant = Variant(key='on', value='on', payload='payload')
             user = User(user_id='test_user')
             variants = client.fetch(user)
             variant_name = 'sdk-ci-test'

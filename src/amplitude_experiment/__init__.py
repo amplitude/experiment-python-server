@@ -12,5 +12,4 @@ from .factory import Experiment
 from .cookie import AmplitudeCookie
 from .local.client import LocalEvaluationClient
 from .local.config import LocalEvaluationConfig
-from .flagresult import FlagResult
 from .assignment import AssignmentConfig

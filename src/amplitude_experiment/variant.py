@@ -1,18 +1,25 @@
+from typing import Dict, Any
+
+
 class Variant:
     """Variant Class"""
 
-    def __init__(self, value: str, payload=None):
+    def __init__(self, value: str, payload: Any = None, key: str = None, metadata: Dict[str, Any] = None):
         """
         Initialize a Variant
             Parameters:
                 value (str): The value of the variant determined by the flag configuration.
                 payload (Any): The attached payload, if any.
+                key (str): The variant key.
+                metadata (Dict[str, Any]: Additional variant metadata used by the system.
 
             Returns:
-                Experiment User context containing a device_id and user_id (if available)
+                An experiment variant
         """
         self.value = value
         self.payload = payload
+        self.key = key
+        self.metadata = metadata
 
     def __eq__(self, obj) -> bool:
         """
@@ -23,8 +30,10 @@ class Variant:
             Returns:
                 True if two variant equals, otherwise False
         """
-        return self.value == obj.value and self.payload == obj.payload
+        if obj is None:
+            return False
+        return self.key == obj.key and self.value == obj.value and self.payload == obj.payload
 
     def __str__(self):
         """Return Variant as string"""
-        return f"value: {self.value}, payload: {self.payload}"
+        return f"key: {self.key}, value: {self.value}, payload: {self.payload}, metadata:{self.metadata}"

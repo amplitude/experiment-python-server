@@ -99,7 +99,7 @@ typedef struct {
   /* User functions. */
   struct {
     struct {
-      const char* (*evaluate)(const char* rules, const char* user);
+      const char* (*evaluate)(const char* flags, const char* context);
     } root;
   } kotlin;
 } libevaluation_interop_ExportedSymbols;

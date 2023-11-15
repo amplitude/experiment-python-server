@@ -1,14 +1,35 @@
 import json
 
+from typing import Dict, Any
+
 
 class User:
     """
     Defines a user context for evaluation. `device_id` and `user_id` are used for identity resolution.
     All other predefined fields and user properties are used for rule based user targeting.
     """
-    def __init__(self, device_id=None, user_id=None, country=None, city=None, region=None, dma=None,
-                 language=None, platform=None, version=None, os=None, device_manufacturer=None, device_brand=None,
-                 device_model=None, carrier=None, library=None, user_properties=None):
+
+    def __init__(
+            self,
+            device_id: str = None,
+            user_id: str = None,
+            country: str = None,
+            city: str = None,
+            region: str = None,
+            dma: str = None,
+            language: str = None,
+            platform: str = None,
+            version: str = None,
+            os: str = None,
+            device_manufacturer: str = None,
+            device_brand: str = None,
+            device_model: str = None,
+            carrier: str = None,
+            library: str = None,
+            user_properties: Dict[str, Any] = None,
+            groups: Dict[str, str] = None,
+            group_properties: Dict[str, Dict[str, Dict[str, Any]]] = None
+    ):
         """
         Initialize User instance
             Parameters:
@@ -28,6 +49,8 @@ class User:
                 carrier (str): Predefined field, must be manually provided
                 library (str): Predefined field, must be manually provided
                 user_properties (dict): Custom user properties
+                groups (dict): Groups associated with the user
+                group_properties (dict): Properties for groups
 
             Returns:
                 User object
@@ -48,6 +71,8 @@ class User:
         self.carrier = carrier
         self.library = library
         self.user_properties = user_properties
+        self.groups = groups
+        self.group_properties = group_properties
 
     def to_json(self):
         """Return user information as JSON string."""
