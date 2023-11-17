@@ -1,7 +1,7 @@
 import time
 import unittest
 
-from amplitude_experiment import Variant
+from src.amplitude_experiment import Variant
 from src.amplitude_experiment import User
 from src.amplitude_experiment.assignment import Assignment, AssignmentFilter
 

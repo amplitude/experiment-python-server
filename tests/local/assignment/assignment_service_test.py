@@ -3,7 +3,7 @@ from unittest.mock import MagicMock
 
 from amplitude import Amplitude
 
-from amplitude_experiment import Variant
+from src.amplitude_experiment import Variant
 from src.amplitude_experiment import User
 from src.amplitude_experiment.assignment import AssignmentFilter, Assignment, DAY_MILLIS, to_event, AssignmentService
 from src.amplitude_experiment.util import hash_code

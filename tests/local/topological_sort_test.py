@@ -2,7 +2,7 @@ import unittest
 
 from typing import Dict, Any, List
 
-from amplitude_experiment.local.topological_sort import topological_sort, CycleException
+from src.amplitude_experiment.local.topological_sort import topological_sort, CycleException
 
 
 class TopologicalSortTestCase(unittest.TestCase):
