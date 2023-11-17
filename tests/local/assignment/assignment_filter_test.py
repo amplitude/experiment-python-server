@@ -78,8 +78,8 @@ class AssignmentFilterTestCase(unittest.TestCase):
             'flag-key-2': Variant(key='control', value='control'),
         }
         results2 = {
-            'flag-key-1': Variant(key='control', value='control'),
-            'flag-key-2': Variant(key='on', value='on'),
+            'flag-key-2': Variant(key='control', value='control'),
+            'flag-key-1': Variant(key='on', value='on'),
         }
         assignment1 = Assignment(user, results1)
         assignment2 = Assignment(user, results2)
