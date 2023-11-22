@@ -1,6 +1,6 @@
 from typing import Dict, Any
 
-from amplitude_experiment import User
+from ..user import User
 
 
 def user_to_evaluation_context(user: User) -> Dict[str, Any]:
