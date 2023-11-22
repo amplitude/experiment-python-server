@@ -63,7 +63,8 @@ class LocalEvaluationClient:
         Locally evaluates flag variants for a user.
 
         This function will only evaluate flags for the keys specified in the flag_keys argument. If flag_keys is
-        missing or None, all flags are evaluated.
+        missing or None, all flags are evaluated. This function differs from evaluate as it will return a default
+        variant object if the flag was evaluated but the user was not assigned (i.e. off).
 
             Parameters:
                 user (User): The user to evaluate
