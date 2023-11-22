@@ -123,3 +123,7 @@ class AssignmentFilterTestCase(unittest.TestCase):
         self.assertFalse(assignment_filter.should_track(assignment2))
         time.sleep(0.95)
         self.assertFalse(assignment_filter.should_track(assignment2))
+
+
+if __name__ == '__main__':
+    unittest.main()

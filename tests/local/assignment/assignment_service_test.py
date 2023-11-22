@@ -103,3 +103,7 @@ class AssignmentServiceTestCase(unittest.TestCase):
         results = {'flag-key-1': Variant(key='on')}
         service.track(Assignment(user, results))
         self.assertTrue(instance.track.called)
+
+
+if __name__ == '__main__':
+    unittest.main()

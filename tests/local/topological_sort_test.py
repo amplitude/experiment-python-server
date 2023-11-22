@@ -237,3 +237,7 @@ def sort(flags: List[Dict[str, Any]], flag_keys: List[int] = None) -> List[Dict[
 
 def flag(key: int, dependencies: List[int]) -> Dict[str, Any]:
     return {'key': str(key), 'dependencies': [str(d) for d in dependencies]}
+
+
+if __name__ == '__main__':
+    unittest.main()
