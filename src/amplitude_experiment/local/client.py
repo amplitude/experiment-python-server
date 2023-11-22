@@ -13,6 +13,7 @@ from ..connection_pool import HTTPConnectionPool
 from .poller import Poller
 from .evaluation.evaluation import evaluate
 from ..util import deprecated
+from ..util.user import user_to_evaluation_context
 from ..variant import Variant
 from ..version import __version__
 
@@ -71,7 +72,7 @@ class LocalEvaluationClient:
         if self.flags is None or len(self.flags) == 0:
             return variants
         self.logger.debug(f"[Experiment] Evaluate: user={user} - Flags: {self.flags}")
-        context = self.__user_to_evaluation_context(user)
+        context = user_to_evaluation_context(user)
         sorted_flags = topological_sort(self.flags, flag_keys)
         flags_json = json.dumps(sorted_flags)
         context_json = json.dumps(context)
@@ -163,30 +164,5 @@ class LocalEvaluationClient:
 
         return {key: variant for key, variant in variants.items() if not is_default_variant(variant)}
 
-    @staticmethod
-    def __user_to_evaluation_context(user: User) -> Dict[str, Any]:
-        user_groups = user.groups
-        user_group_properties = user.group_properties
-        user_dict = user.__dict__.copy()
-        user_dict.pop('groups')
-        user_dict.pop('group_properties')
-        context = {'user': user_dict}
-        if user_groups is None:
-            return context
-        groups = {}
-        for group_type in user_groups:
-            group_name = groups[group_type]
-            if type(group_name) == list and len(group_name) > 0:
-                group_name = group_name[0]
-            groups[group_type] = {'group_name': group_name}
-            group_properties_type = user_group_properties[group_type]
-            if group_properties_type is None or type(group_properties_type != dict):
-                continue
-            group_properties_name = group_properties_type[group_name]
-            if group_properties_name is None or type(group_properties_name != dict):
-                continue
-            groups[group_type].update(group_properties_name)
-        context['groups'] = groups
-        return context
 
 

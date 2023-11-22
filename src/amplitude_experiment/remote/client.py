@@ -39,7 +39,7 @@ class RemoteEvaluationClient:
     def fetch_v2(self, user: User):
         """
         Fetch all variants for a user synchronously. This method will automatically retry if configured, and throw if
-        all retries fail. This function differs from fetch as it will return a default variant object if the variant
+        all retries fail. This function differs from fetch as it will return a default variant object if the flag
         was evaluated but the user was not assigned (i.e. off).
 
             Parameters:
