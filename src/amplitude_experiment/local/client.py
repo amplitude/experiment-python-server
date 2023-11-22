@@ -60,10 +60,14 @@ class LocalEvaluationClient:
 
     def evaluate_v2(self, user: User, flag_keys: Set[str] = None) -> Dict[str, Variant]:
         """
-         Locally evaluates flag variants for a user.
-         Parameters:
+        Locally evaluates flag variants for a user.
+
+        This function will only evaluate flags for the keys specified in the flag_keys argument. If flag_keys is
+        missing or None, all flags are evaluated.
+
+            Parameters:
                 user (User): The user to evaluate
-                flag_keys (List[str]): The flags to evaluate with the user. If empty, all flags from the flag cache are evaluated.
+                flag_keys (List[str]): The flags to evaluate with the user. If empty, all flags are evaluated.
 
             Returns:
                 The evaluated variants.
@@ -100,10 +104,14 @@ class LocalEvaluationClient:
     @deprecated("Use evaluate_v2")
     def evaluate(self, user: User, flag_keys: List[str] = None) -> Dict[str, Variant]:
         """
-         Locally evaluates flag variants for a user.
-         Parameters:
+        Locally evaluates flag variants for a user.
+
+        This function will only evaluate flags for the keys specified in the flag_keys argument. If flag_keys is
+        missing, all flags are evaluated.
+
+            Parameters:
                 user (User): The user to evaluate
-                flag_keys (List[str]): The flags to evaluate with the user. If empty, all flags from the flag cache are evaluated.
+                flag_keys (List[str]): The flags to evaluate with the user. If empty, all flags are evaluated.
 
             Returns:
                 The evaluated variants.
