@@ -9,6 +9,7 @@ from .config import RemoteEvaluationConfig
 from ..connection_pool import HTTPConnectionPool
 from ..user import User
 from ..util.deprecated import deprecated
+from ..util.variant import evaluation_variants_json_to_variants
 from ..variant import Variant
 from ..version import __version__
 
@@ -148,7 +149,7 @@ class RemoteEvaluationClient:
             elapsed = '%.3f' % ((time.time() - start) * 1000)
             self.logger.debug(f"[Experiment] Fetch complete in {elapsed} ms")
             json_response = json.loads(response.read().decode("utf8"))
-            variants = self.__parse_json_variants(json_response)
+            variants = evaluation_variants_json_to_variants(json_response)
             self.logger.debug(f"[Experiment] Fetched variants: {json.dumps(variants, default=str)}")
             return variants
         finally:
@@ -177,18 +178,6 @@ class RemoteEvaluationClient:
         user = user or {}
         user.library = user.library or f"experiment-python-server/{__version__}"
         return user
-
-    @staticmethod
-    def __parse_json_variants(json_response):
-        variants = {}
-        for key, value in json_response.items():
-            variants[key] = Variant(
-                value=value.get('value'),
-                payload=value.get('payload'),
-                key=value.get('key'),
-                metadata=value.get('metadata')
-            )
-        return variants
 
     @staticmethod
     def __filter_default_variants(variants: Dict[str, Variant]) -> Dict[str, Variant]:

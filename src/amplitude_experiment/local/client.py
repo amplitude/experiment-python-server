@@ -14,6 +14,7 @@ from .poller import Poller
 from .evaluation.evaluation import evaluate
 from ..util import deprecated
 from ..util.user import user_to_evaluation_context
+from ..util.variant import evaluation_variants_json_to_variants
 from ..variant import Variant
 from ..version import __version__
 
@@ -73,9 +74,8 @@ class LocalEvaluationClient:
             Returns:
                 The evaluated variants.
         """
-        variants = {}
         if self.flags is None or len(self.flags) == 0:
-            return variants
+            return {}
         self.logger.debug(f"[Experiment] Evaluate: user={user} - Flags: {self.flags}")
         context = user_to_evaluation_context(user)
         sorted_flags = topological_sort(self.flags, flag_keys)
@@ -87,17 +87,11 @@ class LocalEvaluationClient:
         error = evaluation_result.get('error')
         if error is not None:
             self.logger.error(f"[Experiment] Evaluation failed: {error}")
-            return variants
+            return {}
         result = evaluation_result.get('result')
         if result is None:
-            return variants
-        for flag_key, variant in result.items():
-            variants[flag_key] = Variant(
-                key=variant.get('key'),
-                value=variant.get('value'),
-                payload=variant.get('payload'),
-                metadata=variant.get('metadata')
-            )
+            return {}
+        variants = evaluation_variants_json_to_variants(json_response)
         if self.assignment_service is not None:
             self.assignment_service.track(Assignment(user, variants))
         return variants
