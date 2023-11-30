@@ -91,7 +91,7 @@ class LocalEvaluationClient:
         result = evaluation_result.get('result')
         if result is None:
             return {}
-        variants = evaluation_variants_json_to_variants(json_response)
+        variants = evaluation_variants_json_to_variants(result)
         if self.assignment_service is not None:
             self.assignment_service.track(Assignment(user, variants))
         return variants
