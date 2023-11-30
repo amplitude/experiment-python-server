@@ -1,7 +1,7 @@
 import json
 import unittest
 
-from amplitude_experiment import Variant
+from src.amplitude_experiment import Variant
 from src.amplitude_experiment.util.variant import evaluation_variant_json_to_variant, \
     evaluation_variants_json_to_variants
 
