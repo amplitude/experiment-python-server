@@ -3,11 +3,13 @@ import logging
 import threading
 import time
 from time import sleep
-from typing import Any
+from typing import Any, Dict
 
 from .config import RemoteEvaluationConfig
 from ..connection_pool import HTTPConnectionPool
 from ..user import User
+from ..util.deprecated import deprecated
+from ..util.variant import evaluation_variants_json_to_variants
 from ..variant import Variant
 from ..version import __version__
 
@@ -35,11 +37,14 @@ class RemoteEvaluationClient:
             self.logger.setLevel(logging.DEBUG)
         self.__setup_connection_pool()
 
-    def fetch(self, user: User):
+    def fetch_v2(self, user: User):
         """
-        Fetch all variants for a user synchronous.This method will automatically retry if configured.
+        Fetch all variants for a user synchronously. This method will automatically retry if configured, and throw if
+        all retries fail. This function differs from fetch as it will return a default variant object if the flag
+        was evaluated but the user was not assigned (i.e. off).
+
             Parameters:
-                user (User): The Experiment User
+                user (User): The Experiment User to fetch variants for.
 
             Returns:
                 Variants Dictionary.
@@ -48,9 +53,9 @@ class RemoteEvaluationClient:
             return self.__fetch_internal(user)
         except Exception as e:
             self.logger.error(f"[Experiment] Failed to fetch variants: {e}")
-            return {}
+            raise e
 
-    def fetch_async(self, user: User, callback=None):
+    def fetch_async_v2(self, user: User, callback=None):
         """
         Fetch all variants for a user asynchronous. Will trigger callback after fetch complete
             Parameters:
@@ -60,6 +65,36 @@ class RemoteEvaluationClient:
         thread = threading.Thread(target=self.__fetch_async_internal, args=(user, callback))
         thread.start()
 
+    @deprecated("Use fetch_v2")
+    def fetch(self, user: User):
+        """
+        Fetch all variants for a user synchronous. This method will automatically retry if configured.
+            Parameters:
+                user (User): The Experiment User
+
+            Returns:
+                Variants Dictionary.
+        """
+        try:
+            variants = self.fetch_v2(user)
+            return self.__filter_default_variants(variants)
+        except Exception:
+            return {}
+
+    @deprecated("Use fetch_async_v2")
+    def fetch_async(self, user: User, callback=None):
+        """
+        Fetch all variants for a user asynchronous. Will trigger callback after fetch complete
+            Parameters:
+                user (User): The Experiment User
+                callback (callable): Callback function, takes user and variants arguments
+        """
+        def wrapper(u, v, e=None):
+            v = self.__filter_default_variants(v)
+            if callback is not None:
+                callback(u, v, e)
+        self.fetch_async_v2(user, wrapper)
+
     def __fetch_async_internal(self, user, callback):
         try:
             variants = self.__fetch_internal(user)
@@ -67,9 +102,8 @@ class RemoteEvaluationClient:
                 callback(user, variants)
             return variants
         except Exception as e:
-            self.logger.error(f"[Experiment] Failed to fetch variants: {e}")
             if callback:
-                callback(user, {})
+                callback(user, {}, e)
             return {}
 
     def __fetch_internal(self, user):
@@ -111,11 +145,11 @@ class RemoteEvaluationClient:
                                 f"cannot be cached by CDN; must be < 8KB")
         self.logger.debug(f"[Experiment] Fetch variants for user: {str(user_context)}")
         try:
-            response = conn.request('POST', '/sdk/vardata', body, headers)
+            response = conn.request('POST', '/sdk/v2/vardata?v=0', body, headers)
             elapsed = '%.3f' % ((time.time() - start) * 1000)
             self.logger.debug(f"[Experiment] Fetch complete in {elapsed} ms")
             json_response = json.loads(response.read().decode("utf8"))
-            variants = self.__parse_json_variants(json_response)
+            variants = evaluation_variants_json_to_variants(json_response)
             self.logger.debug(f"[Experiment] Fetched variants: {json.dumps(variants, default=str)}")
             return variants
         finally:
@@ -139,18 +173,22 @@ class RemoteEvaluationClient:
     def __exit__(self, *exit_info: Any) -> None:
         self.close()
 
-    def __add_context(self, user):
+    @staticmethod
+    def __add_context(user):
         user = user or {}
         user.library = user.library or f"experiment-python-server/{__version__}"
         return user
 
-    def __parse_json_variants(self, json_response):
-        variants = {}
-        for key, value in json_response.items():
-            variant_value = ''
-            if 'value' in value:
-                variant_value = value['value']
-            elif 'key' in value:
-                variant_value = value['key']
-            variants[key] = Variant(variant_value, value.get('payload'))
-        return variants
+    @staticmethod
+    def __filter_default_variants(variants: Dict[str, Variant]) -> Dict[str, Variant]:
+        def is_default_variant(variant: Variant) -> bool:
+            default = False
+            if variant.metadata is not None and variant.metadata.get('default') is not None:
+                default = variant.metadata.get('default')
+            deployed = True
+            if variant.metadata is not None and variant.metadata.get('deployed') is not None:
+                deployed = variant.metadata.get('deployed')
+            return default and not deployed
+        return {key: variant for key, variant in variants.items() if not is_default_variant(variant)}
+
+

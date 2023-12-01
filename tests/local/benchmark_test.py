@@ -53,7 +53,7 @@ def random_benchmark_flag():
     return f"local-evaluation-benchmark-{n}"
 
 
-@unittest.skipIf(platform.machine().startswith(('arm', 'aarch64')), "GHA aarch64 too slow")
+@unittest.skip("github actions too slow")
 class BenchmarkTestCase(unittest.TestCase):
     _local_evaluation_client: LocalEvaluationClient = None
 

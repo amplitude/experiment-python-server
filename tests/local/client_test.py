@@ -23,12 +23,12 @@ class LocalEvaluationClientTestCase(unittest.TestCase):
 
     def test_evaluate_all_flags_success(self):
         variants = self._local_evaluation_client.evaluate(test_user)
-        expected_variant = Variant('on', 'payload')
+        expected_variant = Variant(key='on', value='on', payload='payload')
         self.assertEqual(expected_variant, variants.get('sdk-local-evaluation-ci-test'))
 
     def test_evaluate_one_flag_success(self):
         variants = self._local_evaluation_client.evaluate(test_user, ['sdk-local-evaluation-ci-test'])
-        expected_variant = Variant('on', 'payload')
+        expected_variant = Variant(key='on', value='on', payload='payload')
         self.assertEqual(expected_variant, variants.get('sdk-local-evaluation-ci-test'))
 
     def test_invalid_api_key_throw_exception(self):
@@ -38,12 +38,12 @@ class LocalEvaluationClientTestCase(unittest.TestCase):
 
     def test_evaluate_with_dependencies_success(self):
         variants = self._local_evaluation_client.evaluate(test_user_2)
-        expected_variant = Variant('control', None)
+        expected_variant = Variant(key='control', value='control')
         self.assertEqual(expected_variant, variants.get('sdk-ci-local-dependencies-test'))
 
     def test_evaluate_with_dependencies_and_flag_keys_success(self):
         variants = self._local_evaluation_client.evaluate(test_user_2, ['sdk-ci-local-dependencies-test'])
-        expected_variant = Variant('control', None)
+        expected_variant = Variant(key='control', value='control')
         self.assertEqual(expected_variant, variants.get('sdk-ci-local-dependencies-test'))
 
     def test_evaluate_with_dependencies_and_flag_keys_not_exist_no_variant(self):
