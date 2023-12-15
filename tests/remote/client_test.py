@@ -3,7 +3,6 @@ import unittest
 from src.amplitude_experiment import RemoteEvaluationClient, Variant, User, RemoteEvaluationConfig
 
 API_KEY = 'client-DvWljIjiiuqLbyjqdvBaLFfEBrAvGuA3'
-SERVER_URL = 'https://api.lab.amplitude.com/sdk/vardata'
 
 
 class RemoteEvaluationClientTestCase(unittest.TestCase):
@@ -15,19 +14,19 @@ class RemoteEvaluationClientTestCase(unittest.TestCase):
         self.assertRaises(ValueError, RemoteEvaluationClient, "")
 
     def test_fetch(self):
-        with RemoteEvaluationClient(API_KEY) as client:
+        with RemoteEvaluationClient(API_KEY, RemoteEvaluationConfig(debug=True)) as client:
             expected_variant = Variant(key='on', value='on', payload='payload')
             user = User(user_id='test_user')
-            variants = client.fetch(user)
+            variants = client.fetch_v2(user)
             variant_name = 'sdk-ci-test'
             self.assertIn(variant_name, variants)
             self.assertEqual(expected_variant, variants.get(variant_name))
 
-    def callback_for_async(self, user, variants):
-        expected_variant = Variant('on', 'payload')
+    def callback_for_async(self, user, variants, e):
+        expected_variant = Variant(key='on', value='on', payload='payload')
         variant_name = 'sdk-ci-test'
-        self.assertIn(variant_name, variants)
         self.assertEqual(expected_variant, variants.get(variant_name))
+        self.assertIn(variant_name, variants)
         self.client.close()
 
     def test_fetch_async(self):

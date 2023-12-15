@@ -1,6 +1,6 @@
 import json
 
-from typing import Dict, Any
+from typing import Dict, List, Any
 
 
 class User:
@@ -27,7 +27,7 @@ class User:
             carrier: str = None,
             library: str = None,
             user_properties: Dict[str, Any] = None,
-            groups: Dict[str, str] = None,
+            groups: Dict[str, List[str]] = None,
             group_properties: Dict[str, Dict[str, Dict[str, Any]]] = None
     ):
         """

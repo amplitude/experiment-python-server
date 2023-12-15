@@ -1,3 +1,4 @@
+import base64
 import json
 import logging
 import threading
@@ -134,18 +135,20 @@ class RemoteEvaluationClient:
     def __do_fetch(self, user):
         start = time.time()
         user_context = self.__add_context(user)
+        body = user_context.to_json().encode('utf8')
+        serialized_user = base64.b64encode(body).decode('utf8')
         headers = {
             'Authorization': f"Api-Key {self.api_key}",
-            'Content-Type': 'application/json;charset=utf-8'
+            'Content-Type': 'application/json',
+            'X-Amp-Exp-User': serialized_user,
         }
         conn = self._connection_pool.acquire()
-        body = user_context.to_json().encode('utf8')
         if len(body) > 8000:
             self.logger.warning(f"[Experiment] encoded user object length ${len(body)} "
                                 f"cannot be cached by CDN; must be < 8KB")
         self.logger.debug(f"[Experiment] Fetch variants for user: {str(user_context)}")
         try:
-            response = conn.request('POST', '/sdk/v2/vardata?v=0', body, headers)
+            response = conn.request('GET', '/sdk/v2/vardata?v=0', headers=headers)
             elapsed = '%.3f' % ((time.time() - start) * 1000)
             self.logger.debug(f"[Experiment] Fetch complete in {elapsed} ms")
             json_response = json.loads(response.read().decode("utf8"))
