@@ -113,7 +113,7 @@ class RemoteEvaluationClient:
             return self.__do_fetch(user)
         except Exception as e:
             self.logger.error(f"[Experiment] Fetch failed: {e}")
-            if self.should_retry_fetch(e):
+            if self.__should_retry_fetch(e):
                 return self.__retry_fetch(user)
 
     def __retry_fetch(self, user):
@@ -151,8 +151,8 @@ class RemoteEvaluationClient:
             elapsed = '%.3f' % ((time.time() - start) * 1000)
             self.logger.debug(f"[Experiment] Fetch complete in {elapsed} ms")
             if response.status != 200:
-                raise FetchException(f"Fetch error response: status={response.status} {response.reason}",
-                                     response.status)
+                raise FetchException(response.status,
+                                     f"Fetch error response: status={response.status} {response.reason}")
             json_response = json.loads(response.read().decode("utf8"))
             variants = evaluation_variants_json_to_variants(json_response)
             self.logger.debug(f"[Experiment] Fetched variants: {json.dumps(variants, default=str)}")
@@ -194,12 +194,11 @@ class RemoteEvaluationClient:
             if variant.metadata is not None and variant.metadata.get('deployed') is not None:
                 deployed = variant.metadata.get('deployed')
             return default and not deployed
+
         return {key: variant for key, variant in variants.items() if not is_default_variant(variant)}
 
     @staticmethod
-    def should_retry_fetch(err: Exception):
+    def __should_retry_fetch(err: Exception):
         if isinstance(err, FetchException):
             return err.status_code < 400 or err.status_code >= 500 or err.status_code == 429
         return True
-
-
