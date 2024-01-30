@@ -20,6 +20,7 @@ jobs:
 
       - name: Install requirements
         run: pip install -r requirements.txt
+          pip install -r requirements-dev.txt
 
       - name: Unit Test
         run: python -m unittest discover -s ./tests -p '*_test.py'
