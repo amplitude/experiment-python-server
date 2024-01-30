@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v1.3.1 (2024-01-30)
+
+### Fix
+
+* Improve remote evaluation fetch retry logic ([#42](https://github.com/amplitude/experiment-python-server/issues/42)) ([`4864666`](https://github.com/amplitude/experiment-python-server/commit/486466683d787de35fc8a442b0ac060078b4ad81))
+
 ## v1.3.0 (2023-12-01)
 
 ### Feature
