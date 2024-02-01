@@ -10,7 +10,8 @@ class LocalEvaluationConfig:
                  server_url: str = DEFAULT_SERVER_URL,
                  flag_config_polling_interval_millis: int = 30000,
                  flag_config_poller_request_timeout_millis: int = 10000,
-                 assignment_config: AssignmentConfig = None):
+                 assignment_config: AssignmentConfig = None,
+                 deployment_key: str = None):
         """
         Initialize a config
            Parameters:
@@ -21,6 +22,8 @@ class LocalEvaluationConfig:
                    to perform local evaluation.
                flag_config_poller_request_timeout_millis (int): The request timeout, in milliseconds,
                    used when fetching variants.
+                deployment_key (str): The Experiment deployment key. If provided, it is used
+                    instead of the project API key
 
            Returns:
                The config object
@@ -30,3 +33,4 @@ class LocalEvaluationConfig:
         self.flag_config_polling_interval_millis = flag_config_polling_interval_millis
         self.flag_config_poller_request_timeout_millis = flag_config_poller_request_timeout_millis
         self.assignment_config = assignment_config
+        self.deployment_key = deployment_key
