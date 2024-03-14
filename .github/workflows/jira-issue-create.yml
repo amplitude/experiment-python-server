@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     environment: Jira
     name: SDK Bot Jira Issue Creation
     steps:
@@ -25,15 +25,12 @@ jobs:
           project: ${{ secrets.JIRA_PROJECT }}
           issuetype: Task
           summary: |
-            [SDK - Experiment Python Server] ${{ github.event.issue.title }}
+            [SDK - experiment-python-server] ${{ github.event.issue.title }}
           description: |
             ${{ github.event.issue.html_url }}
           fields: '{
-            "customfield_10006": 1391,
-            "customfield_11481": {"value": "Governance 🕵️"},
-            "customfield_11200": {"value": "Developer Experience"},
-            "labels": ["experiment-python"]
-          }' # sprint, pillar, pod, labels
+            "labels": ["experiment-python-server", "sdk-backlog-grooming", "github"]
+          }'
 
       - name: Log created issue
-        run: echo "Issue AMP-${{ steps.create.outputs.issue }} was created"
+        run: echo "Issue SKY-${{ steps.create.outputs.issue }} was created"
