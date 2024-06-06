@@ -8,11 +8,19 @@ from amplitude import Amplitude
 from .config import LocalEvaluationConfig
 from .topological_sort import topological_sort
 from ..assignment import Assignment, AssignmentFilter, AssignmentService
+from ..cohort.cohort_description import USER_GROUP_TYPE
+from ..cohort.cohort_download_api import DirectCohortDownloadApiV5
+from ..cohort.cohort_loader import CohortLoader
+from ..cohort.cohort_storage import InMemoryCohortStorage
+from ..deployment.deployment_runner import DeploymentRunner
+from ..flag.flag_config_api import FlagConfigApiV2
+from ..flag.flag_config_storage import InMemoryFlagConfigStorage
 from ..user import User
 from ..connection_pool import HTTPConnectionPool
 from .poller import Poller
 from .evaluation.evaluation import evaluate
 from ..util import deprecated
+from ..util.flag_config import get_grouped_cohort_ids_from_flags
 from ..util.user import user_to_evaluation_context
 from ..util.variant import evaluation_variants_json_to_variants
 from ..variant import Variant
@@ -50,6 +58,17 @@ class LocalEvaluationClient:
         self.flags = None
         self.poller = Poller(self.config.flag_config_polling_interval_millis / 1000, self.__do_flags)
         self.lock = Lock()
+        self.cohort_storage = InMemoryCohortStorage()
+        self.flag_config_storage = InMemoryFlagConfigStorage()
+        if config and config.cohort_sync_config:
+            direct_cohort_download_api = DirectCohortDownloadApiV5(config.cohort_sync_config.api_key,
+                                                                   config.cohort_sync_config.secret_key)
+            cohort_loader = CohortLoader(config.cohort_sync_config.max_cohort_size, direct_cohort_download_api,
+                                         self.cohort_storage, direct_cohort_download_api)
+            flag_config_api = FlagConfigApiV2(api_key, config.server_url,
+                                              config.flag_config_poller_request_timeout_millis)
+            self.deployment_runner = DeploymentRunner(config, flag_config_api, self.flag_config_storage,
+                                                      self.cohort_storage, cohort_loader)
 
     def start(self):
         """
@@ -77,8 +96,12 @@ class LocalEvaluationClient:
         if self.flags is None or len(self.flags) == 0:
             return {}
         self.logger.debug(f"[Experiment] Evaluate: user={user} - Flags: {self.flags}")
-        context = user_to_evaluation_context(user)
+        flag_configs = self.flag_config_storage.get_flag_configs()
         sorted_flags = topological_sort(self.flags, flag_keys)
+        if not sorted_flags:
+            return {}
+        enriched_user = self.enrich_user(user, flag_configs)
+        context = user_to_evaluation_context(enriched_user)
         flags_json = json.dumps(sorted_flags)
         context_json = json.dumps(context)
         result_json = evaluate(flags_json, context_json)
@@ -167,5 +190,26 @@ class LocalEvaluationClient:
 
         return {key: variant for key, variant in variants.items() if not is_default_variant(variant)}
 
+    def enrich_user(self, user: User, flag_configs: Dict) -> User:
+        grouped_cohort_ids = get_grouped_cohort_ids_from_flags(list(flag_configs.values()))
 
+        if USER_GROUP_TYPE in grouped_cohort_ids:
+            user_cohort_ids = grouped_cohort_ids[USER_GROUP_TYPE]
+            if user_cohort_ids and user.user_id:
+                user.cohort_ids = self.cohort_storage.get_cohorts_for_user(user.user_id, user_cohort_ids)
 
+        if user.groups:
+            for group_type, group_names in user.groups.items():
+                group_name = group_names[0] if group_names else None
+                if not group_name:
+                    continue
+                cohort_ids = grouped_cohort_ids.get(group_type, [])
+                if not cohort_ids:
+                    continue
+                user.add_group_cohort_ids(
+                    group_type,
+                    group_name,
+                    self.cohort_storage.get_cohorts_for_group(group_type, group_name, cohort_ids)
+                )
+
+        return user

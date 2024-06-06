@@ -1,12 +1,11 @@
 import unittest
-from typing import List, Dict, Set, Any
 
 # Assuming the following utility functions are defined in a module named cohort_utils.py
 from src.amplitude_experiment.util.flag_config import (
     get_all_cohort_ids_from_flags,
     get_grouped_cohort_ids_from_flags,
-    get_all_cohort_ids,
-    get_grouped_cohort_ids,
+    get_all_cohort_ids_from_flag,
+    get_grouped_cohort_ids_for_flag,
 )
 
 
@@ -95,15 +94,15 @@ class CohortUtilsTestCase(unittest.TestCase):
     def test_get_all_cohort_ids(self):
         expected_cohort_ids = {'cohort1', 'cohort2', 'cohort3', 'cohort4', 'cohort5', 'cohort6'}
         for flag in self.flags:
-            cohort_ids = get_all_cohort_ids(flag)
+            cohort_ids = get_all_cohort_ids_from_flag(flag)
             self.assertTrue(cohort_ids.issubset(expected_cohort_ids))
 
-    def test_get_grouped_cohort_ids(self):
+    def test_get_grouped_cohort_ids_for_flag(self):
         expected_grouped_cohort_ids = {
             'User': {'cohort1', 'cohort2', 'cohort3', 'cohort4', 'cohort5', 'cohort6'}
         }
         for flag in self.flags:
-            grouped_cohort_ids = get_grouped_cohort_ids(flag)
+            grouped_cohort_ids = get_grouped_cohort_ids_for_flag(flag)
             for key, values in grouped_cohort_ids.items():
                 self.assertTrue(key in expected_grouped_cohort_ids)
                 self.assertTrue(values.issubset(expected_grouped_cohort_ids[key]))
@@ -113,7 +112,7 @@ class CohortUtilsTestCase(unittest.TestCase):
         cohort_ids = get_all_cohort_ids_from_flags(self.flags)
         self.assertEqual(cohort_ids, expected_cohort_ids)
 
-    def test_get_grouped_cohort_ids_from_flags(self):
+    def test_get_grouped_cohort_ids_for_flag_from_flags(self):
         expected_grouped_cohort_ids = {
             'User': {'cohort1', 'cohort2', 'cohort3', 'cohort4', 'cohort5', 'cohort6'}
         }

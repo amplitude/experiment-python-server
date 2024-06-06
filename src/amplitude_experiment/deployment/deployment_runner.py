@@ -9,7 +9,7 @@ from src.amplitude_experiment.cohort.cohort_storage import CohortStorage
 from src.amplitude_experiment.flag.flag_config_api import FlagConfigApi
 from src.amplitude_experiment.flag.flag_config_storage import FlagConfigStorage
 from src.amplitude_experiment.local.poller import Poller
-from src.amplitude_experiment.util.flag_config import get_all_cohort_ids
+from src.amplitude_experiment.util.flag_config import get_all_cohort_ids_from_flag
 
 
 class DeploymentRunner:
@@ -56,7 +56,7 @@ class DeploymentRunner:
         if initial:
             cached_futures = {}
             for flag_config in flag_configs:
-                cohort_ids = get_all_cohort_ids(flag_config)
+                cohort_ids = get_all_cohort_ids_from_flag(flag_config)
                 if not self.cohort_loader or not cohort_ids:
                     self.flag_config_storage.put_flag_config(flag_config)
                     continue
@@ -72,7 +72,7 @@ class DeploymentRunner:
 
         futures = {}
         for flag_config in flag_configs:
-            cohort_ids = get_all_cohort_ids(flag_config)
+            cohort_ids = get_all_cohort_ids_from_flag(flag_config)
             if not self.cohort_loader or not cohort_ids:
                 self.flag_config_storage.put_flag_config(flag_config)
                 continue

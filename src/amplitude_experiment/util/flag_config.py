@@ -29,7 +29,7 @@ def get_grouped_cohort_condition_ids(segment: Dict[str, Any]) -> Dict[str, Set[s
     return cohort_ids
 
 
-def get_grouped_cohort_ids(flag: Dict[str, Any]) -> Dict[str, Set[str]]:
+def get_grouped_cohort_ids_from_flag(flag: Dict[str, Any]) -> Dict[str, Set[str]]:
     cohort_ids = {}
     segments = flag.get('segments', [])
     for segment in segments:
@@ -38,14 +38,14 @@ def get_grouped_cohort_ids(flag: Dict[str, Any]) -> Dict[str, Set[str]]:
     return cohort_ids
 
 
-def get_all_cohort_ids(flag: Dict[str, Any]) -> Set[str]:
-    return {cohort_id for values in get_grouped_cohort_ids(flag).values() for cohort_id in values}
+def get_all_cohort_ids_from_flag(flag: Dict[str, Any]) -> Set[str]:
+    return {cohort_id for values in get_grouped_cohort_ids_from_flag(flag).values() for cohort_id in values}
 
 
 def get_grouped_cohort_ids_from_flags(flags: List[Dict[str, Any]]) -> Dict[str, Set[str]]:
     cohort_ids = {}
     for flag in flags:
-        for key, values in get_grouped_cohort_ids(flag).items():
+        for key, values in get_grouped_cohort_ids_from_flag(flag).items():
             cohort_ids.setdefault(key, set()).update(values)
     return cohort_ids
 
