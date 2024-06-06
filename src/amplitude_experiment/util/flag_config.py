@@ -1,6 +1,6 @@
 from typing import List, Dict, Set, Any
 
-from src.amplitude_experiment.cohort.cohort_description import USER_GROUP_TYPE
+from ..cohort.cohort_description import USER_GROUP_TYPE
 
 
 def is_cohort_filter(condition: Dict[str, Any]) -> bool:

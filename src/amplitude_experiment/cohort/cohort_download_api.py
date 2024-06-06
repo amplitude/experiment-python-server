@@ -6,9 +6,9 @@ import csv
 from io import StringIO
 from typing import Set
 
-from src.amplitude_experiment.cohort.cohort_description import CohortDescription, USER_GROUP_TYPE
-from src.amplitude_experiment.connection_pool import HTTPConnectionPool
-from src.amplitude_experiment.exception import CachedCohortDownloadException, HTTPErrorResponseException
+from .cohort_description import CohortDescription, USER_GROUP_TYPE
+from ..connection_pool import HTTPConnectionPool
+from ..exception import CachedCohortDownloadException, HTTPErrorResponseException
 
 CDN_COHORT_SYNC_URL = 'https://cohort.lab.amplitude.com'
 

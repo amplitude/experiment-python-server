@@ -3,7 +3,7 @@ from typing import List
 
 from ..version import __version__
 
-from src.amplitude_experiment.connection_pool import HTTPConnectionPool
+from ..connection_pool import HTTPConnectionPool
 
 
 class FlagConfigApi:

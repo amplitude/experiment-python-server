@@ -5,7 +5,7 @@ from src.amplitude_experiment.util.flag_config import (
     get_all_cohort_ids_from_flags,
     get_grouped_cohort_ids_from_flags,
     get_all_cohort_ids_from_flag,
-    get_grouped_cohort_ids_for_flag,
+    get_grouped_cohort_ids_from_flag,
 )
 
 
@@ -102,7 +102,7 @@ class CohortUtilsTestCase(unittest.TestCase):
             'User': {'cohort1', 'cohort2', 'cohort3', 'cohort4', 'cohort5', 'cohort6'}
         }
         for flag in self.flags:
-            grouped_cohort_ids = get_grouped_cohort_ids_for_flag(flag)
+            grouped_cohort_ids = get_grouped_cohort_ids_from_flag(flag)
             for key, values in grouped_cohort_ids.items():
                 self.assertTrue(key in expected_grouped_cohort_ids)
                 self.assertTrue(values.issubset(expected_grouped_cohort_ids[key]))

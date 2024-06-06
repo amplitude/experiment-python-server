@@ -2,9 +2,9 @@ from typing import Dict, Set, Optional
 from concurrent.futures import ThreadPoolExecutor, Future
 import threading
 
-from src.amplitude_experiment.cohort.cohort_description import CohortDescription
-from src.amplitude_experiment.cohort.cohort_download_api import CohortDownloadApi, DirectCohortDownloadApiV5
-from src.amplitude_experiment.cohort.cohort_storage import CohortStorage
+from .cohort_description import CohortDescription
+from .cohort_download_api import CohortDownloadApi, DirectCohortDownloadApiV5
+from .cohort_storage import CohortStorage
 
 
 class CohortLoader:

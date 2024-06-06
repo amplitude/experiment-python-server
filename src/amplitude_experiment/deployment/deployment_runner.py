@@ -3,13 +3,13 @@ from typing import Optional
 import threading
 import time
 
-from src.amplitude_experiment import LocalEvaluationConfig
-from src.amplitude_experiment.cohort.cohort_loader import CohortLoader
-from src.amplitude_experiment.cohort.cohort_storage import CohortStorage
-from src.amplitude_experiment.flag.flag_config_api import FlagConfigApi
-from src.amplitude_experiment.flag.flag_config_storage import FlagConfigStorage
-from src.amplitude_experiment.local.poller import Poller
-from src.amplitude_experiment.util.flag_config import get_all_cohort_ids_from_flag
+from ..local.config import LocalEvaluationConfig
+from ..cohort.cohort_loader import CohortLoader
+from ..cohort.cohort_storage import CohortStorage
+from ..flag.flag_config_api import FlagConfigApi
+from ..flag.flag_config_storage import FlagConfigStorage
+from ..local.poller import Poller
+from ..util.flag_config import get_all_cohort_ids_from_flag
 
 
 class DeploymentRunner:

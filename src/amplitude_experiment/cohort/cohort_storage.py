@@ -1,7 +1,7 @@
 from typing import Dict, Set, Optional
 from threading import RLock
 
-from src.amplitude_experiment.cohort.cohort_description import CohortDescription, USER_GROUP_TYPE
+from .cohort_description import CohortDescription, USER_GROUP_TYPE
 
 
 class CohortStorage:
