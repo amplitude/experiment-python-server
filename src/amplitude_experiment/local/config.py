@@ -1,4 +1,5 @@
 from ..assignment import AssignmentConfig
+from ..cohort.cohort_sync_config import CohortSyncConfig
 
 
 class LocalEvaluationConfig:
@@ -11,7 +12,8 @@ class LocalEvaluationConfig:
                  flag_config_polling_interval_millis: int = 30000,
                  flag_config_poller_request_timeout_millis: int = 10000,
                  assignment_config: AssignmentConfig = None,
-                 deployment_key: str = None):
+                 deployment_key: str = None,
+                 cohort_sync_config: CohortSyncConfig = None):
         """
         Initialize a config
            Parameters:
@@ -34,3 +36,4 @@ class LocalEvaluationConfig:
         self.flag_config_poller_request_timeout_millis = flag_config_poller_request_timeout_millis
         self.assignment_config = assignment_config
         self.deployment_key = deployment_key
+        self.cohort_sync_config = cohort_sync_config
