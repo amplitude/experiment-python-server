@@ -1,9 +1,9 @@
 import unittest
 from unittest import mock
+from unittest.mock import patch
 
-from src.amplitude_experiment import LocalEvaluationConfig, LocalEvaluationClient, User
+from src.amplitude_experiment import LocalEvaluationConfig
 from src.amplitude_experiment.cohort.cohort_loader import CohortLoader
-from src.amplitude_experiment.cohort.cohort_sync_config import CohortSyncConfig
 from src.amplitude_experiment.flag.flag_config_api import FlagConfigApi
 from src.amplitude_experiment.deployment.deployment_runner import DeploymentRunner
 
@@ -60,11 +60,11 @@ class DeploymentRunnerTest(unittest.TestCase):
             cohort_storage,
             cohort_loader
         )
-        flag_api.get_flag_configs.return_value = [self.flag]
-        cohort_download_api.get_cohort_description.side_effect = RuntimeError("test")
-
-        with self.assertRaises(RuntimeError):
-            runner.start()
+        with patch.object(runner, '_delete_unused_cohorts'):
+            flag_api.get_flag_configs.return_value = [self.flag]
+            cohort_download_api.get_cohort_description.side_effect = RuntimeError("test")
+            with self.assertRaises(RuntimeError):
+                runner.start()
 
 
 if __name__ == '__main__':

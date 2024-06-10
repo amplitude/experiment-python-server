@@ -16,11 +16,9 @@ class CohortLoaderTest(unittest.TestCase):
         self.api.get_cohort_description.side_effect = [cohort_description("a"), cohort_description("b")]
         self.api.get_cohort_members.side_effect = [{"1"}, {"1", "2"}]
 
-        # Submitting tasks asynchronously
         future_a = self.loader.load_cohort("a")
         future_b = self.loader.load_cohort("b")
 
-        # Asserting after tasks complete
         future_a.result()
         future_b.result()
 

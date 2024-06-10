@@ -69,10 +69,10 @@ class DeploymentRunner:
         if initial:
             try:
                 for future in futures:
-                    self.logger.debug(f"Waiting for future {future}")
                     future.result()
             except Exception as e:
-                self.logger.warning("Failed to download cohort", exc_info=e)
+                self.logger.warning("Failed to download cohort", e)
+                raise e
 
         self._delete_unused_cohorts()
         self.logger.debug(f"Refreshed {len(flag_configs)} flag configs.")
@@ -88,6 +88,7 @@ class DeploymentRunner:
                 self.logger.debug(f"Flag config {flag_config['key']} stored successfully.")
             except Exception as e:
                 self.logger.error(f"Failed to load cohorts for flag {flag_config['key']}", exc_info=e)
+                raise e
 
         return self.cohort_loader.executor.submit(task)
 

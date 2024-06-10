@@ -28,17 +28,16 @@ class CohortLoader:
                             cohort_members = self.download_cohort(cohort_description)
                             self.cohort_storage.put_cohort(cohort_description, cohort_members)
                     except Exception as e:
-                        print(f"Failed to load cohort {cohort_id}: {e}")
+                        raise e
 
                 future = self.executor.submit(task)
-                future.add_done_callback(lambda f: self._remove_job(f, cohort_id))
+                future.add_done_callback(lambda f: self._remove_job(cohort_id))
                 self.jobs[cohort_id] = future
             return self.jobs[cohort_id]
 
-    def _remove_job(self, future: Future, cohort_id: str):
-        with self.lock_jobs:
-            if cohort_id in self.jobs:
-                del self.jobs[cohort_id]
+    def _remove_job(self, cohort_id: str):
+        if cohort_id in self.jobs:
+            del self.jobs[cohort_id]
 
     def get_cohort_description(self, cohort_id: str) -> CohortDescription:
         return self.cohort_download_api.get_cohort_description(cohort_id)

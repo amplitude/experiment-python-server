@@ -24,13 +24,14 @@ class CohortDownloadApi:
 
 
 class DirectCohortDownloadApi(CohortDownloadApi):
-    def __init__(self, api_key: str, secret_key: str, max_cohort_size: int = 15000, request_status_delay: int = 5, debug: bool = False):
+    def __init__(self, api_key: str, secret_key: str, max_cohort_size: int = 15000,
+                 debug: bool = False, cohort_request_delay_millis: int = 5000):
         super().__init__()
         self.api_key = api_key
         self.secret_key = secret_key
         self.max_cohort_size = max_cohort_size
         self.__setup_connection_pool()
-        self.request_status_delay = request_status_delay
+        self.cohort_request_delay_millis = cohort_request_delay_millis
         self.logger = logging.getLogger("Amplitude")
         self.logger.addHandler(logging.StreamHandler())
         if debug:
@@ -79,7 +80,7 @@ class DirectCohortDownloadApi(CohortDownloadApi):
                 self.logger.debug(f"getCohortMembers({cohort_description.id}): request-status error {errors} - {e}")
                 if errors >= 3 or isinstance(e, CohortTooLargeException):
                     raise e
-            time.sleep(self.request_status_delay)
+            time.sleep(self.cohort_request_delay_millis/1000)
 
     def _get_cohort_members_request(self, cohort_id: str) -> HTTPResponse:
         headers = {
