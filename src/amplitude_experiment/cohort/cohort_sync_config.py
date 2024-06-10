@@ -3,4 +3,3 @@ class CohortSyncConfig:
         self.api_key = api_key
         self.secret_key = secret_key
         self.max_cohort_size = max_cohort_size
-

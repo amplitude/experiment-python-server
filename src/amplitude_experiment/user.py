@@ -1,6 +1,6 @@
 import json
 
-from typing import Dict, Any, Set
+from typing import Dict, Any, Set, List
 
 
 class User:
@@ -29,7 +29,8 @@ class User:
             user_properties: Dict[str, Any] = None,
             groups: Dict[str, str] = None,
             group_properties: Dict[str, Dict[str, Dict[str, Any]]] = None,
-            group_cohort_ids: Dict[str, Dict[str, Set[str]]] = None
+            group_cohort_ids: Dict[str, Dict[str, List[str]]] = None,
+            cohort_ids: List[str] = None
     ):
         """
         Initialize User instance
@@ -75,6 +76,7 @@ class User:
         self.groups = groups
         self.group_properties = group_properties
         self.group_cohort_ids = group_cohort_ids
+        self.cohort_ids = cohort_ids
 
     def to_json(self):
         """Return user information as JSON string."""
@@ -84,7 +86,7 @@ class User:
         """Return user as string"""
         return self.to_json()
 
-    def add_group_cohort_ids(self, group_type: str, group_name: str, cohort_ids: Set[str]) -> None:
+    def add_group_cohort_ids(self, group_type: str, group_name: str, cohort_ids: List[str]) -> None:
         """
         Add cohort IDs for a group.
         Parameters:

@@ -9,7 +9,7 @@ from .config import LocalEvaluationConfig
 from .topological_sort import topological_sort
 from ..assignment import Assignment, AssignmentFilter, AssignmentService
 from ..cohort.cohort_description import USER_GROUP_TYPE
-from ..cohort.cohort_download_api import DirectCohortDownloadApiV5
+from ..cohort.cohort_download_api import DirectCohortDownloadApi
 from ..cohort.cohort_loader import CohortLoader
 from ..cohort.cohort_storage import InMemoryCohortStorage
 from ..deployment.deployment_runner import DeploymentRunner
@@ -55,16 +55,15 @@ class LocalEvaluationClient:
         if self.config.debug:
             self.logger.setLevel(logging.DEBUG)
         self.__setup_connection_pool()
-        self.flags = None
-        self.poller = Poller(self.config.flag_config_polling_interval_millis / 1000, self.__do_flags)
         self.lock = Lock()
         self.cohort_storage = InMemoryCohortStorage()
         self.flag_config_storage = InMemoryFlagConfigStorage()
         if config and config.cohort_sync_config:
-            direct_cohort_download_api = DirectCohortDownloadApiV5(config.cohort_sync_config.api_key,
-                                                                   config.cohort_sync_config.secret_key)
-            cohort_loader = CohortLoader(config.cohort_sync_config.max_cohort_size, direct_cohort_download_api,
-                                         self.cohort_storage, direct_cohort_download_api)
+            cohort_download_api = DirectCohortDownloadApi(config.cohort_sync_config.api_key,
+                                                          config.cohort_sync_config.secret_key,
+                                                          config.cohort_sync_config.max_cohort_size,
+                                                          self.config.debug)
+            cohort_loader = CohortLoader(cohort_download_api, self.cohort_storage)
             flag_config_api = FlagConfigApiV2(api_key, config.server_url,
                                               config.flag_config_poller_request_timeout_millis)
             self.deployment_runner = DeploymentRunner(config, flag_config_api, self.flag_config_storage,
@@ -75,8 +74,7 @@ class LocalEvaluationClient:
         Fetch initial flag configurations and start polling for updates. You must call this function to begin
         polling for flag config updates.
         """
-        self.__do_flags()
-        self.poller.start()
+        self.deployment_runner.start()
 
     def evaluate_v2(self, user: User, flag_keys: Set[str] = None) -> Dict[str, Variant]:
         """
@@ -93,11 +91,12 @@ class LocalEvaluationClient:
             Returns:
                 The evaluated variants.
         """
-        if self.flags is None or len(self.flags) == 0:
-            return {}
-        self.logger.debug(f"[Experiment] Evaluate: user={user} - Flags: {self.flags}")
         flag_configs = self.flag_config_storage.get_flag_configs()
-        sorted_flags = topological_sort(self.flags, flag_keys)
+        if flag_configs is None or len(flag_configs) == 0:
+            return {}
+        self.logger.debug(f"[Experiment] Evaluate: user={user} - Flags: {flag_configs}")
+        flag_configs = self.flag_config_storage.get_flag_configs()
+        sorted_flags = topological_sort(flag_configs, flag_keys)
         if not sorted_flags:
             return {}
         enriched_user = self.enrich_user(user, flag_configs)
@@ -138,30 +137,6 @@ class LocalEvaluationClient:
         variants = self.evaluate_v2(user, flag_keys)
         return self.__filter_default_variants(variants)
 
-    def __do_flags(self):
-        conn = self._connection_pool.acquire()
-        headers = {
-            'Authorization': f"Api-Key {self.api_key}",
-            'Content-Type': 'application/json;charset=utf-8',
-            'X-Amp-Exp-Library': f"experiment-python-server/{__version__}"
-        }
-        body = None
-        self.logger.debug('[Experiment] Get flag configs')
-        try:
-            response = conn.request('GET', '/sdk/v2/flags?v=0', body, headers)
-            response_body = response.read().decode("utf8")
-            if response.status != 200:
-                raise Exception(
-                    f"[Experiment] Get flagConfigs - received error response: ${response.status}: ${response_body}")
-            flags = json.loads(response_body)
-            flags_dict = {flag['key']: flag for flag in flags}
-            self.logger.debug(f"[Experiment] Got flag configs: {flags}")
-            self.lock.acquire()
-            self.flags = flags_dict
-            self.lock.release()
-        finally:
-            self._connection_pool.release(conn)
-
     def __setup_connection_pool(self):
         scheme, _, host = self.config.server_url.split('/', 3)
         timeout = self.config.flag_config_poller_request_timeout_millis / 1000
@@ -172,7 +147,7 @@ class LocalEvaluationClient:
         """
         Stop polling for flag configurations. Close resource like connection pool with client
         """
-        self.poller.stop()
+        self.deployment_runner.stop()
         self._connection_pool.close()
 
     def __enter__(self) -> 'LocalEvaluationClient':
@@ -196,7 +171,7 @@ class LocalEvaluationClient:
         if USER_GROUP_TYPE in grouped_cohort_ids:
             user_cohort_ids = grouped_cohort_ids[USER_GROUP_TYPE]
             if user_cohort_ids and user.user_id:
-                user.cohort_ids = self.cohort_storage.get_cohorts_for_user(user.user_id, user_cohort_ids)
+                user.cohort_ids = list(self.cohort_storage.get_cohorts_for_user(user.user_id, user_cohort_ids))
 
         if user.groups:
             for group_type, group_names in user.groups.items():
@@ -209,7 +184,6 @@ class LocalEvaluationClient:
                 user.add_group_cohort_ids(
                     group_type,
                     group_name,
-                    self.cohort_storage.get_cohorts_for_group(group_type, group_name, cohort_ids)
+                    list(self.cohort_storage.get_cohorts_for_group(group_type, group_name, cohort_ids))
                 )
-
         return user

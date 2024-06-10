@@ -1,6 +1,5 @@
 import unittest
 
-# Assuming the following utility functions are defined in a module named cohort_utils.py
 from src.amplitude_experiment.util.flag_config import (
     get_all_cohort_ids_from_flags,
     get_grouped_cohort_ids_from_flags,

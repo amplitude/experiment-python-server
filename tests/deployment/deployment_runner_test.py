@@ -1,8 +1,9 @@
 import unittest
 from unittest import mock
 
-from src.amplitude_experiment import LocalEvaluationConfig
+from src.amplitude_experiment import LocalEvaluationConfig, LocalEvaluationClient, User
 from src.amplitude_experiment.cohort.cohort_loader import CohortLoader
+from src.amplitude_experiment.cohort.cohort_sync_config import CohortSyncConfig
 from src.amplitude_experiment.flag.flag_config_api import FlagConfigApi
 from src.amplitude_experiment.deployment.deployment_runner import DeploymentRunner
 
@@ -35,7 +36,7 @@ class DeploymentRunnerTest(unittest.TestCase):
         cohort_download_api = mock.Mock()
         flag_config_storage = mock.Mock()
         cohort_storage = mock.Mock()
-        cohort_loader = CohortLoader(100, cohort_download_api, cohort_storage)
+        cohort_loader = CohortLoader(cohort_download_api, cohort_storage)
         runner = DeploymentRunner(
             LocalEvaluationConfig(),
             flag_api,
@@ -52,7 +53,7 @@ class DeploymentRunnerTest(unittest.TestCase):
         cohort_download_api = mock.Mock()
         flag_config_storage = mock.Mock()
         cohort_storage = mock.Mock()
-        cohort_loader = CohortLoader(100, cohort_download_api, cohort_storage)
+        cohort_loader = CohortLoader(cohort_download_api, cohort_storage)
         runner = DeploymentRunner(
             LocalEvaluationConfig(),
             flag_api, flag_config_storage,

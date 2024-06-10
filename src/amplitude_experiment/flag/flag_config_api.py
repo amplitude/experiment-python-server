@@ -16,6 +16,7 @@ class FlagConfigApiV2(FlagConfigApi):
         self.deployment_key = deployment_key
         self.server_url = server_url
         self.flag_config_poller_request_timeout_millis = flag_config_poller_request_timeout_millis
+        self.__setup_connection_pool()
 
     def get_flag_configs(self) -> List:
         return self._get_flag_configs()
