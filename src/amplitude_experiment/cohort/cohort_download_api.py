@@ -7,9 +7,9 @@ from typing import Set
 
 from .cohort_description import CohortDescription
 from ..connection_pool import HTTPConnectionPool
-from ..exception import HTTPErrorResponseException, CohortTooLargeException
+from ..exception import HTTPErrorResponseException, CohortTooLargeException, CohortNotModifiedException
 
-CDN_COHORT_SYNC_URL = 'https://api.lab.amplitude.com'
+CDN_COHORT_SYNC_URL = 'https://cohort-v2.lab.amplitude.com'
 
 
 class CohortDownloadApi:
@@ -19,7 +19,7 @@ class CohortDownloadApi:
     def get_cohort_description(self, cohort_id: str) -> CohortDescription:
         raise NotImplementedError
 
-    def get_cohort_members(self, cohort_description: CohortDescription) -> Set[str]:
+    def get_cohort_members(self, cohort_description: CohortDescription, last_modified: int) -> Set[str]:
         raise NotImplementedError
 
 
@@ -55,22 +55,24 @@ class DirectCohortDownloadApi(CohortDownloadApi):
         finally:
             self._connection_pool.release(conn)
 
-    def get_cohort_members(self, cohort_description: CohortDescription) -> Set[str]:
+    def get_cohort_members(self, cohort_description: CohortDescription, should_download_cohort: bool = False) -> Set[str]:
         self.logger.debug(f"getCohortMembers({cohort_description.id}): start - {cohort_description}")
         errors = 0
         while True:
             response = None
             try:
-                response = self._get_cohort_members_request(cohort_description.id)
+                last_modified = -1 if should_download_cohort else cohort_description.last_computed
+                response = self._get_cohort_members_request(cohort_description.id, last_modified)
                 self.logger.debug(f"getCohortMembers({cohort_description.id}): status={response.status}")
                 if response.status == 200:
                     response_json = json.loads(response.read().decode("utf8"))
                     members = set(response_json['memberIds'])
                     self.logger.debug(f"getCohortMembers({cohort_description.id}): end - resultSize={len(members)}")
                     return members
+                elif response.status == 204:
+                    raise CohortNotModifiedException(f"Cohort not modified: {response.status}")
                 elif response.status == 413:
-                    raise CohortTooLargeException(response.status,
-                                                  f"Cohort exceeds max cohort size: {response.status}")
+                    raise CohortTooLargeException(f"Cohort exceeds max cohort size: {response.status}")
                 elif response.status != 202:
                     raise HTTPErrorResponseException(response.status,
                                                      f"Unexpected response code: {response.status}")
@@ -82,13 +84,14 @@ class DirectCohortDownloadApi(CohortDownloadApi):
                     raise e
             time.sleep(self.cohort_request_delay_millis/1000)
 
-    def _get_cohort_members_request(self, cohort_id: str) -> HTTPResponse:
+    def _get_cohort_members_request(self, cohort_id: str, last_modified: int) -> HTTPResponse:
         headers = {
             'Authorization': f'Basic {self._get_basic_auth()}',
         }
         conn = self._connection_pool.acquire()
         try:
-            response = conn.request('GET', f'/sdk/v1/cohort/{cohort_id}?maxCohortSize={self.max_cohort_size}',
+            response = conn.request('GET', f'/sdk/v1/cohort/{cohort_id}?maxCohortSize={self.max_cohort_size}'
+                                           f'&lastModified={last_modified}',
                                     headers=headers)
             return response
         finally:
@@ -101,5 +104,5 @@ class DirectCohortDownloadApi(CohortDownloadApi):
     def __setup_connection_pool(self):
         scheme, _, host = self.cdn_server_url.split('/', 3)
         timeout = 10
-        self._connection_pool = HTTPConnectionPool(host, max_size=50, idle_timeout=30, read_timeout=timeout,
+        self._connection_pool = HTTPConnectionPool(host, max_size=10, idle_timeout=30, read_timeout=timeout,
                                                    scheme=scheme)

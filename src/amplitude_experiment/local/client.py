@@ -58,16 +58,17 @@ class LocalEvaluationClient:
         self.lock = Lock()
         self.cohort_storage = InMemoryCohortStorage()
         self.flag_config_storage = InMemoryFlagConfigStorage()
-        if config and config.cohort_sync_config:
-            cohort_download_api = DirectCohortDownloadApi(config.cohort_sync_config.api_key,
-                                                          config.cohort_sync_config.secret_key,
-                                                          config.cohort_sync_config.max_cohort_size,
+        cohort_loader = None
+        if self.config.cohort_sync_config:
+            cohort_download_api = DirectCohortDownloadApi(self.config.cohort_sync_config.api_key,
+                                                          self.config.cohort_sync_config.secret_key,
+                                                          self.config.cohort_sync_config.max_cohort_size,
                                                           self.config.debug)
             cohort_loader = CohortLoader(cohort_download_api, self.cohort_storage)
-            flag_config_api = FlagConfigApiV2(api_key, config.server_url,
-                                              config.flag_config_poller_request_timeout_millis)
-            self.deployment_runner = DeploymentRunner(config, flag_config_api, self.flag_config_storage,
-                                                      self.cohort_storage, cohort_loader)
+        flag_config_api = FlagConfigApiV2(api_key, self.config.server_url,
+                                          self.config.flag_config_poller_request_timeout_millis)
+        self.deployment_runner = DeploymentRunner(self.config, flag_config_api, self.flag_config_storage,
+                                                  self.cohort_storage, cohort_loader)
 
     def start(self):
         """

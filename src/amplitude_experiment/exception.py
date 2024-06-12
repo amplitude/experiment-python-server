@@ -4,10 +4,14 @@ class FetchException(Exception):
         self.status_code = status_code
 
 
-class CohortTooLargeException(Exception):
-    def __init__(self, cached_members, message):
+class CohortNotModifiedException(Exception):
+    def __init__(self, message):
         super().__init__(message)
-        self.cached_members = cached_members
+
+
+class CohortTooLargeException(Exception):
+    def __init__(self, message):
+        super().__init__(message)
 
 
 class HTTPErrorResponseException(Exception):

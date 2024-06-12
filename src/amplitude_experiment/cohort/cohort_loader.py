@@ -24,9 +24,8 @@ class CohortLoader:
                 def task():
                     try:
                         cohort_description = self.get_cohort_description(cohort_id)
-                        if self.should_download_cohort(cohort_description):
-                            cohort_members = self.download_cohort(cohort_description)
-                            self.cohort_storage.put_cohort(cohort_description, cohort_members)
+                        cohort_members = self.download_cohort(cohort_description)
+                        self.cohort_storage.put_cohort(cohort_description, cohort_members)
                     except Exception as e:
                         raise e
 
@@ -43,8 +42,8 @@ class CohortLoader:
         return self.cohort_download_api.get_cohort_description(cohort_id)
 
     def should_download_cohort(self, cohort_description: CohortDescription) -> bool:
-        storage_description = self.cohort_storage.get_cohort_description(cohort_description.id)
-        return cohort_description.last_computed > (storage_description.last_computed if storage_description else -1)
+        return self.cohort_storage.get_cohort_description(cohort_description.id) is None
 
     def download_cohort(self, cohort_description: CohortDescription) -> Set[str]:
-        return self.cohort_download_api.get_cohort_members(cohort_description)
+        return self.cohort_download_api.get_cohort_members(cohort_description,
+                                                           self.should_download_cohort(cohort_description))
