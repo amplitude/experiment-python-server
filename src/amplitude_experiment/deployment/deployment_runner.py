@@ -43,12 +43,10 @@ class DeploymentRunner:
         self.poller.stop()
 
     def __periodic_refresh(self):
-        while True:
-            try:
-                self.refresh(initial=False)
-            except Exception as e:
-                self.logger.error("Refresh flag configs failed.", exc_info=e)
-            time.sleep(self.config.flag_config_polling_interval_millis / 1000)
+        try:
+            self.refresh(initial=False)
+        except Exception as e:
+            self.logger.error("Refresh flag configs failed.", exc_info=e)
 
     def refresh(self, initial: bool = False):
         self.logger.debug("Refreshing flag configs.")
@@ -82,7 +80,7 @@ class DeploymentRunner:
             try:
                 for cohort_id in cohort_ids:
                     future = self.cohort_loader.load_cohort(cohort_id)
-                    future.result()  # Wait for cohort to load
+                    future.result()
                     self.logger.debug(f"Cohort {cohort_id} loaded for flag {flag_config['key']}")
                 self.flag_config_storage.put_flag_config(flag_config)
                 self.logger.debug(f"Flag config {flag_config['key']} stored successfully.")

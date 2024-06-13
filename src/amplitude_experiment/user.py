@@ -27,7 +27,7 @@ class User:
             carrier: str = None,
             library: str = None,
             user_properties: Dict[str, Any] = None,
-            groups: Dict[str, str] = None,
+            groups: Dict[str, List[str]] = None,
             group_properties: Dict[str, Dict[str, Dict[str, Any]]] = None,
             group_cohort_ids: Dict[str, Dict[str, List[str]]] = None,
             cohort_ids: List[str] = None
