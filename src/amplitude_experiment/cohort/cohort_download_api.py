@@ -3,7 +3,6 @@ import logging
 import base64
 import json
 from http.client import HTTPResponse
-from typing import Set
 
 from .cohort import Cohort
 from ..connection_pool import HTTPConnectionPool
@@ -33,14 +32,6 @@ class DirectCohortDownloadApi(CohortDownloadApi):
         self.logger.addHandler(logging.StreamHandler())
         if debug:
             self.logger.setLevel(logging.DEBUG)
-
-    def get_cohort_info(self, cohort_id: str) -> HTTPResponse:
-        conn = self._connection_pool.acquire()
-        try:
-            return conn.request('GET', f'/sdk/v1/cohort/{cohort_id}?skipCohortDownload=true',
-                                headers={'Authorization': f'Basic {self._get_basic_auth()}'})
-        finally:
-            self._connection_pool.release(conn)
 
     def get_cohort(self, cohort_id: str, cohort: Cohort) -> Cohort:
         self.logger.debug(f"getCohortMembers({cohort_id}): start")

@@ -4,15 +4,16 @@ from threading import Lock
 
 class FlagConfigStorage:
     def get_flag_config(self, key: str) -> Dict:
-        pass
+        raise NotImplementedError
+
     def get_flag_configs(self) -> Dict:
-        pass
+        raise NotImplementedError
 
     def put_flag_config(self, flag_config: Dict):
-        pass
+        raise NotImplementedError
 
     def remove_if(self, condition: Callable[[Dict], bool]):
-        pass
+        raise NotImplementedError
 
 
 class InMemoryFlagConfigStorage(FlagConfigStorage):

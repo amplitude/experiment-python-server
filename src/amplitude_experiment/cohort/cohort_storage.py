@@ -6,22 +6,22 @@ from .cohort import Cohort, USER_GROUP_TYPE
 
 class CohortStorage:
     def get_cohort(self, cohort_id: str):
-        pass
+        raise NotImplementedError
 
     def get_cohorts(self):
-        pass
+        raise NotImplementedError
 
     def get_cohorts_for_user(self, user_id: str, cohort_ids: Set[str]) -> Set[str]:
-        pass
+        raise NotImplementedError
 
     def get_cohorts_for_group(self, group_type: str, group_name: str, cohort_ids: Set[str]) -> Set[str]:
-        pass
+        raise NotImplementedError
 
     def put_cohort(self, cohort_description: Cohort):
-        pass
+        raise NotImplementedError
 
     def delete_cohort(self, group_type: str, cohort_id: str):
-        pass
+        raise NotImplementedError
 
 
 class InMemoryCohortStorage(CohortStorage):
