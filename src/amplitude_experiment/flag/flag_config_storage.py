@@ -3,6 +3,8 @@ from threading import Lock
 
 
 class FlagConfigStorage:
+    def get_flag_config(self, key: str) -> Dict:
+        pass
     def get_flag_configs(self) -> Dict:
         pass
 
@@ -17,6 +19,10 @@ class InMemoryFlagConfigStorage(FlagConfigStorage):
     def __init__(self):
         self.flag_configs = {}
         self.flag_configs_lock = Lock()
+
+    def get_flag_config(self, key: str) -> Dict:
+        with self.flag_configs_lock:
+            return self.flag_configs.get(key)
 
     def get_flag_configs(self) -> Dict[str, Dict]:
         with self.flag_configs_lock:

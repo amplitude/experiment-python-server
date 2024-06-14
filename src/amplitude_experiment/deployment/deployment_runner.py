@@ -1,8 +1,6 @@
 import logging
-from concurrent.futures import Future
 from typing import Optional, Set
 import threading
-import time
 
 from ..local.config import LocalEvaluationConfig
 from ..cohort.cohort_loader import CohortLoader
@@ -44,9 +42,9 @@ class DeploymentRunner:
 
     def __periodic_refresh(self):
         try:
-            self.refresh(initial=False)
+            self.refresh()
         except Exception as e:
-            self.logger.error("Refresh flag configs failed.", exc_info=e)
+            self.logger.error(f"Refresh flag and cohort configs failed: {e}")
 
     def refresh(self, initial: bool = False):
         self.logger.debug("Refreshing flag configs.")
@@ -54,52 +52,65 @@ class DeploymentRunner:
         flag_keys = {flag['key'] for flag in flag_configs}
         self.flag_config_storage.remove_if(lambda f: f.key not in flag_keys)
 
-        futures = []
         for flag_config in flag_configs:
             cohort_ids = get_all_cohort_ids_from_flag(flag_config)
             if not self.cohort_loader or not cohort_ids:
                 self.logger.debug(f"Putting non-cohort flag {flag_config['key']}")
                 self.flag_config_storage.put_flag_config(flag_config)
                 continue
-            future = self._load_cohorts_and_store_flag(flag_config, cohort_ids)
-            futures.append(future)
 
-        if initial:
+            # Keep track of old flag and cohort for each flag
+            old_flag_config = self.flag_config_storage.get_flag_config(flag_config['key'])
+
             try:
-                for future in futures:
-                    future.result()
+                flag_loaded = self._load_cohorts_and_store_flag(flag_config, cohort_ids, initial)
+                if flag_loaded:
+                    self.flag_config_storage.put_flag_config(flag_config)  # Store new flag config
+                    self.logger.debug(f"Stored flag config {flag_config['key']}")
+                else:
+                    self.logger.warning(f"Failed to load all cohorts for flag {flag_config['key']}. Using the old flag config.")
+                    self.flag_config_storage.put_flag_config(old_flag_config)
             except Exception as e:
-                self.logger.warning("Failed to download cohort", e)
-                raise e
+                self.logger.error(f"Failed to load cohorts for flag {flag_config['key']}:{e}")
+                if initial:
+                    raise e
 
         self._delete_unused_cohorts()
         self.logger.debug(f"Refreshed {len(flag_configs)} flag configs.")
 
-    def _load_cohorts_and_store_flag(self, flag_config: dict, cohort_ids: Set[str]) -> Future:
+    def _load_cohorts_and_store_flag(self, flag_config: dict, cohort_ids: Set[str], initial: bool):
         def task():
             try:
                 for cohort_id in cohort_ids:
                     future = self.cohort_loader.load_cohort(cohort_id)
                     future.result()
                     self.logger.debug(f"Cohort {cohort_id} loaded for flag {flag_config['key']}")
-                self.flag_config_storage.put_flag_config(flag_config)
-                self.logger.debug(f"Flag config {flag_config['key']} stored successfully.")
+                return True  # All cohorts loaded successfully
             except Exception as e:
-                self.logger.error(f"Failed to load cohorts for flag {flag_config['key']}", exc_info=e)
-                raise e
+                self.logger.error(f"Failed to load cohorts for flag {flag_config['key']}: {e}")
+                if initial:
+                    raise e
+                return False  # Cohort loading failed
 
-        return self.cohort_loader.executor.submit(task)
+        cohort_fetched = self.cohort_loader.executor.submit(task)
+        flag_fetched = True
+
+        # Wait for both flag and cohort loading to complete
+        if initial:
+            flag_fetched = cohort_fetched.result()
+
+        return flag_fetched
 
     def _delete_unused_cohorts(self):
         flag_cohort_ids = set()
         for flag in self.flag_config_storage.get_flag_configs().values():
             flag_cohort_ids.update(get_all_cohort_ids_from_flag(flag))
 
-        storage_cohorts = self.cohort_storage.get_cohort_descriptions()
+        storage_cohorts = self.cohort_storage.get_cohorts()
         deleted_cohort_ids = set(storage_cohorts.keys()) - flag_cohort_ids
 
         for deleted_cohort_id in deleted_cohort_ids:
-            deleted_cohort_description = storage_cohorts.get(deleted_cohort_id)
-            if deleted_cohort_description is not None:
-                self.cohort_storage.delete_cohort(deleted_cohort_description.group_type, deleted_cohort_id)
+            deleted_cohort = storage_cohorts.get(deleted_cohort_id)
+            if deleted_cohort is not None:
+                self.cohort_storage.delete_cohort(deleted_cohort.group_type, deleted_cohort_id)
 

@@ -5,7 +5,7 @@ import json
 from http.client import HTTPResponse
 from typing import Set
 
-from .cohort_description import CohortDescription
+from .cohort import Cohort
 from ..connection_pool import HTTPConnectionPool
 from ..exception import HTTPErrorResponseException, CohortTooLargeException, CohortNotModifiedException
 
@@ -16,10 +16,7 @@ class CohortDownloadApi:
     def __init__(self):
         self.cdn_server_url = CDN_COHORT_SYNC_URL
 
-    def get_cohort_description(self, cohort_id: str) -> CohortDescription:
-        raise NotImplementedError
-
-    def get_cohort_members(self, cohort_description: CohortDescription, last_modified: int) -> Set[str]:
+    def get_cohort(self, cohort_id: str, cohort: Cohort) -> Cohort:
         raise NotImplementedError
 
 
@@ -37,16 +34,6 @@ class DirectCohortDownloadApi(CohortDownloadApi):
         if debug:
             self.logger.setLevel(logging.DEBUG)
 
-    def get_cohort_description(self, cohort_id: str) -> CohortDescription:
-        response = self.get_cohort_info(cohort_id)
-        cohort_info = json.loads(response.read().decode("utf-8"))
-        return CohortDescription(
-            id=cohort_info['cohortId'],
-            last_computed=cohort_info['lastComputed'],
-            size=cohort_info['size'],
-            group_type=cohort_info['groupType'],
-        )
-
     def get_cohort_info(self, cohort_id: str) -> HTTPResponse:
         conn = self._connection_pool.acquire()
         try:
@@ -55,20 +42,25 @@ class DirectCohortDownloadApi(CohortDownloadApi):
         finally:
             self._connection_pool.release(conn)
 
-    def get_cohort_members(self, cohort_description: CohortDescription, should_download_cohort: bool = False) -> Set[str]:
-        self.logger.debug(f"getCohortMembers({cohort_description.id}): start - {cohort_description}")
+    def get_cohort(self, cohort_id: str, cohort: Cohort) -> Cohort:
+        self.logger.debug(f"getCohortMembers({cohort_id}): start")
         errors = 0
         while True:
             response = None
             try:
-                last_modified = -1 if should_download_cohort else cohort_description.last_computed
-                response = self._get_cohort_members_request(cohort_description.id, last_modified)
-                self.logger.debug(f"getCohortMembers({cohort_description.id}): status={response.status}")
+                last_modified = None if cohort is None else cohort.last_computed
+                response = self._get_cohort_members_request(cohort_id, last_modified)
+                self.logger.debug(f"getCohortMembers({cohort_id}): status={response.status}")
                 if response.status == 200:
-                    response_json = json.loads(response.read().decode("utf8"))
-                    members = set(response_json['memberIds'])
-                    self.logger.debug(f"getCohortMembers({cohort_description.id}): end - resultSize={len(members)}")
-                    return members
+                    cohort_info = json.loads(response.read().decode("utf8"))
+                    self.logger.debug(f"getCohortMembers({cohort_id}): end - resultSize={cohort_info['size']}")
+                    return Cohort(
+                        id=cohort_info['cohortId'],
+                        last_computed=cohort_info['lastComputed'],
+                        size=cohort_info['size'],
+                        member_ids=set(cohort_info['memberIds']),
+                        group_type=cohort_info['groupType'],
+                    )
                 elif response.status == 204:
                     raise CohortNotModifiedException(f"Cohort not modified: {response.status}")
                 elif response.status == 413:
@@ -79,8 +71,8 @@ class DirectCohortDownloadApi(CohortDownloadApi):
             except Exception as e:
                 if not isinstance(e, HTTPErrorResponseException) and response.status != 429:
                     errors += 1
-                self.logger.debug(f"getCohortMembers({cohort_description.id}): request-status error {errors} - {e}")
-                if errors >= 3 or isinstance(e, CohortTooLargeException):
+                self.logger.debug(f"getCohortMembers({cohort_id}): request-status error {errors} - {e}")
+                if errors >= 3 or isinstance(e, CohortNotModifiedException) or isinstance(e, CohortTooLargeException):
                     raise e
             time.sleep(self.cohort_request_delay_millis/1000)
 
@@ -90,9 +82,10 @@ class DirectCohortDownloadApi(CohortDownloadApi):
         }
         conn = self._connection_pool.acquire()
         try:
-            response = conn.request('GET', f'/sdk/v1/cohort/{cohort_id}?maxCohortSize={self.max_cohort_size}'
-                                           f'&lastModified={last_modified}',
-                                    headers=headers)
+            url = f'/sdk/v1/cohort/{cohort_id}?maxCohortSize={self.max_cohort_size}'
+            if last_modified is not None:
+                url += f'&lastModified={last_modified}'
+            response = conn.request('GET', url, headers=headers)
             return response
         finally:
             self._connection_pool.release(conn)

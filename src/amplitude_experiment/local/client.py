@@ -8,7 +8,7 @@ from amplitude import Amplitude
 from .config import LocalEvaluationConfig
 from .topological_sort import topological_sort
 from ..assignment import Assignment, AssignmentFilter, AssignmentService
-from ..cohort.cohort_description import USER_GROUP_TYPE
+from ..cohort.cohort import USER_GROUP_TYPE
 from ..cohort.cohort_download_api import DirectCohortDownloadApi
 from ..cohort.cohort_loader import CohortLoader
 from ..cohort.cohort_storage import InMemoryCohortStorage
