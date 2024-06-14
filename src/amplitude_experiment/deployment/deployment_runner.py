@@ -48,7 +48,13 @@ class DeploymentRunner:
 
     def refresh(self, initial: bool = False):
         self.logger.debug("Refreshing flag configs.")
-        flag_configs = self.flag_config_api.get_flag_configs()
+        try:
+            flag_configs = self.flag_config_api.get_flag_configs()
+        except Exception as e:
+            self.logger.error(f'Failed to fetch flag configs: {e}')
+            if initial:
+                raise Exception
+            return
         flag_keys = {flag['key'] for flag in flag_configs}
         self.flag_config_storage.remove_if(lambda f: f.key not in flag_keys)
 
