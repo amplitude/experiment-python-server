@@ -7,7 +7,7 @@ USER_GROUP_TYPE: ClassVar[str] = "User"
 @dataclass
 class Cohort:
     id: str
-    last_computed: int
+    last_modified: int
     size: int
     member_ids: Set[str]
     group_type: str = field(default=USER_GROUP_TYPE)

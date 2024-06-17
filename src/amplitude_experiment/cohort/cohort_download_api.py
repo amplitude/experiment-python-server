@@ -39,7 +39,7 @@ class DirectCohortDownloadApi(CohortDownloadApi):
         while True:
             response = None
             try:
-                last_modified = None if cohort is None else cohort.last_computed
+                last_modified = None if cohort is None else cohort.last_modified
                 response = self._get_cohort_members_request(cohort_id, last_modified)
                 self.logger.debug(f"getCohortMembers({cohort_id}): status={response.status}")
                 if response.status == 200:
@@ -47,7 +47,7 @@ class DirectCohortDownloadApi(CohortDownloadApi):
                     self.logger.debug(f"getCohortMembers({cohort_id}): end - resultSize={cohort_info['size']}")
                     return Cohort(
                         id=cohort_info['cohortId'],
-                        last_computed=cohort_info['lastComputed'],
+                        last_modified=cohort_info['lastModified'],
                         size=cohort_info['size'],
                         member_ids=set(cohort_info['memberIds']),
                         group_type=cohort_info['groupType'],

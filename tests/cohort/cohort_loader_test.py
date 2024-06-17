@@ -13,8 +13,8 @@ class CohortLoaderTest(unittest.TestCase):
 
     def test_load_success(self):
         self.api.get_cohort.side_effect = [
-            Cohort(id="a", last_computed=0, size=1, member_ids={"1"}),
-            Cohort(id="b", last_computed=0, size=2, member_ids={"1", "2"})
+            Cohort(id="a", last_modified=0, size=1, member_ids={"1"}),
+            Cohort(id="b", last_modified=0, size=2, member_ids={"1", "2"})
         ]
 
         future_a = self.loader.load_cohort("a")
@@ -25,8 +25,8 @@ class CohortLoaderTest(unittest.TestCase):
 
         storage_description_a = self.storage.get_cohort("a")
         storage_description_b = self.storage.get_cohort("b")
-        self.assertEqual(Cohort(id="a", last_computed=0, size=1, member_ids={"1"}), storage_description_a)
-        self.assertEqual(Cohort(id="b", last_computed=0, size=2, member_ids={"1", "2"}), storage_description_b)
+        self.assertEqual(Cohort(id="a", last_modified=0, size=1, member_ids={"1"}), storage_description_a)
+        self.assertEqual(Cohort(id="b", last_modified=0, size=2, member_ids={"1", "2"}), storage_description_b)
 
         storage_user1_cohorts = self.storage.get_cohorts_for_user("1", {"a", "b"})
         storage_user2_cohorts = self.storage.get_cohorts_for_user("2", {"a", "b"})
@@ -34,11 +34,11 @@ class CohortLoaderTest(unittest.TestCase):
         self.assertEqual({"b"}, storage_user2_cohorts)
 
     def test_filter_cohorts_already_computed_equivalent_cohorts_are_filtered(self):
-        self.storage.put_cohort(Cohort("a", last_computed=0, size=0, member_ids=set()))
-        self.storage.put_cohort(Cohort("b", last_computed=0, size=0, member_ids=set()))
+        self.storage.put_cohort(Cohort("a", last_modified=0, size=0, member_ids=set()))
+        self.storage.put_cohort(Cohort("b", last_modified=0, size=0, member_ids=set()))
         self.api.get_cohort.side_effect = [
-            Cohort(id="a", last_computed=0, size=0, member_ids=set()),
-            Cohort(id="b", last_computed=1, size=2, member_ids={"1", "2"})
+            Cohort(id="a", last_modified=0, size=0, member_ids=set()),
+            Cohort(id="b", last_modified=1, size=2, member_ids={"1", "2"})
         ]
 
         self.loader.load_cohort("a").result()
@@ -46,8 +46,8 @@ class CohortLoaderTest(unittest.TestCase):
 
         storage_description_a = self.storage.get_cohort("a")
         storage_description_b = self.storage.get_cohort("b")
-        self.assertEqual(Cohort(id="a", last_computed=0, size=0, member_ids=set()), storage_description_a)
-        self.assertEqual(Cohort(id="b", last_computed=1, size=2, member_ids={"1", "2"}), storage_description_b)
+        self.assertEqual(Cohort(id="a", last_modified=0, size=0, member_ids=set()), storage_description_a)
+        self.assertEqual(Cohort(id="b", last_modified=1, size=2, member_ids={"1", "2"}), storage_description_b)
 
         storage_user1_cohorts = self.storage.get_cohorts_for_user("1", {"a", "b"})
         storage_user2_cohorts = self.storage.get_cohorts_for_user("2", {"a", "b"})
@@ -56,9 +56,9 @@ class CohortLoaderTest(unittest.TestCase):
 
     def test_load_download_failure_throws(self):
         self.api.get_cohort.side_effect = [
-            Cohort(id="a", last_computed=0, size=1, member_ids={"1"}),
+            Cohort(id="a", last_modified=0, size=1, member_ids={"1"}),
             Exception("Connection timed out"),
-            Cohort(id="c", last_computed=0, size=1, member_ids={"1"})
+            Cohort(id="c", last_modified=0, size=1, member_ids={"1"})
         ]
 
         self.loader.load_cohort("a").result()
