@@ -20,8 +20,8 @@ class CohortDownloadApi:
 
 
 class DirectCohortDownloadApi(CohortDownloadApi):
-    def __init__(self, api_key: str, secret_key: str, max_cohort_size: int,
-                 debug: bool = False, cohort_request_delay_millis: int = 5000):
+    def __init__(self, api_key: str, secret_key: str, max_cohort_size: int, cohort_request_delay_millis: int,
+                 debug: bool):
         super().__init__()
         self.api_key = api_key
         self.secret_key = secret_key

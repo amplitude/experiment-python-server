@@ -17,7 +17,7 @@ def response(code: int, body: dict = None):
 class CohortDownloadApiTest(unittest.TestCase):
 
     def setUp(self):
-        self.api = DirectCohortDownloadApi('api', 'secret', 15000, False, 100)
+        self.api = DirectCohortDownloadApi('api', 'secret', 15000, 100, False)
 
     def test_cohort_download_success(self):
         cohort = Cohort(id="1234", last_modified=0, size=1, member_ids={'user'})
