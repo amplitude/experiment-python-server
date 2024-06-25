@@ -10,8 +10,7 @@ class RemoteEvaluationConfig:
                  fetch_retry_backoff_min_millis=500,
                  fetch_retry_backoff_max_millis=10000,
                  fetch_retry_backoff_scalar=1.5,
-                 fetch_retry_timeout_millis=10000,
-                 deployment_key=None):
+                 fetch_retry_timeout_millis=10000):
         """
         Initialize a config
             Parameters:
@@ -26,8 +25,6 @@ class RemoteEvaluationConfig:
                   greater than the max, the max is used for all subsequent retries.
                 fetch_retry_backoff_scalar (float): Scales the minimum backoff exponentially.
                 fetch_retry_timeout_millis (int): The request timeout for retrying fetch requests.
-                deployment_key (str): The Experiment deployment key. If provided, it is used
-                    instead of the project API key
 
             Returns:
                 The config object
@@ -40,4 +37,3 @@ class RemoteEvaluationConfig:
         self.fetch_retry_backoff_max_millis = fetch_retry_backoff_max_millis
         self.fetch_retry_backoff_scalar = fetch_retry_backoff_scalar
         self.fetch_retry_timeout_millis = fetch_retry_timeout_millis
-        self.deployment_key = deployment_key

@@ -15,17 +15,15 @@ class Experiment:
         """
         Initializes a remote evaluation client.
             Parameters:
-                api_key (str): The Amplitude Project API Key used in the client. If a deployment key is provided in the
-                    config, it will be used instead
+                api_key (str): The Amplitude API Key
                 config (RemoteEvaluationConfig): Optional Config
 
             Returns:
                 A remote evaluation client.
         """
-        used_key = config.deployment_key if config and config.deployment_key else api_key
-        if remote_evaluation_instances.get(used_key) is None:
-            remote_evaluation_instances[used_key] = RemoteEvaluationClient(used_key, config)
-        return remote_evaluation_instances[used_key]
+        if remote_evaluation_instances.get(api_key) is None:
+            remote_evaluation_instances[api_key] = RemoteEvaluationClient(api_key, config)
+        return remote_evaluation_instances[api_key]
 
     @staticmethod
     def initialize_local(api_key: str, config: LocalEvaluationConfig = None) -> LocalEvaluationClient:
@@ -34,14 +32,12 @@ class Experiment:
         user without requiring a remote call to the amplitude evaluation server. In order to best leverage local
         evaluation, all flags, and experiments being evaluated server side should be configured as local.
             Parameters:
-                api_key (str): The Amplitude Project API Key used in the client. If a deployment key is provided in the
-                    config, it will be used instead
+                api_key (str): The Amplitude API Key
                 config (RemoteEvaluationConfig): Optional Config
 
             Returns:
                 A local evaluation client.
         """
-        used_key = config.deployment_key if config and config.deployment_key else api_key
-        if local_evaluation_instances.get(used_key) is None:
-            local_evaluation_instances[used_key] = LocalEvaluationClient(used_key, config)
-        return local_evaluation_instances[used_key]
+        if local_evaluation_instances.get(api_key) is None:
+            local_evaluation_instances[api_key] = LocalEvaluationClient(api_key, config)
+        return local_evaluation_instances[api_key]
