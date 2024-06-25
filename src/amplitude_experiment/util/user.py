@@ -6,11 +6,11 @@ from ..user import User
 def user_to_evaluation_context(user: User) -> Dict[str, Any]:
     user_groups = user.groups
     user_group_properties = user.group_properties
-    user_group_cohort_ids = user.group_cohort_ids  # Assuming this property exists on the User object
+    user_group_cohort_ids = user.group_cohort_ids
     user_dict = {key: value for key, value in user.__dict__.copy().items() if value is not None}
     user_dict.pop('groups', None)
     user_dict.pop('group_properties', None)
-    user_dict.pop('group_cohort_ids', None)  # Removing the group_cohort_ids from the user dictionary
+    user_dict.pop('group_cohort_ids', None)
     context = {'user': user_dict} if len(user_dict) > 0 else {}
 
     if user_groups is None:

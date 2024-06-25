@@ -3,6 +3,7 @@ import logging
 import base64
 import json
 from http.client import HTTPResponse
+from typing import Optional
 
 from .cohort import Cohort
 from ..connection_pool import HTTPConnectionPool
@@ -15,7 +16,7 @@ class CohortDownloadApi:
     def __init__(self):
         self.cdn_server_url = CDN_COHORT_SYNC_URL
 
-    def get_cohort(self, cohort_id: str, cohort: Cohort) -> Cohort:
+    def get_cohort(self, cohort_id: str, cohort: Cohort) -> Optional[Cohort]:
         raise NotImplementedError
 
 
@@ -33,7 +34,7 @@ class DirectCohortDownloadApi(CohortDownloadApi):
         if debug:
             self.logger.setLevel(logging.DEBUG)
 
-    def get_cohort(self, cohort_id: str, cohort: Cohort) -> Cohort:
+    def get_cohort(self, cohort_id: str, cohort: Cohort) -> Optional[Cohort]:
         self.logger.debug(f"getCohortMembers({cohort_id}): start")
         errors = 0
         while True:

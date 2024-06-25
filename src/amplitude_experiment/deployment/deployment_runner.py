@@ -34,7 +34,7 @@ class DeploymentRunner:
 
     def start(self):
         with self.lock:
-            self.refresh(initial=True)
+            self.refresh()
             self.poller.start()
 
     def stop(self):
@@ -46,15 +46,14 @@ class DeploymentRunner:
         except Exception as e:
             self.logger.error(f"Refresh flag and cohort configs failed: {e}")
 
-    def refresh(self, initial: bool = False):
+    def refresh(self):
         self.logger.debug("Refreshing flag configs.")
         try:
             flag_configs = self.flag_config_api.get_flag_configs()
         except Exception as e:
             self.logger.error(f'Failed to fetch flag configs: {e}')
-            if initial:
-                raise Exception
-            return
+            raise Exception
+
         flag_keys = {flag['key'] for flag in flag_configs}
         self.flag_config_storage.remove_if(lambda f: f.key not in flag_keys)
 
@@ -69,43 +68,33 @@ class DeploymentRunner:
             old_flag_config = self.flag_config_storage.get_flag_config(flag_config['key'])
 
             try:
-                flag_loaded = self._load_cohorts_and_store_flag(flag_config, cohort_ids, initial)
-                if flag_loaded:
-                    self.flag_config_storage.put_flag_config(flag_config)  # Store new flag config
-                    self.logger.debug(f"Stored flag config {flag_config['key']}")
-                else:
-                    self.logger.warning(f"Failed to load all cohorts for flag {flag_config['key']}. Using the old flag config.")
-                    self.flag_config_storage.put_flag_config(old_flag_config)
+                self._load_cohorts(flag_config, cohort_ids)
+                self.flag_config_storage.put_flag_config(flag_config)  # Store new flag config
+                self.logger.debug(f"Stored flag config {flag_config['key']}")
+
             except Exception as e:
-                self.logger.error(f"Failed to load cohorts for flag {flag_config['key']}:{e}")
-                if initial:
-                    raise e
+                self.logger.warning(f"Failed to load all cohorts for flag {flag_config['key']}. "
+                                    f"Using the old flag config.")
+                self.flag_config_storage.put_flag_config(old_flag_config)
+                raise e
 
         self._delete_unused_cohorts()
         self.logger.debug(f"Refreshed {len(flag_configs)} flag configs.")
 
-    def _load_cohorts_and_store_flag(self, flag_config: dict, cohort_ids: Set[str], initial: bool):
+    def _load_cohorts(self, flag_config: dict, cohort_ids: Set[str]):
         def task():
             try:
                 for cohort_id in cohort_ids:
                     future = self.cohort_loader.load_cohort(cohort_id)
                     future.result()
                     self.logger.debug(f"Cohort {cohort_id} loaded for flag {flag_config['key']}")
-                return True  # All cohorts loaded successfully
             except Exception as e:
                 self.logger.error(f"Failed to load cohorts for flag {flag_config['key']}: {e}")
-                if initial:
-                    raise e
-                return False  # Cohort loading failed
+                raise e
 
         cohort_fetched = self.cohort_loader.executor.submit(task)
-        flag_fetched = True
-
         # Wait for both flag and cohort loading to complete
-        if initial:
-            flag_fetched = cohort_fetched.result()
-
-        return flag_fetched
+        cohort_fetched.result()
 
     def _delete_unused_cohorts(self):
         flag_cohort_ids = set()
