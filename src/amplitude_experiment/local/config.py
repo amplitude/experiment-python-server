@@ -4,7 +4,7 @@ from ..assignment import AssignmentConfig
 from ..cohort.cohort_sync_config import CohortSyncConfig, DEFAULT_COHORT_SYNC_URL, EU_COHORT_SYNC_URL
 
 DEFAULT_SERVER_URL = 'https://api.lab.amplitude.com'
-EU_SERVER_URL = 'https://api.eu.lab.amplitude.com'
+EU_SERVER_URL = 'https://flag.lab.eu.amplitude.com'
 
 
 class ServerZone(Enum):
@@ -26,7 +26,7 @@ class LocalEvaluationConfig:
         Initialize a config
            Parameters:
                 debug (bool): Set to true to log some extra information to the console.
-                server_url (str): The server endpoint from which to request variants.
+                server_url (str): The server endpoint from which to request flag configs.
                 server_zone (ServerZone): Location of the Amplitude data center to get flags and cohorts from, US or EU
                 flag_config_polling_interval_millis (int): The interval, in milliseconds, at which to poll for flag
                   configurations.
