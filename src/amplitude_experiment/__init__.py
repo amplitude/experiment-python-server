@@ -12,4 +12,6 @@ from .factory import Experiment
 from .cookie import AmplitudeCookie
 from .local.client import LocalEvaluationClient
 from .local.config import LocalEvaluationConfig
+from .local.config import ServerZone
 from .assignment import AssignmentConfig
+from .cohort.cohort_sync_config import CohortSyncConfig
