@@ -9,32 +9,29 @@ from .cohort import Cohort
 from ..connection_pool import HTTPConnectionPool
 from ..exception import HTTPErrorResponseException, CohortTooLargeException, CohortNotModifiedException
 
-CDN_COHORT_SYNC_URL = 'https://cohort-v2.lab.amplitude.com'
-
 
 class CohortDownloadApi:
-    def __init__(self):
-        self.cdn_server_url = CDN_COHORT_SYNC_URL
 
-    def get_cohort(self, cohort_id: str, cohort: Cohort) -> Optional[Cohort]:
+    def get_cohort(self, cohort_id: str, cohort: Optional[Cohort]) -> Cohort:
         raise NotImplementedError
 
 
 class DirectCohortDownloadApi(CohortDownloadApi):
     def __init__(self, api_key: str, secret_key: str, max_cohort_size: int, cohort_request_delay_millis: int,
-                 debug: bool):
+                 server_url: str, debug: bool):
         super().__init__()
         self.api_key = api_key
         self.secret_key = secret_key
         self.max_cohort_size = max_cohort_size
-        self.__setup_connection_pool()
         self.cohort_request_delay_millis = cohort_request_delay_millis
         self.logger = logging.getLogger("Amplitude")
         self.logger.addHandler(logging.StreamHandler())
+        self.server_url = server_url
         if debug:
             self.logger.setLevel(logging.DEBUG)
+        self.__setup_connection_pool()
 
-    def get_cohort(self, cohort_id: str, cohort: Cohort) -> Optional[Cohort]:
+    def get_cohort(self, cohort_id: str, cohort: Optional[Cohort]) -> Cohort:
         self.logger.debug(f"getCohortMembers({cohort_id}): start")
         errors = 0
         while True:
@@ -87,7 +84,7 @@ class DirectCohortDownloadApi(CohortDownloadApi):
         return base64.b64encode(credentials.encode('utf-8')).decode('utf-8')
 
     def __setup_connection_pool(self):
-        scheme, _, host = self.cdn_server_url.split('/', 3)
+        scheme, _, host = self.server_url.split('/', 3)
         timeout = 10
         self._connection_pool = HTTPConnectionPool(host, max_size=10, idle_timeout=30, read_timeout=timeout,
                                                    scheme=scheme)
