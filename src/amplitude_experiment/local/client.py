@@ -99,7 +99,6 @@ class LocalEvaluationClient:
         if flag_configs is None or len(flag_configs) == 0:
             return {}
         self.logger.debug(f"[Experiment] Evaluate: user={user} - Flags: {flag_configs}")
-        flag_configs = self.flag_config_storage.get_flag_configs()
         sorted_flags = topological_sort(flag_configs, flag_keys)
         if not sorted_flags:
             return {}
