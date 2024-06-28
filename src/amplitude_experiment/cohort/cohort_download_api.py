@@ -58,7 +58,7 @@ class DirectCohortDownloadApi(CohortDownloadApi):
                     raise HTTPErrorResponseException(response.status,
                                                      f"Unexpected response code: {response.status}")
             except Exception as e:
-                if not isinstance(e, HTTPErrorResponseException) and response.status != 429:
+                if response and not isinstance(e, HTTPErrorResponseException) and response.status != 429:
                     errors += 1
                 self.logger.debug(f"getCohortMembers({cohort_id}): request-status error {errors} - {e}")
                 if errors >= 3 or isinstance(e, CohortNotModifiedException) or isinstance(e, CohortTooLargeException):

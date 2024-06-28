@@ -2,6 +2,7 @@ import logging
 from typing import Optional, Set
 import threading
 
+from ..exception import CohortNotModifiedException
 from ..local.config import LocalEvaluationConfig
 from ..cohort.cohort_loader import CohortLoader
 from ..cohort.cohort_storage import CohortStorage
@@ -55,7 +56,7 @@ class DeploymentRunner:
             raise Exception
 
         flag_keys = {flag['key'] for flag in flag_configs}
-        self.flag_config_storage.remove_if(lambda f: f.key not in flag_keys)
+        self.flag_config_storage.remove_if(lambda f: f['key'] not in flag_keys)
 
         for flag_config in flag_configs:
             cohort_ids = get_all_cohort_ids_from_flag(flag_config)
@@ -89,8 +90,9 @@ class DeploymentRunner:
                     future.result()
                     self.logger.debug(f"Cohort {cohort_id} loaded for flag {flag_config['key']}")
             except Exception as e:
-                self.logger.error(f"Failed to load cohorts for flag {flag_config['key']}: {e}")
-                raise e
+                if not isinstance(e, CohortNotModifiedException):
+                    self.logger.error(f"Failed to load cohorts for flag {flag_config['key']}: {e}")
+                    raise e
 
         cohort_fetched = self.cohort_loader.executor.submit(task)
         # Wait for both flag and cohort loading to complete
