@@ -18,17 +18,14 @@ class CohortDownloadApi:
 
 class DirectCohortDownloadApi(CohortDownloadApi):
     def __init__(self, api_key: str, secret_key: str, max_cohort_size: int, cohort_request_delay_millis: int,
-                 server_url: str, debug: bool):
+                 server_url: str, logger: logging.Logger = None):
         super().__init__()
         self.api_key = api_key
         self.secret_key = secret_key
         self.max_cohort_size = max_cohort_size
         self.cohort_request_delay_millis = cohort_request_delay_millis
-        self.logger = logging.getLogger("Amplitude")
-        self.logger.addHandler(logging.StreamHandler())
         self.server_url = server_url
-        if debug:
-            self.logger.setLevel(logging.DEBUG)
+        self.logger = logger or logging.getLogger("Amplitude")
         self.__setup_connection_pool()
 
     def get_cohort(self, cohort_id: str, cohort: Optional[Cohort]) -> Cohort:
@@ -58,7 +55,7 @@ class DirectCohortDownloadApi(CohortDownloadApi):
                     raise HTTPErrorResponseException(response.status,
                                                      f"Unexpected response code: {response.status}")
             except Exception as e:
-                if response and not isinstance(e, HTTPErrorResponseException) and response.status != 429:
+                if response and not (isinstance(e, HTTPErrorResponseException) and response.status == 429):
                     errors += 1
                 self.logger.debug(f"getCohortMembers({cohort_id}): request-status error {errors} - {e}")
                 if errors >= 3 or isinstance(e, CohortNotModifiedException) or isinstance(e, CohortTooLargeException):

@@ -65,13 +65,13 @@ class LocalEvaluationClient:
                                                           self.config.cohort_sync_config.max_cohort_size,
                                                           self.config.cohort_sync_config.cohort_request_delay_millis,
                                                           self.config.cohort_sync_config.cohort_server_url,
-                                                          self.config.debug)
+                                                          self.logger)
 
-            cohort_loader = CohortLoader(cohort_download_api, self.cohort_storage)
+            cohort_loader = CohortLoader(cohort_download_api, self.cohort_storage, self.logger)
         flag_config_api = FlagConfigApiV2(api_key, self.config.server_url,
                                           self.config.flag_config_poller_request_timeout_millis)
         self.deployment_runner = DeploymentRunner(self.config, flag_config_api, self.flag_config_storage,
-                                                  self.cohort_storage, cohort_loader)
+                                                  self.cohort_storage, cohort_loader, self.logger)
 
     def start(self):
         """

@@ -14,7 +14,7 @@ class CohortSyncConfig:
             cohort_server_url (str): The server endpoint from which to request cohorts
     """
 
-    def __init__(self, api_key: str, secret_key: str, max_cohort_size: int = 15000,
+    def __init__(self, api_key: str, secret_key: str, max_cohort_size: int = 2147483647,
                  cohort_request_delay_millis: int = 5000, cohort_server_url: str = DEFAULT_COHORT_SYNC_URL):
         self.api_key = api_key
         self.secret_key = secret_key

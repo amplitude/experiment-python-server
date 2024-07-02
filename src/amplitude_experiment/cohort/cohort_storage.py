@@ -23,6 +23,9 @@ class CohortStorage:
     def delete_cohort(self, group_type: str, cohort_id: str):
         raise NotImplementedError
 
+    def get_cohort_ids(self) -> Set[str]:
+        raise NotImplementedError
+
 
 class InMemoryCohortStorage(CohortStorage):
     def __init__(self):
@@ -64,3 +67,7 @@ class InMemoryCohortStorage(CohortStorage):
                 group_cohorts.remove(cohort_id)
             if cohort_id in self.cohort_store:
                 del self.cohort_store[cohort_id]
+
+    def get_cohort_ids(self):
+        with self.lock:
+            return set(self.cohort_store.keys())
