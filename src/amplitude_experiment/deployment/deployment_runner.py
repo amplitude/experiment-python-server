@@ -18,8 +18,8 @@ class DeploymentRunner:
             flag_config_api: FlagConfigApi,
             flag_config_storage: FlagConfigStorage,
             cohort_storage: CohortStorage,
+            logger: logging.Logger,
             cohort_loader: Optional[CohortLoader] = None,
-            logger: logging.Logger = None
     ):
         self.config = config
         self.flag_config_api = flag_config_api
@@ -55,25 +55,30 @@ class DeploymentRunner:
         except Exception as e:
             self.logger.error(f'Failed to fetch flag configs: {e}')
             raise e
+
         flag_keys = {flag['key'] for flag in flag_configs}
         self.flag_config_storage.remove_if(lambda f: f['key'] not in flag_keys)
+
         if not self.cohort_loader:
             for flag_config in flag_configs:
                 self.logger.debug(f"Putting non-cohort flag {flag_config['key']}")
                 self.flag_config_storage.put_flag_config(flag_config)
             return
+
         new_cohort_ids = set()
         for flag_config in flag_configs:
             new_cohort_ids.update(get_all_cohort_ids_from_flag(flag_config))
+
         existing_cohort_ids = self.cohort_storage.get_cohort_ids()
         cohort_ids_to_download = new_cohort_ids - existing_cohort_ids
-        cohort_download_error = None
+        cohort_download_errors = []
+
         # download all new cohorts
         for cohort_id in cohort_ids_to_download:
             try:
                 self.cohort_loader.load_cohort(cohort_id).result()
             except Exception as e:
-                cohort_download_error = e
+                cohort_download_errors.append((cohort_id, str(e)))
                 self.logger.error(f"Download cohort {cohort_id} failed: {e}")
 
         # get updated set of cohort ids
@@ -85,7 +90,6 @@ class DeploymentRunner:
             if not cohort_ids or not self.cohort_loader:
                 self.flag_config_storage.put_flag_config(flag_config)
                 self.logger.debug(f"Putting non-cohort flag {flag_config['key']}")
-            # only store flag config if all required cohorts exist
             elif cohort_ids.issubset(updated_cohort_ids):
                 self.flag_config_storage.put_flag_config(flag_config)
                 self.logger.debug(f"Putting flag {flag_config['key']}")
@@ -97,9 +101,12 @@ class DeploymentRunner:
         # delete unused cohorts
         self._delete_unused_cohorts()
         self.logger.debug(f"Refreshed {len(flag_configs) - failed_flag_count} flag configs.")
-        # if not all required cohorts exist, throw an error
-        if cohort_download_error:
-            raise cohort_download_error
+
+        # if there are any download errors, raise an aggregated exception
+        if cohort_download_errors:
+            error_count = len(cohort_download_errors)
+            error_messages = "\n".join([f"Cohort {cohort_id}: {error}" for cohort_id, error in cohort_download_errors])
+            raise Exception(f"{error_count} cohort(s) failed to download:\n{error_messages}")
 
     def __update_cohorts(self):
         self.cohort_loader.update_stored_cohorts().result()

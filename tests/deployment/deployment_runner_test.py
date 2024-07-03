@@ -38,15 +38,15 @@ class DeploymentRunnerTest(unittest.TestCase):
         flag_config_storage = mock.Mock()
         cohort_storage = mock.Mock()
         cohort_storage.get_cohort_ids.return_value = set()
-        cohort_loader = CohortLoader(cohort_download_api, cohort_storage)
         logger = mock.create_autospec(logging.Logger)
+        cohort_loader = CohortLoader(cohort_download_api, cohort_storage, logger)
         runner = DeploymentRunner(
             LocalEvaluationConfig(),
             flag_api,
             flag_config_storage,
             cohort_storage,
+            logger,
             cohort_loader,
-            logger  # Pass the logger mock here
         )
         flag_api.get_flag_configs.side_effect = RuntimeError("test")
         with self.assertRaises(RuntimeError):
@@ -58,19 +58,19 @@ class DeploymentRunnerTest(unittest.TestCase):
         flag_config_storage = mock.Mock()
         cohort_storage = mock.Mock()
         cohort_storage.get_cohort_ids.return_value = set()
-        cohort_loader = CohortLoader(cohort_download_api, cohort_storage)
         logger = mock.create_autospec(logging.Logger)
+        cohort_loader = CohortLoader(cohort_download_api, cohort_storage, logger)
         runner = DeploymentRunner(
             LocalEvaluationConfig(),
             flag_api, flag_config_storage,
             cohort_storage,
+            logger,
             cohort_loader,
-            logger  # Pass the logger mock here
         )
         with patch.object(runner, '_delete_unused_cohorts'):
             flag_api.get_flag_configs.return_value = [self.flag]
             cohort_download_api.get_cohort.side_effect = RuntimeError("test")
-            with self.assertRaises(RuntimeError):
+            with self.assertRaises(Exception):
                 runner.start()
 
 

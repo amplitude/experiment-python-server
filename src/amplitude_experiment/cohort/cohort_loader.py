@@ -10,7 +10,7 @@ from .cohort_storage import CohortStorage
 
 class CohortLoader:
     def __init__(self, cohort_download_api: CohortDownloadApi, cohort_storage: CohortStorage,
-                 logger: logging.Logger = None):
+                 logger: logging.Logger):
         self.cohort_download_api = cohort_download_api
         self.cohort_storage = cohort_storage
         self.jobs: Dict[str, Future] = {}
@@ -19,7 +19,7 @@ class CohortLoader:
             max_workers=32,
             thread_name_prefix='CohortLoaderExecutor'
         )
-        self.logger = logger or logging.getLogger("Amplitude")
+        self.logger = logger
 
     def load_cohort(self, cohort_id: str) -> Future:
         with self.lock_jobs:

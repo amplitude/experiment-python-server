@@ -1,5 +1,7 @@
 import json
+import logging
 import unittest
+from unittest import mock
 from unittest.mock import MagicMock, patch
 from src.amplitude_experiment.cohort.cohort import Cohort
 from src.amplitude_experiment.cohort.cohort_download_api import DirectCohortDownloadApi
@@ -17,7 +19,7 @@ def response(code: int, body: dict = None):
 class CohortDownloadApiTest(unittest.TestCase):
 
     def setUp(self):
-        self.api = DirectCohortDownloadApi('api', 'secret', 15000, 100, "https://example.amplitude.com")
+        self.api = DirectCohortDownloadApi('api', 'secret', 15000, 100, "https://example.amplitude.com", mock.create_autospec(logging.Logger))
 
     def test_cohort_download_success(self):
         cohort = Cohort(id="1234", last_modified=0, size=1, member_ids={'user'})
