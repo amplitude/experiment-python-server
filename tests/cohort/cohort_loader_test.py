@@ -1,6 +1,4 @@
-import logging
 import unittest
-from unittest import mock
 from unittest.mock import MagicMock
 
 from src.amplitude_experiment.cohort.cohort import Cohort
@@ -11,7 +9,7 @@ class CohortLoaderTest(unittest.TestCase):
     def setUp(self):
         self.api = MagicMock()
         self.storage = InMemoryCohortStorage()
-        self.loader = CohortLoader(self.api, self.storage, mock.create_autospec(logging.Logger))
+        self.loader = CohortLoader(self.api, self.storage)
 
     def test_load_success(self):
         self.api.get_cohort.side_effect = [

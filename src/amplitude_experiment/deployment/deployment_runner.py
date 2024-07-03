@@ -109,7 +109,11 @@ class DeploymentRunner:
             raise Exception(f"{error_count} cohort(s) failed to download:\n{error_messages}")
 
     def __update_cohorts(self):
-        self.cohort_loader.update_stored_cohorts().result()
+        try:
+            self.cohort_loader.update_stored_cohorts().result()
+        except Exception as e:
+            self.logger.error(f"Error while updating cohorts: {e}")
+
 
     def _delete_unused_cohorts(self):
         flag_cohort_ids = set()

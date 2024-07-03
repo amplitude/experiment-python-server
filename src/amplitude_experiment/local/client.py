@@ -67,7 +67,7 @@ class LocalEvaluationClient:
                                                           self.config.cohort_sync_config.cohort_server_url,
                                                           self.logger)
 
-            cohort_loader = CohortLoader(cohort_download_api, self.cohort_storage, self.logger)
+            cohort_loader = CohortLoader(cohort_download_api, self.cohort_storage)
         flag_config_api = FlagConfigApiV2(api_key, self.config.server_url,
                                           self.config.flag_config_poller_request_timeout_millis)
         self.deployment_runner = DeploymentRunner(self.config, flag_config_api, self.flag_config_storage,
