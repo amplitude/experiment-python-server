@@ -1,6 +1,3 @@
-from typing import List, Tuple
-
-
 class FetchException(Exception):
     def __init__(self, status_code, message):
         super().__init__(message)
@@ -11,6 +8,7 @@ class CohortNotModifiedException(Exception):
     def __init__(self, message):
         super().__init__(message)
 
+
 class CohortTooLargeException(Exception):
     def __init__(self, message):
         super().__init__(message)
@@ -20,6 +18,7 @@ class HTTPErrorResponseException(Exception):
     def __init__(self, status_code, message):
         super().__init__(message)
         self.status_code = status_code
+
 
 class CohortUpdateException(Exception):
     def __init__(self, errors):
@@ -35,5 +34,3 @@ class CohortUpdateException(Exception):
             else:
                 error_messages.append(str(item))
         return f"One or more cohorts failed to update:\n" + "\n".join(error_messages)
-
-
