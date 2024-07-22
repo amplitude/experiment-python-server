@@ -1,5 +1,5 @@
 import logging
-from typing import Optional, Set
+from typing import Optional
 import threading
 
 from ..local.config import LocalEvaluationConfig
@@ -113,7 +113,6 @@ class DeploymentRunner:
             self.cohort_loader.update_stored_cohorts().result()
         except Exception as e:
             self.logger.error(f"Error while updating cohorts: {e}")
-
 
     def _delete_unused_cohorts(self):
         flag_cohort_ids = set()
