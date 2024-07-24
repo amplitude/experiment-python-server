@@ -77,6 +77,15 @@ user = User(
 variants = experiment.evaluate(user)
 ```
 
+# Running unit tests suite
+To setup for running test on local, create a `.env` file with following
+contents, and replace `{API_KEY}` and `{SECRET_KEY}` (or `{EU_API_KEY}` and `{EU_SECRET_KEY}` for EU data center) for the project in test:
+
+```
+API_KEY={API_KEY}
+SECRET_KEY={SECRET_KEY}
+```
+
 ## More Information
 Please visit our :100:[Developer Center](https://www.docs.developers.amplitude.com/experiment/sdks/python-sdk/) for more instructions on using our the SDK.
 

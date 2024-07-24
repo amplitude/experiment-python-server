@@ -1,7 +1,11 @@
 import unittest
 from src.amplitude_experiment import LocalEvaluationClient, LocalEvaluationConfig, User, Variant
+from src.amplitude_experiment.cohort.cohort_sync_config import CohortSyncConfig
+from src.amplitude_experiment.local.config import ServerZone
+from dotenv import load_dotenv
+import os
 
-API_KEY = 'server-qz35UwzJ5akieoAdIgzM4m9MIiOLXLoz'
+SERVER_API_KEY = 'server-qz35UwzJ5akieoAdIgzM4m9MIiOLXLoz'
 test_user = User(user_id='test_user')
 test_user_2 = User(user_id='user_id', device_id='device_id')
 
@@ -11,7 +15,15 @@ class LocalEvaluationClientTestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        cls._local_evaluation_client = LocalEvaluationClient(API_KEY, LocalEvaluationConfig(debug=False))
+        load_dotenv()
+        api_key = os.getenv('API_KEY')
+        secret_key = os.getenv('SECRET_KEY')
+        cohort_sync_config = CohortSyncConfig(api_key=api_key,
+                                              secret_key=secret_key,
+                                              cohort_request_delay_millis=100)
+        cls._local_evaluation_client = (
+            LocalEvaluationClient(SERVER_API_KEY, LocalEvaluationConfig(debug=False,
+                                                                        cohort_sync_config=cohort_sync_config)))
         cls._local_evaluation_client.start()
 
     @classmethod
@@ -55,6 +67,18 @@ class LocalEvaluationClientTestCase(unittest.TestCase):
         variants = self._local_evaluation_client.evaluate(test_user_2)
         expected_variant = None
         self.assertEqual(expected_variant, variants.get('sdk-local-evaluation-ci-test-holdout'))
+
+    def test_evaluate_with_cohort(self):
+        user = User(user_id='12345', device_id='device_id')
+        variant = self._local_evaluation_client.evaluate(user).get('sdk-local-evaluation-user-cohort-ci-test')
+        expected_variant = Variant(key='on', value='on')
+        self.assertEqual(expected_variant, variant)
+
+    def test_evaluate_with_group_cohort(self):
+        user = User(user_id='12345', device_id='device_id', groups={'org id': ['1']})
+        variant = self._local_evaluation_client.evaluate(user).get('sdk-local-evaluation-group-cohort-ci-test')
+        expected_variant = Variant(key='on', value='on')
+        self.assertEqual(expected_variant, variant)
 
 
 if __name__ == '__main__':
