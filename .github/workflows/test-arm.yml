@@ -1,16 +1,15 @@
 name: Unit Test on Arm
 on: [pull_request]
 
-env:
-  API_KEY: ${{ secrets.API_KEY }}
-  SECRET_KEY: ${{ secrets.SECRET_KEY }}
-  EU_API_KEY: ${{ secrets.EU_API_KEY }}
-  EU_SECRET_KEY: ${{ secrets.EU_SECRET_KEY }}
-
 jobs:
   aarch_job:
     runs-on: ubuntu-latest
     name: Test on ubuntu aarch64
+    env:
+      API_KEY: ${{ secrets.API_KEY }}
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      EU_API_KEY: ${{ secrets.EU_API_KEY }}
+      EU_SECRET_KEY: ${{ secrets.EU_SECRET_KEY }}
     steps:
       - uses: actions/checkout@v3
       - uses: uraimo/run-on-arch-action@v2

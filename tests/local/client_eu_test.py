@@ -14,8 +14,8 @@ class LocalEvaluationClientTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         load_dotenv()
-        api_key = os.getenv('EU_API_KEY')
-        secret_key = os.getenv('EU_SECRET_KEY')
+        api_key = os.environ['EU_API_KEY']
+        secret_key = os.environ['EU_SECRET_KEY']
         cohort_sync_config = CohortSyncConfig(api_key=api_key,
                                               secret_key=secret_key,
                                               cohort_request_delay_millis=100)
