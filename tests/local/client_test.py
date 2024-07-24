@@ -17,8 +17,6 @@ class LocalEvaluationClientTestCase(unittest.TestCase):
         load_dotenv()
         api_key = os.getenv('API_KEY')
         secret_key = os.getenv('SECRET_KEY')
-        if not api_key or not secret_key:
-            raise ValueError("API_KEY or SECRET_KEY is not set in the environment variables")
         cohort_sync_config = CohortSyncConfig(api_key=api_key,
                                               secret_key=secret_key,
                                               cohort_request_delay_millis=100)
