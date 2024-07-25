@@ -4,18 +4,21 @@ on: [pull_request]
 jobs:
   aarch_job:
     runs-on: ubuntu-latest
-    name: Test on ubuntu aarch64
-    env:
-      API_KEY: ${{ secrets.API_KEY }}
-      SECRET_KEY: ${{ secrets.SECRET_KEY }}
-      EU_API_KEY: ${{ secrets.EU_API_KEY }}
-      EU_SECRET_KEY: ${{ secrets.EU_SECRET_KEY }}
+    environment: Unit Test
+    name: Test on Ubuntu aarch64
     steps:
-      - uses: actions/checkout@v3
-      - uses: uraimo/run-on-arch-action@v2
-        name: Run Unit Test
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Set up and run unit test on aarch64
+        uses: uraimo/run-on-arch-action@v2
         id: runcmd
         with:
+          env: |
+            API_KEY: ${{ secrets.API_KEY }}
+            SECRET_KEY: ${{ secrets.SECRET_KEY }}
+            EU_API_KEY: ${{ secrets.EU_API_KEY }}
+            EU_SECRET_KEY: ${{ secrets.EU_SECRET_KEY }}
           arch: aarch64
           distro: ubuntu20.04
           githubToken: ${{ github.token }}
