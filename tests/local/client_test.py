@@ -68,16 +68,28 @@ class LocalEvaluationClientTestCase(unittest.TestCase):
         self.assertEqual(expected_variant, variants.get('sdk-local-evaluation-ci-test-holdout'))
 
     def test_evaluate_with_cohort(self):
-        user = User(user_id='12345', device_id='device_id')
-        variant = self._local_evaluation_client.evaluate(user).get('sdk-local-evaluation-user-cohort-ci-test')
-        expected_variant = Variant(key='on', value='on')
-        self.assertEqual(expected_variant, variant)
+        targeted_user = User(user_id='12345', device_id='device_id')
+        targeted_variant = (self._local_evaluation_client.evaluate_v2(targeted_user)
+                            .get('sdk-local-evaluation-user-cohort-ci-test'))
+        expected_on_variant = Variant(key='on', value='on')
+        self.assertEqual(expected_on_variant, targeted_variant)
+        non_targeted_user = User(user_id='not_targeted')
+        non_targeted_variant = (self._local_evaluation_client.evaluate_v2(non_targeted_user)
+                                .get('sdk-local-evaluation-user-cohort-ci-test'))
+        expected_off_variant = Variant(key='off')
+        self.assertEqual(expected_off_variant, non_targeted_variant)
 
     def test_evaluate_with_group_cohort(self):
-        user = User(user_id='12345', device_id='device_id', groups={'org id': ['1']})
-        variant = self._local_evaluation_client.evaluate(user).get('sdk-local-evaluation-group-cohort-ci-test')
-        expected_variant = Variant(key='on', value='on')
-        self.assertEqual(expected_variant, variant)
+        targeted_user = User(user_id='12345', device_id='device_id', groups={'org id': ['1']})
+        targeted_variant = (self._local_evaluation_client.evaluate_v2(targeted_user)
+                            .get('sdk-local-evaluation-group-cohort-ci-test'))
+        expected_on_variant = Variant(key='on', value='on')
+        self.assertEqual(expected_on_variant, targeted_variant)
+        non_targeted_user = User(user_id='12345', device_id='device_id', groups={'org id': ['not_targeted']})
+        non_targeted_variant = (self._local_evaluation_client.evaluate_v2(non_targeted_user)
+                                .get('sdk-local-evaluation-group-cohort-ci-test'))
+        expected_off_variant = Variant(key='off')
+        self.assertEqual(expected_off_variant, non_targeted_variant)
 
 
 if __name__ == '__main__':

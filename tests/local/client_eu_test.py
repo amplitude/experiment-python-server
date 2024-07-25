@@ -29,10 +29,16 @@ class LocalEvaluationClientTestCase(unittest.TestCase):
         cls._local_evaluation_client.stop()
 
     def test_evaluate_with_cohort_eu(self):
-        user = User(user_id='1', device_id='0')
-        variant = self._local_evaluation_client.evaluate_v2(user).get('sdk-local-evaluation-user-cohort')
-        expected_variant = Variant(key='on', value='on')
-        self.assertEqual(expected_variant, variant)
+        targeted_user = User(user_id='1', device_id='0')
+        targeted_variant = (self._local_evaluation_client.evaluate_v2(targeted_user)
+                            .get('sdk-local-evaluation-user-cohort'))
+        expected_on_variant = Variant(key='on', value='on')
+        self.assertEqual(expected_on_variant, targeted_variant)
+        non_targeted_user = User(user_id='not_targeted')
+        non_targeted_variant = (self._local_evaluation_client.evaluate_v2(non_targeted_user)
+                                .get('sdk-local-evaluation-user-cohort'))
+        expected_off_variant = Variant(key='off')
+        self.assertEqual(non_targeted_variant, expected_off_variant)
 
 
 if __name__ == '__main__':
