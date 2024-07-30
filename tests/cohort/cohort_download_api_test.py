@@ -5,7 +5,7 @@ from unittest import mock
 from unittest.mock import MagicMock, patch
 from src.amplitude_experiment.cohort.cohort import Cohort
 from src.amplitude_experiment.cohort.cohort_download_api import DirectCohortDownloadApi
-from src.amplitude_experiment.exception import CohortTooLargeException, CohortNotModifiedException
+from src.amplitude_experiment.exception import CohortTooLargeException
 
 
 def response(code: int, body: dict = None):
@@ -95,9 +95,9 @@ class CohortDownloadApiTest(unittest.TestCase):
         not_modified_response = response(204)
 
         with patch.object(self.api, '_get_cohort_members_request', return_value=not_modified_response):
+            result_cohort = self.api.get_cohort("1234", cohort)
+            self.assertEqual(None, result_cohort)
 
-            with self.assertRaises(CohortNotModifiedException):
-                self.api.get_cohort("1234", cohort)
 
 
 if __name__ == '__main__':

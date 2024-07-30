@@ -47,13 +47,13 @@ class DeploymentRunner:
         try:
             self.__update_flag_configs()
         except Exception as e:
-            self.logger.error(f"Error while updating flags: {e}")
+            self.logger.warning(f"Error while updating flags: {e}")
 
     def __update_flag_configs(self):
         try:
             flag_configs = self.flag_config_api.get_flag_configs()
         except Exception as e:
-            self.logger.error(f'Failed to fetch flag configs: {e}')
+            self.logger.warning(f'Failed to fetch flag configs: {e}')
             raise e
 
         flag_keys = {flag['key'] for flag in flag_configs}
@@ -79,7 +79,7 @@ class DeploymentRunner:
                 self.cohort_loader.load_cohort(cohort_id).result()
             except Exception as e:
                 cohort_download_errors.append((cohort_id, str(e)))
-                self.logger.error(f"Download cohort {cohort_id} failed: {e}")
+                self.logger.warning(f"Download cohort {cohort_id} failed: {e}")
 
         # get updated set of cohort ids
         updated_cohort_ids = self.cohort_storage.get_cohort_ids()
@@ -94,7 +94,7 @@ class DeploymentRunner:
                 self.flag_config_storage.put_flag_config(flag_config)
                 self.logger.debug(f"Putting flag {flag_config['key']}")
             else:
-                self.logger.error(f"Flag {flag_config['key']} not updated because "
+                self.logger.warning(f"Flag {flag_config['key']} not updated because "
                                   f"not all required cohorts could be loaded")
                 failed_flag_count += 1
 
@@ -112,7 +112,7 @@ class DeploymentRunner:
         try:
             self.cohort_loader.update_stored_cohorts().result()
         except Exception as e:
-            self.logger.error(f"Error while updating cohorts: {e}")
+            self.logger.warning(f"Error while updating cohorts: {e}")
 
     def _delete_unused_cohorts(self):
         flag_cohort_ids = set()

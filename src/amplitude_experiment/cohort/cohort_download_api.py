@@ -7,7 +7,7 @@ from typing import Optional
 
 from .cohort import Cohort
 from ..connection_pool import HTTPConnectionPool
-from ..exception import HTTPErrorResponseException, CohortTooLargeException, CohortNotModifiedException
+from ..exception import HTTPErrorResponseException, CohortTooLargeException
 
 
 class CohortDownloadApi:
@@ -28,7 +28,7 @@ class DirectCohortDownloadApi(CohortDownloadApi):
         self.logger = logger
         self.__setup_connection_pool()
 
-    def get_cohort(self, cohort_id: str, cohort: Optional[Cohort]) -> Cohort:
+    def get_cohort(self, cohort_id: str, cohort: Optional[Cohort]) -> Cohort or None:
         self.logger.debug(f"getCohortMembers({cohort_id}): start")
         errors = 0
         while True:
@@ -48,9 +48,10 @@ class DirectCohortDownloadApi(CohortDownloadApi):
                         group_type=cohort_info['groupType'],
                     )
                 elif response.status == 204:
-                    raise CohortNotModifiedException(f"Cohort not modified: {response.status}")
+                    self.logger.debug(f"getCohortMembers({cohort_id}): Cohort not modified" )
+                    return
                 elif response.status == 413:
-                    raise CohortTooLargeException(f"Cohort exceeds max cohort size: {response.status}")
+                    raise CohortTooLargeException(f"Cohort exceeds max cohort size of {self.max_cohort_size}: {response.status}")
                 elif response.status != 202:
                     raise HTTPErrorResponseException(response.status,
                                                      f"Unexpected response code: {response.status}")
@@ -58,7 +59,7 @@ class DirectCohortDownloadApi(CohortDownloadApi):
                 if response and not (isinstance(e, HTTPErrorResponseException) and response.status == 429):
                     errors += 1
                 self.logger.debug(f"getCohortMembers({cohort_id}): request-status error {errors} - {e}")
-                if errors >= 3 or isinstance(e, CohortNotModifiedException) or isinstance(e, CohortTooLargeException):
+                if errors >= 3 or isinstance(e, CohortTooLargeException):
                     raise e
             time.sleep(self.cohort_request_delay_millis/1000)
 

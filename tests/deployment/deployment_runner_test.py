@@ -39,7 +39,7 @@ class DeploymentRunnerTest(unittest.TestCase):
         cohort_storage = mock.Mock()
         cohort_storage.get_cohort_ids.return_value = set()
         logger = mock.create_autospec(logging.Logger)
-        cohort_loader = CohortLoader(cohort_download_api, cohort_storage, logger)
+        cohort_loader = CohortLoader(cohort_download_api, cohort_storage)
         runner = DeploymentRunner(
             LocalEvaluationConfig(),
             flag_api,
@@ -59,7 +59,7 @@ class DeploymentRunnerTest(unittest.TestCase):
         cohort_storage = mock.Mock()
         cohort_storage.get_cohort_ids.return_value = set()
         logger = mock.create_autospec(logging.Logger)
-        cohort_loader = CohortLoader(cohort_download_api, cohort_storage, logger)
+        cohort_loader = CohortLoader(cohort_download_api, cohort_storage)
         runner = DeploymentRunner(
             LocalEvaluationConfig(),
             flag_api, flag_config_storage,

@@ -58,6 +58,8 @@ class CohortLoader:
     def __load_cohort_internal(self, cohort_id):
         try:
             cohort = self.download_cohort(cohort_id)
-            self.cohort_storage.put_cohort(cohort)
+            # None is returned when cohort is not modified
+            if cohort is not None:
+                self.cohort_storage.put_cohort(cohort)
         except Exception as e:
             raise e
