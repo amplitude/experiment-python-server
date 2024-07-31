@@ -90,7 +90,7 @@ class CohortDownloadApiTest(unittest.TestCase):
             with self.assertRaises(CohortTooLargeException):
                 self.api.get_cohort("1234", cohort)
 
-    def test_cohort_not_modified_exception(self):
+    def test_cohort_not_modified(self):
         cohort = Cohort(id="1234", last_modified=1000, size=1, member_ids=set())
         not_modified_response = response(204)
 
