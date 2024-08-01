@@ -97,7 +97,7 @@ class LocalEvaluationClientTestCase(unittest.TestCase):
         expected_off_variant = Variant(key='off')
         self.assertEqual(expected_off_variant, non_targeted_variant)
 
-    def test_evaluation_cohorts_not_in_storage_exception(self):
+    def test_evaluation_cohorts_not_in_storage(self):
         with mock.patch.object(self._local_evaluation_client.cohort_storage, 'put_cohort', return_value=None):
             self._local_evaluation_client.cohort_storage.get_cohort_ids = mock.Mock(return_value=set())
             targeted_user = User(user_id='12345')
