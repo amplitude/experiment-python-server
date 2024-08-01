@@ -97,7 +97,7 @@ class LocalEvaluationClientTestCase(unittest.TestCase):
         expected_off_variant = Variant(key='off')
         self.assertEqual(expected_off_variant, non_targeted_variant)
 
-    def test_evaluation_cohorts_not_in_storage(self):
+    def test_evaluation_cohorts_not_in_storage_with_sync_config(self):
         with mock.patch.object(self._local_evaluation_client.cohort_storage, 'put_cohort', return_value=None):
             self._local_evaluation_client.cohort_storage.get_cohort_ids = mock.Mock(return_value=set())
             targeted_user = User(user_id='12345')
@@ -105,8 +105,8 @@ class LocalEvaluationClientTestCase(unittest.TestCase):
             with self.assertLogs(self._local_evaluation_client.logger, level='WARNING') as log:
                 self._local_evaluation_client.evaluate_v2(targeted_user, {'sdk-local-evaluation-user-cohort-ci-test'})
                 log_message = (
-                    "WARNING:Amplitude:Evaluating flag sdk-local-evaluation-user-cohort-ci-test with cohorts "
-                    "{.*} without cohort syncing configured"
+                    "WARNING:Amplitude:Evaluating flag sdk-local-evaluation-user-cohort-ci-test dependent on cohorts "
+                    "{.*} without {.*} in storage"
                 )
                 self.assertTrue(any(re.match(log_message, message) for message in log.output))
 

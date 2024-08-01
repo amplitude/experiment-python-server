@@ -176,9 +176,15 @@ class LocalEvaluationClient:
         for flag in flag_configs:
             flag_cohort_ids = get_all_cohort_ids_from_flag(flag)
             missing_cohorts = flag_cohort_ids - stored_cohort_ids
-            if self.config.cohort_sync_config and missing_cohorts:
-                self.logger.warning(f"Evaluating flag {flag['key']} with cohorts {flag_cohort_ids} without "
-                                    f"cohort syncing configured")
+            if missing_cohorts:
+                message = (
+                    f"Evaluating flag {flag['key']} dependent on cohorts {flag_cohort_ids} "
+                    f"without {missing_cohorts} in storage"
+                    if self.config.cohort_sync_config
+                    else f"Evaluating flag {flag['key']} dependent on cohorts {flag_cohort_ids} without "
+                         f"cohort syncing configured"
+                )
+                self.logger.warning(message)
 
     def _enrich_user_with_cohorts(self, user: User, flag_configs: Dict) -> User:
         grouped_cohort_ids = get_grouped_cohort_ids_from_flags(list(flag_configs.values()))
