@@ -86,7 +86,7 @@ class DeploymentRunner:
         # iterate through new flag configs and check if their required cohorts exist
         for flag_config in flag_configs:
             cohort_ids = get_all_cohort_ids_from_flag(flag_config)
-            self.logger.debug(f"Putting non-cohort flag {flag_config['key']} with cohorts {cohort_ids}")
+            self.logger.debug(f"Storing flag {flag_config['key']}")
             self.flag_config_storage.put_flag_config(flag_config)
             missing_cohorts = cohort_ids - updated_cohort_ids
             if missing_cohorts:
