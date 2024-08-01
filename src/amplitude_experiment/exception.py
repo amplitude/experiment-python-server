@@ -9,6 +9,11 @@ class CohortTooLargeException(Exception):
         super().__init__(message)
 
 
+class EvaluationCohortsNotInStorageException(Exception):
+    def __init__(self, message):
+        super().__init__(message)
+
+
 class HTTPErrorResponseException(Exception):
     def __init__(self, status_code, message):
         super().__init__(message)

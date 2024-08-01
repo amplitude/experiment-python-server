@@ -84,29 +84,17 @@ class DeploymentRunner:
         # get updated set of cohort ids
         updated_cohort_ids = self.cohort_storage.get_cohort_ids()
         # iterate through new flag configs and check if their required cohorts exist
-        failed_flag_count = 0
         for flag_config in flag_configs:
             cohort_ids = get_all_cohort_ids_from_flag(flag_config)
-            if not cohort_ids or not self.cohort_loader:
-                self.flag_config_storage.put_flag_config(flag_config)
-                self.logger.debug(f"Putting non-cohort flag {flag_config['key']}")
-            elif cohort_ids.issubset(updated_cohort_ids):
-                self.flag_config_storage.put_flag_config(flag_config)
-                self.logger.debug(f"Putting flag {flag_config['key']}")
-            else:
-                self.logger.warning(f"Flag {flag_config['key']} not updated because "
-                                  f"not all required cohorts could be loaded")
-                failed_flag_count += 1
+            self.logger.debug(f"Putting non-cohort flag {flag_config['key']} with cohorts {cohort_ids}")
+            self.flag_config_storage.put_flag_config(flag_config)
+            missing_cohorts = cohort_ids - updated_cohort_ids
+            if missing_cohorts:
+                self.logger.warning(f"Flag {flag_config['key']} - failed to load cohorts: {missing_cohorts}")
 
         # delete unused cohorts
         self._delete_unused_cohorts()
-        self.logger.debug(f"Refreshed {len(flag_configs) - failed_flag_count} flag configs.")
-
-        # if there are any download errors, raise an aggregated exception
-        if cohort_download_errors:
-            error_count = len(cohort_download_errors)
-            error_messages = "\n".join([f"Cohort {cohort_id}: {error}" for cohort_id, error in cohort_download_errors])
-            raise Exception(f"{error_count} cohort(s) failed to download:\n{error_messages}")
+        self.logger.debug(f"Refreshed {len(flag_configs)} flag configs.")
 
     def __update_cohorts(self):
         try:

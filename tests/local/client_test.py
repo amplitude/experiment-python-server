@@ -1,8 +1,12 @@
+import re
 import unittest
+from unittest import mock
+
 from src.amplitude_experiment import LocalEvaluationClient, LocalEvaluationConfig, User, Variant
 from src.amplitude_experiment.cohort.cohort_sync_config import CohortSyncConfig
 from dotenv import load_dotenv
 import os
+
 
 SERVER_API_KEY = 'server-qz35UwzJ5akieoAdIgzM4m9MIiOLXLoz'
 test_user = User(user_id='test_user')
@@ -69,7 +73,8 @@ class LocalEvaluationClientTestCase(unittest.TestCase):
 
     def test_evaluate_with_cohort(self):
         targeted_user = User(user_id='12345', device_id='device_id')
-        targeted_variant = (self._local_evaluation_client.evaluate_v2(targeted_user)
+        targeted_variant = (self._local_evaluation_client.evaluate_v2(targeted_user,
+                                                                      {'sdk-local-evaluation-user-cohort-ci-test'})
                             .get('sdk-local-evaluation-user-cohort-ci-test'))
         expected_on_variant = Variant(key='on', value='on')
         self.assertEqual(expected_on_variant, targeted_variant)
@@ -81,7 +86,8 @@ class LocalEvaluationClientTestCase(unittest.TestCase):
 
     def test_evaluate_with_group_cohort(self):
         targeted_user = User(user_id='12345', device_id='device_id', groups={'org id': ['1']})
-        targeted_variant = (self._local_evaluation_client.evaluate_v2(targeted_user)
+        targeted_variant = (self._local_evaluation_client.evaluate_v2(targeted_user,
+                                                                      {'sdk-local-evaluation-group-cohort-ci-test'})
                             .get('sdk-local-evaluation-group-cohort-ci-test'))
         expected_on_variant = Variant(key='on', value='on')
         self.assertEqual(expected_on_variant, targeted_variant)
@@ -90,6 +96,19 @@ class LocalEvaluationClientTestCase(unittest.TestCase):
                                 .get('sdk-local-evaluation-group-cohort-ci-test'))
         expected_off_variant = Variant(key='off')
         self.assertEqual(expected_off_variant, non_targeted_variant)
+
+    def test_evaluation_cohorts_not_in_storage_exception(self):
+        with mock.patch.object(self._local_evaluation_client.cohort_storage, 'put_cohort', return_value=None):
+            self._local_evaluation_client.cohort_storage.get_cohort_ids = mock.Mock(return_value=set())
+            targeted_user = User(user_id='12345')
+
+            with self.assertLogs(self._local_evaluation_client.logger, level='WARNING') as log:
+                self._local_evaluation_client.evaluate_v2(targeted_user, {'sdk-local-evaluation-user-cohort-ci-test'})
+                log_message = (
+                    "WARNING:Amplitude:Evaluating flag sdk-local-evaluation-user-cohort-ci-test with cohorts "
+                    "{.*} without cohort syncing configured"
+                )
+                self.assertTrue(any(re.match(log_message, message) for message in log.output))
 
 
 if __name__ == '__main__':

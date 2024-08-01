@@ -52,7 +52,7 @@ class DeploymentRunnerTest(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             runner.start()
 
-    def test_start_throws_if_first_cohort_load_fails(self):
+    def test_start_does_not_throw_if_cohort_load_fails(self):
         flag_api = mock.create_autospec(FlagConfigApi)
         cohort_download_api = mock.Mock()
         flag_config_storage = mock.Mock()
@@ -67,11 +67,17 @@ class DeploymentRunnerTest(unittest.TestCase):
             logger,
             cohort_loader,
         )
+
+        # Mock methods as needed
         with patch.object(runner, '_delete_unused_cohorts'):
             flag_api.get_flag_configs.return_value = [self.flag]
             cohort_download_api.get_cohort.side_effect = RuntimeError("test")
-            with self.assertRaises(Exception):
+
+            # Simply call the method and let the test pass if no exception is raised
+            try:
                 runner.start()
+            except Exception as e:
+                self.fail(f"runner.start() raised an exception unexpectedly: {e}")
 
 
 if __name__ == '__main__':

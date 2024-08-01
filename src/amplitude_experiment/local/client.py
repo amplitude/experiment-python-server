@@ -17,14 +17,12 @@ from ..flag.flag_config_api import FlagConfigApiV2
 from ..flag.flag_config_storage import InMemoryFlagConfigStorage
 from ..user import User
 from ..connection_pool import HTTPConnectionPool
-from .poller import Poller
 from .evaluation.evaluation import evaluate
 from ..util import deprecated
-from ..util.flag_config import get_grouped_cohort_ids_from_flags
+from ..util.flag_config import get_grouped_cohort_ids_from_flags, get_all_cohort_ids_from_flag
 from ..util.user import user_to_evaluation_context
 from ..util.variant import evaluation_variants_json_to_variants
 from ..variant import Variant
-from ..version import __version__
 
 
 class LocalEvaluationClient:
@@ -102,8 +100,13 @@ class LocalEvaluationClient:
         sorted_flags = topological_sort(flag_configs, flag_keys)
         if not sorted_flags:
             return {}
-        enriched_user = self.enrich_user(user, flag_configs)
-        context = user_to_evaluation_context(enriched_user)
+
+        # Check if all required cohorts are in storage, if not log a warning
+        self._required_cohorts_in_storage(sorted_flags)
+        if self.config.cohort_sync_config:
+            user = self._enrich_user_with_cohorts(user, flag_configs)
+
+        context = user_to_evaluation_context(user)
         flags_json = json.dumps(sorted_flags)
         context_json = json.dumps(context)
         result_json = evaluate(flags_json, context_json)
@@ -168,7 +171,16 @@ class LocalEvaluationClient:
 
         return {key: variant for key, variant in variants.items() if not is_default_variant(variant)}
 
-    def enrich_user(self, user: User, flag_configs: Dict) -> User:
+    def _required_cohorts_in_storage(self, flag_configs: List) -> None:
+        stored_cohort_ids = self.cohort_storage.get_cohort_ids()
+        for flag in flag_configs:
+            flag_cohort_ids = get_all_cohort_ids_from_flag(flag)
+            missing_cohorts = flag_cohort_ids - stored_cohort_ids
+            if self.config.cohort_sync_config and missing_cohorts:
+                self.logger.warning(f"Evaluating flag {flag['key']} with cohorts {flag_cohort_ids} without "
+                                    f"cohort syncing configured")
+
+    def _enrich_user_with_cohorts(self, user: User, flag_configs: Dict) -> User:
         grouped_cohort_ids = get_grouped_cohort_ids_from_flags(list(flag_configs.values()))
 
         if USER_GROUP_TYPE in grouped_cohort_ids:
