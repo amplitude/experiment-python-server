@@ -6,7 +6,7 @@ import threading
 from .cohort import Cohort
 from .cohort_download_api import CohortDownloadApi
 from .cohort_storage import CohortStorage
-from ..exception import CohortUpdateException
+from ..exception import CohortsDownloadException
 
 
 class CohortLoader:
@@ -30,39 +30,37 @@ class CohortLoader:
 
     def _remove_job(self, cohort_id: str):
         if cohort_id in self.jobs:
-            del self.jobs[cohort_id]
+            with self.lock_jobs:
+                self.jobs.pop(cohort_id, None)
 
     def download_cohort(self, cohort_id: str) -> Cohort:
         cohort = self.cohort_storage.get_cohort(cohort_id)
         return self.cohort_download_api.get_cohort(cohort_id, cohort)
 
-    def update_stored_cohorts(self) -> Future:
-        def update_task():
+    def download_cohorts(self, cohort_ids: Set[str]) -> Future:
+        def update_task(task_cohort_ids):
             errors = []
-            cohort_ids = self.cohort_storage.get_cohort_ids()
-
             futures = []
-            with self.lock_jobs:
-                for cohort_id in cohort_ids:
-                    future = self.load_cohort(cohort_id)
-                    futures.append(future)
+            for cohort_id in task_cohort_ids:
+                future = self.load_cohort(cohort_id)
+                futures.append(future)
 
             for future in as_completed(futures):
-                cohort_id = next(c_id for c_id, f in self.jobs.items() if f == future)
                 try:
                     future.result()
                 except Exception as e:
-                    errors.append((cohort_id, e))
+                    cohort_id = next((c_id for c_id, f in self.jobs.items() if f == future), None)
+                    if cohort_id:
+                        errors.append((cohort_id, e))
 
             if errors:
-                raise CohortUpdateException(errors)
+                raise CohortsDownloadException(errors)
 
-        return self.executor.submit(update_task)
+        return self.executor.submit(update_task, cohort_ids)
 
     def __load_cohort_internal(self, cohort_id):
         try:
             cohort = self.download_cohort(cohort_id)
-            # None is returned when cohort is not modified
             if cohort is not None:
                 self.cohort_storage.put_cohort(cohort)
         except Exception as e:

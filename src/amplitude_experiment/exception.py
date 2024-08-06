@@ -15,7 +15,7 @@ class HTTPErrorResponseException(Exception):
         self.status_code = status_code
 
 
-class CohortUpdateException(Exception):
+class CohortsDownloadException(Exception):
     def __init__(self, errors):
         self.errors = errors
         super().__init__(self.__str__())

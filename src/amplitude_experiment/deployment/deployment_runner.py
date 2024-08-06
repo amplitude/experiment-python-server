@@ -8,7 +8,9 @@ from ..cohort.cohort_storage import CohortStorage
 from ..flag.flag_config_api import FlagConfigApi
 from ..flag.flag_config_storage import FlagConfigStorage
 from ..local.poller import Poller
-from ..util.flag_config import get_all_cohort_ids_from_flag
+from ..util.flag_config import get_all_cohort_ids_from_flag, get_all_cohort_ids_from_flags
+
+COHORT_POLLING_INTERVAL_MILLIS = 60000
 
 
 class DeploymentRunner:
@@ -29,7 +31,7 @@ class DeploymentRunner:
         self.lock = threading.Lock()
         self.flag_poller = Poller(self.config.flag_config_polling_interval_millis / 1000, self.__periodic_flag_update)
         if self.cohort_loader:
-            self.cohort_poller = Poller(self.config.flag_config_polling_interval_millis / 1000,
+            self.cohort_poller = Poller(COHORT_POLLING_INTERVAL_MILLIS / 1000,
                                         self.__update_cohorts)
         self.logger = logger
 
@@ -71,15 +73,12 @@ class DeploymentRunner:
 
         existing_cohort_ids = self.cohort_storage.get_cohort_ids()
         cohort_ids_to_download = new_cohort_ids - existing_cohort_ids
-        cohort_download_errors = []
 
         # download all new cohorts
-        for cohort_id in cohort_ids_to_download:
-            try:
-                self.cohort_loader.load_cohort(cohort_id).result()
-            except Exception as e:
-                cohort_download_errors.append((cohort_id, str(e)))
-                self.logger.warning(f"Download cohort {cohort_id} failed: {e}")
+        try:
+            self.cohort_loader.download_cohorts(cohort_ids_to_download).result()
+        except Exception as e:
+            self.logger.warning(f"Error while downloading cohorts: {e}")
 
         # get updated set of cohort ids
         updated_cohort_ids = self.cohort_storage.get_cohort_ids()
@@ -97,8 +96,9 @@ class DeploymentRunner:
         self.logger.debug(f"Refreshed {len(flag_configs)} flag configs.")
 
     def __update_cohorts(self):
+        cohort_ids = get_all_cohort_ids_from_flags(list(self.flag_config_storage.get_flag_configs().values()))
         try:
-            self.cohort_loader.update_stored_cohorts().result()
+            self.cohort_loader.download_cohorts(cohort_ids).result()
         except Exception as e:
             self.logger.warning(f"Error while updating cohorts: {e}")
 
