@@ -19,7 +19,7 @@ def response(code: int, body: dict = None):
 class CohortDownloadApiTest(unittest.TestCase):
 
     def setUp(self):
-        self.api = DirectCohortDownloadApi('api', 'secret', 15000, 100, "https://example.amplitude.com", mock.create_autospec(logging.Logger))
+        self.api = DirectCohortDownloadApi('api', 'secret', 15000, "https://example.amplitude.com", mock.create_autospec(logging.Logger))
 
     def test_cohort_download_success(self):
         cohort = Cohort(id="1234", last_modified=0, size=1, member_ids={'user'})

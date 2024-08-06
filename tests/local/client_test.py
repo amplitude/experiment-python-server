@@ -22,8 +22,7 @@ class LocalEvaluationClientTestCase(unittest.TestCase):
         api_key = os.environ['API_KEY']
         secret_key = os.environ['SECRET_KEY']
         cohort_sync_config = CohortSyncConfig(api_key=api_key,
-                                              secret_key=secret_key,
-                                              cohort_request_delay_millis=100)
+                                              secret_key=secret_key)
         cls._local_evaluation_client = (
             LocalEvaluationClient(SERVER_API_KEY, LocalEvaluationConfig(debug=False,
                                                                         cohort_sync_config=cohort_sync_config)))

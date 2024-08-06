@@ -5,6 +5,7 @@ import logging
 
 from src.amplitude_experiment import LocalEvaluationConfig
 from src.amplitude_experiment.cohort.cohort_loader import CohortLoader
+from src.amplitude_experiment.cohort.cohort_sync_config import CohortSyncConfig
 from src.amplitude_experiment.flag.flag_config_api import FlagConfigApi
 from src.amplitude_experiment.deployment.deployment_runner import DeploymentRunner
 
@@ -41,7 +42,7 @@ class DeploymentRunnerTest(unittest.TestCase):
         logger = mock.create_autospec(logging.Logger)
         cohort_loader = CohortLoader(cohort_download_api, cohort_storage)
         runner = DeploymentRunner(
-            LocalEvaluationConfig(),
+            LocalEvaluationConfig(cohort_sync_config=CohortSyncConfig('api_key', 'secret_key')),
             flag_api,
             flag_config_storage,
             cohort_storage,
@@ -61,7 +62,7 @@ class DeploymentRunnerTest(unittest.TestCase):
         logger = mock.create_autospec(logging.Logger)
         cohort_loader = CohortLoader(cohort_download_api, cohort_storage)
         runner = DeploymentRunner(
-            LocalEvaluationConfig(),
+            LocalEvaluationConfig(cohort_sync_config=CohortSyncConfig('api_key', 'secret_key')),
             flag_api, flag_config_storage,
             cohort_storage,
             logger,

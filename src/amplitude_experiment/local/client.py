@@ -61,7 +61,6 @@ class LocalEvaluationClient:
             cohort_download_api = DirectCohortDownloadApi(self.config.cohort_sync_config.api_key,
                                                           self.config.cohort_sync_config.secret_key,
                                                           self.config.cohort_sync_config.max_cohort_size,
-                                                          self.config.cohort_sync_config.cohort_request_delay_millis,
                                                           self.config.cohort_sync_config.cohort_server_url,
                                                           self.logger)
 

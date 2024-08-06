@@ -10,8 +10,6 @@ from ..flag.flag_config_storage import FlagConfigStorage
 from ..local.poller import Poller
 from ..util.flag_config import get_all_cohort_ids_from_flag, get_all_cohort_ids_from_flags
 
-COHORT_POLLING_INTERVAL_MILLIS = 60000
-
 
 class DeploymentRunner:
     def __init__(
@@ -31,7 +29,7 @@ class DeploymentRunner:
         self.lock = threading.Lock()
         self.flag_poller = Poller(self.config.flag_config_polling_interval_millis / 1000, self.__periodic_flag_update)
         if self.cohort_loader:
-            self.cohort_poller = Poller(COHORT_POLLING_INTERVAL_MILLIS / 1000,
+            self.cohort_poller = Poller(self.config.cohort_sync_config.cohort_polling_interval_millis / 1000,
                                         self.__update_cohorts)
         self.logger = logger
 
