@@ -4,6 +4,7 @@ import base64
 import json
 from http.client import HTTPResponse
 from typing import Optional
+from ..version import __version__
 
 from .cohort import Cohort
 from ..connection_pool import HTTPConnectionPool
@@ -67,6 +68,7 @@ class DirectCohortDownloadApi(CohortDownloadApi):
     def _get_cohort_members_request(self, cohort_id: str, last_modified: int) -> HTTPResponse:
         headers = {
             'Authorization': f'Basic {self._get_basic_auth()}',
+            'X-Amp-Exp-Library': f"experiment-python-server/{__version__}"
         }
         conn = self._connection_pool.acquire()
         try:
