@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v1.4.0 (2024-08-27)
+
+### Feature
+
+* Support cohort targeting for local evaluation ([#47](https://github.com/amplitude/experiment-python-server/issues/47)) ([`d8c62c4`](https://github.com/amplitude/experiment-python-server/commit/d8c62c43d0fdae689d0ab85057482146ef90cade))
+
 ## v1.3.1 (2024-01-30)
 
 ### Fix
