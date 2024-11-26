@@ -10,7 +10,7 @@ FLAG_TYPE_HOLDOUT_GROUP = "holdout-group"
 
 def to_event(assignment: Assignment) -> BaseEvent:
     event = BaseEvent(event_type='[Experiment] Assignment', user_id=assignment.user.user_id,
-                      device_id=assignment.user.device_id, event_properties={}, user_properties={})
+                      device_id=assignment.user.device_id, event_properties={}, user_properties=assignment.user.user_properties)
     set_props = {}
     unset_props = {}
 
