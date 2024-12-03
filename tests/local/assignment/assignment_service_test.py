@@ -8,7 +8,7 @@ from src.amplitude_experiment import User
 from src.amplitude_experiment.assignment import AssignmentFilter, Assignment, DAY_MILLIS, to_event, AssignmentService
 from src.amplitude_experiment.util import hash_code
 
-user = User(user_id='user', device_id='device')
+user = User(user_id='user', device_id='device', user_properties={'user_prop': True})
 
 
 class AssignmentServiceTestCase(unittest.TestCase):
@@ -61,7 +61,7 @@ class AssignmentServiceTestCase(unittest.TestCase):
             'empty_variant': empty_variant,
         }
         assignment = Assignment(user, results)
-        event = to_event(assignment)
+        event = to_event(assignment, True)
         self.assertEqual(user.user_id, event.user_id)
         self.assertEqual(user.device_id, event.device_id)
         self.assertEqual('[Experiment] Assignment', event.event_type)
@@ -89,6 +89,7 @@ class AssignmentServiceTestCase(unittest.TestCase):
         self.assertEqual('on', set_properties['[Experiment] empty_metadata'])
         unset_properties = user_properties['$unset']
         self.assertEqual('-', unset_properties['[Experiment] default'])
+        self.assertTrue(user_properties['user_prop'])
 
         # Validate insert id
         canonicalization = 'user device basic control default off different_value on empty_metadata on holdout ' \
@@ -99,7 +100,7 @@ class AssignmentServiceTestCase(unittest.TestCase):
     def test_tracking_called(self):
         instance = Amplitude('')
         instance.track = MagicMock()
-        service = AssignmentService(instance, AssignmentFilter(2))
+        service = AssignmentService(instance, AssignmentFilter(2), False)
         results = {'flag-key-1': Variant(key='on')}
         service.track(Assignment(user, results))
         self.assertTrue(instance.track.called)

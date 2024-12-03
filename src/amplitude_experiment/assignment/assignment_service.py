@@ -8,9 +8,13 @@ FLAG_TYPE_MUTUAL_EXCLUSION_GROUP = "mutual-exclusion-group"
 FLAG_TYPE_HOLDOUT_GROUP = "holdout-group"
 
 
-def to_event(assignment: Assignment) -> BaseEvent:
+def to_event(assignment: Assignment, send_evaluated_user_props: bool) -> BaseEvent:
     event = BaseEvent(event_type='[Experiment] Assignment', user_id=assignment.user.user_id,
                       device_id=assignment.user.device_id, event_properties={}, user_properties={})
+
+    if send_evaluated_user_props:
+        event.user_properties = assignment.user.user_properties
+
     set_props = {}
     unset_props = {}
 
@@ -46,10 +50,11 @@ def to_event(assignment: Assignment) -> BaseEvent:
 
 
 class AssignmentService:
-    def __init__(self, amplitude: Amplitude, assignment_filter: AssignmentFilter):
+    def __init__(self, amplitude: Amplitude, assignment_filter: AssignmentFilter, send_evaluated_user_props: bool):
         self.amplitude = amplitude
         self.assignmentFilter = assignment_filter
+        self.send_evaluated_user_props = send_evaluated_user_props
 
     def track(self, assignment: Assignment):
         if self.assignmentFilter.should_track(assignment):
-            self.amplitude.track(to_event(assignment))
+            self.amplitude.track(to_event(assignment, self.send_evaluated_user_props))
