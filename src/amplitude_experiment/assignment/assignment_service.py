@@ -8,11 +8,19 @@ FLAG_TYPE_MUTUAL_EXCLUSION_GROUP = "mutual-exclusion-group"
 FLAG_TYPE_HOLDOUT_GROUP = "holdout-group"
 
 
-def to_event(assignment: Assignment, send_evaluated_user_props: bool) -> BaseEvent:
+def to_event(assignment: Assignment, send_evaluated_props: bool) -> BaseEvent:
     event = BaseEvent(event_type='[Experiment] Assignment', user_id=assignment.user.user_id,
                       device_id=assignment.user.device_id, event_properties={}, user_properties={})
 
-    if send_evaluated_user_props:
+    # If send_evaluated_props is True, populate event with all relevant user attributes
+    if send_evaluated_props:
+        user_attributes = [
+            "country", "city", "region", "dma", "language",
+            "platform", "version", "os", "device_manufacturer",
+            "device_brand", "device_model", "carrier"
+        ]
+        for attr in user_attributes:
+            setattr(event, attr, getattr(assignment.user, attr, None))
         event.user_properties = assignment.user.user_properties
 
     set_props = {}
@@ -50,11 +58,11 @@ def to_event(assignment: Assignment, send_evaluated_user_props: bool) -> BaseEve
 
 
 class AssignmentService:
-    def __init__(self, amplitude: Amplitude, assignment_filter: AssignmentFilter, send_evaluated_user_props: bool):
+    def __init__(self, amplitude: Amplitude, assignment_filter: AssignmentFilter, send_evaluated_props: bool):
         self.amplitude = amplitude
         self.assignmentFilter = assignment_filter
-        self.send_evaluated_user_props = send_evaluated_user_props
+        self.send_evaluated_props = send_evaluated_props
 
     def track(self, assignment: Assignment):
         if self.assignmentFilter.should_track(assignment):
-            self.amplitude.track(to_event(assignment, self.send_evaluated_user_props))
+            self.amplitude.track(to_event(assignment, self.send_evaluated_props))

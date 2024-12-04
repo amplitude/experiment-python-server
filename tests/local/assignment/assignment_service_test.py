@@ -8,7 +8,7 @@ from src.amplitude_experiment import User
 from src.amplitude_experiment.assignment import AssignmentFilter, Assignment, DAY_MILLIS, to_event, AssignmentService
 from src.amplitude_experiment.util import hash_code
 
-user = User(user_id='user', device_id='device', user_properties={'user_prop': True})
+user = User(user_id='user', device_id='device', user_properties={'user_prop': True}, country='country')
 
 
 class AssignmentServiceTestCase(unittest.TestCase):
@@ -65,6 +65,7 @@ class AssignmentServiceTestCase(unittest.TestCase):
         self.assertEqual(user.user_id, event.user_id)
         self.assertEqual(user.device_id, event.device_id)
         self.assertEqual('[Experiment] Assignment', event.event_type)
+        self.assertEqual('country', event.country)
         # Validate event properties
         event_properties = event.event_properties
         self.assertEqual('control', event_properties['basic.variant'])
