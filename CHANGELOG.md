@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v1.5.0 (2024-12-09)
+
+### Feature
+
+* Support sending evaluated user properties in local evaluation assignment tracking ([#51](https://github.com/amplitude/experiment-python-server/issues/51)) ([`935401a`](https://github.com/amplitude/experiment-python-server/commit/935401a9a077161574a5359f7827aac236c88dbf))
+
 ## v1.4.0 (2024-08-27)
 
 ### Feature
