@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Any
-from enum import StrEnum
 from dataclasses_json import dataclass_json
 
 from .select import selectable
