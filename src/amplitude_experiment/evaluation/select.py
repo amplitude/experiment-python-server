@@ -1,5 +1,6 @@
 from dataclasses import is_dataclass
-from typing import Any, List, Optional, Protocol, runtime_checkable
+from typing import Any, List, Optional
+from typing_extensions import Protocol, runtime_checkable
 
 
 @runtime_checkable
