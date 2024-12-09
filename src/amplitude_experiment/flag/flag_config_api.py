@@ -1,13 +1,14 @@
 import json
 from typing import List
 
+from ..evaluation.types import EvaluationFlag
 from ..version import __version__
 
 from ..connection_pool import HTTPConnectionPool
 
 
 class FlagConfigApi:
-    def get_flag_configs(self) -> List:
+    def get_flag_configs(self) -> List[EvaluationFlag]:
         pass
 
 
@@ -18,10 +19,10 @@ class FlagConfigApiV2(FlagConfigApi):
         self.flag_config_poller_request_timeout_millis = flag_config_poller_request_timeout_millis
         self.__setup_connection_pool()
 
-    def get_flag_configs(self) -> List:
+    def get_flag_configs(self) -> List[EvaluationFlag]:
         return self._get_flag_configs()
 
-    def _get_flag_configs(self) -> List:
+    def _get_flag_configs(self) -> List[EvaluationFlag]:
         conn = self._connection_pool.acquire()
         headers = {
             'Authorization': f"Api-Key {self.deployment_key}",
@@ -35,8 +36,8 @@ class FlagConfigApiV2(FlagConfigApi):
             if response.status != 200:
                 raise Exception(
                     f"[Experiment] Get flagConfigs - received error response: ${response.status}: ${response_body}")
-            flags = json.loads(response_body)
-            return flags
+            response_json = json.loads(response_body)
+            return EvaluationFlag.schema().load(response_json, many=True)
         finally:
             self._connection_pool.release(conn)
 
