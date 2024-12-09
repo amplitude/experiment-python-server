@@ -72,8 +72,8 @@ class EvaluationFlag:
     metadata: Optional[Dict[str, Any]] = None
 
 
-class EvaluationOperator(StrEnum):
-    """Enumeration of evaluation operators."""
+class EvaluationOperator:
+    """Constants for evaluation operators."""
     IS = 'is'
     IS_NOT = 'is not'
     CONTAINS = 'contains'
