@@ -39,6 +39,9 @@ jobs:
       - name: Install dependencies
         run: python -m pip install build setuptools wheel twine amplitude_analytics parameterized python-dotenv~=0.21.1 python-semantic-release==7.34.6
 
+      - name: Install requirements
+        run: pip install -r requirements.txt && pip install -r requirements-dev.txt
+
       - name: Run Test
         env:
           API_KEY: ${{ secrets.API_KEY }}
