@@ -1,5 +1,7 @@
+import json
 import unittest
 
+from src.amplitude_experiment.evaluation.types import EvaluationFlag
 from src.amplitude_experiment.util.flag_config import (
     get_all_cohort_ids_from_flags,
     get_grouped_cohort_ids_from_flags,
@@ -11,7 +13,7 @@ from src.amplitude_experiment.util.flag_config import (
 class CohortUtilsTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.flags = [
+        flags_dict = [
             {
                 'key': 'flag-1',
                 'metadata': {
@@ -127,6 +129,7 @@ class CohortUtilsTestCase(unittest.TestCase):
                 }
             }
         ]
+        self.flags = EvaluationFlag.schema().load(flags_dict, many=True)
 
     def test_get_all_cohort_ids(self):
         expected_cohort_ids = {'cohort1', 'cohort2', 'cohort3', 'cohort4', 'cohort5', 'cohort6', 'cohort7', 'cohort8'}

@@ -56,12 +56,12 @@ class DeploymentRunner:
             self.logger.warning(f'Failed to fetch flag configs: {e}')
             raise e
 
-        flag_keys = {flag['key'] for flag in flag_configs}
-        self.flag_config_storage.remove_if(lambda f: f['key'] not in flag_keys)
+        flag_keys = {flag.key for flag in flag_configs}
+        self.flag_config_storage.remove_if(lambda f: f.key not in flag_keys)
 
         if not self.cohort_loader:
             for flag_config in flag_configs:
-                self.logger.debug(f"Putting non-cohort flag {flag_config['key']}")
+                self.logger.debug(f"Putting non-cohort flag {flag_config.key}")
                 self.flag_config_storage.put_flag_config(flag_config)
             return
 
@@ -83,11 +83,11 @@ class DeploymentRunner:
         # iterate through new flag configs and check if their required cohorts exist
         for flag_config in flag_configs:
             cohort_ids = get_all_cohort_ids_from_flag(flag_config)
-            self.logger.debug(f"Storing flag {flag_config['key']}")
+            self.logger.debug(f"Storing flag {flag_config.key}")
             self.flag_config_storage.put_flag_config(flag_config)
             missing_cohorts = cohort_ids - updated_cohort_ids
             if missing_cohorts:
-                self.logger.warning(f"Flag {flag_config['key']} - failed to load cohorts: {missing_cohorts}")
+                self.logger.warning(f"Flag {flag_config.key} - failed to load cohorts: {missing_cohorts}")
 
         # delete unused cohorts
         self._delete_unused_cohorts()
