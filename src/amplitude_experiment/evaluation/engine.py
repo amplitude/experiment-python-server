@@ -7,6 +7,7 @@ from .select import select
 from .types import EvaluationOperator, EvaluationFlag, EvaluationVariant, EvaluationSegment, EvaluationCondition
 from .semantic_version import SemanticVersion
 
+
 class EvaluationEngine:
     """Feature flag evaluation engine."""
 
@@ -284,15 +285,7 @@ class EvaluationEngine:
             type_transformer: Callable[[str], Any],
             type_comparator: Callable[[Any, str, Any], bool]
     ) -> bool:
-        """Match values after transforming them to comparable types.
-
-        Args:
-            prop_value: String value to compare
-            op: Comparison operator
-            filter_values: List of filter values to compare against
-            type_transformer: Function to transform string values to comparable type
-            type_comparator: Function to perform the comparison
-        """
+        """Match values after transforming them to comparable types."""
         # Transform property value
         transformed_prop = type_transformer(prop_value)
 

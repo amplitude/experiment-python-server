@@ -6,14 +6,9 @@ M_32 = 5
 N_32 = 0xe6546b64
 
 
-def string_to_utf8_byte_array(input_str: str) -> bytes:
-    """Convert a string to UTF-8 bytes."""
-    return input_str.encode('utf-8')
-
-
 def hash32x86(input_str: str, seed: int = 0) -> int:
     """Calculate 32-bit Murmur3 hash of a string."""
-    data = string_to_utf8_byte_array(input_str)
+    data = input_str.encode('utf-8')
     length = len(data)
     n_blocks = length // 4
     hash_val = seed
