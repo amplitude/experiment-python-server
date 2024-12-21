@@ -3,6 +3,8 @@ from unittest import mock
 from unittest.mock import patch
 import logging
 
+from amplitude_experiment.evaluation.types import EvaluationFlag
+
 from src.amplitude_experiment import LocalEvaluationConfig
 from src.amplitude_experiment.cohort.cohort_loader import CohortLoader
 from src.amplitude_experiment.cohort.cohort_sync_config import CohortSyncConfig
@@ -44,6 +46,7 @@ class DeploymentRunnerTest(unittest.TestCase):
         runner = DeploymentRunner(
             LocalEvaluationConfig(cohort_sync_config=CohortSyncConfig('api_key', 'secret_key')),
             flag_api,
+            None,
             flag_config_storage,
             cohort_storage,
             logger,
@@ -63,15 +66,15 @@ class DeploymentRunnerTest(unittest.TestCase):
         cohort_loader = CohortLoader(cohort_download_api, cohort_storage)
         runner = DeploymentRunner(
             LocalEvaluationConfig(cohort_sync_config=CohortSyncConfig('api_key', 'secret_key')),
-            flag_api, flag_config_storage,
+            flag_api, None, flag_config_storage,
             cohort_storage,
             logger,
             cohort_loader,
         )
 
         # Mock methods as needed
-        with patch.object(runner, '_delete_unused_cohorts'):
-            flag_api.get_flag_configs.return_value = [self.flag]
+        with patch.object(runner.flag_updater.main_updater, '_delete_unused_cohorts'):
+            flag_api.get_flag_configs.return_value = EvaluationFlag.schema().load([self.flag], many=True)
             cohort_download_api.get_cohort.side_effect = RuntimeError("test")
 
             # Simply call the method and let the test pass if no exception is raised
