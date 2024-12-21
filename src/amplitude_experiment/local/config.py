@@ -6,6 +6,9 @@ from ..cohort.cohort_sync_config import CohortSyncConfig, DEFAULT_COHORT_SYNC_UR
 DEFAULT_SERVER_URL = 'https://api.lab.amplitude.com'
 EU_SERVER_URL = 'https://flag.lab.eu.amplitude.com'
 
+DEFAULT_STREAM_URL = 'https://stream.lab.amplitude.com'
+EU_STREAM_SERVER_URL = 'https://stream.lab.eu.amplitude.com'
+
 
 class ServerZone(Enum):
     US = "US"
@@ -20,6 +23,9 @@ class LocalEvaluationConfig:
                  server_zone: ServerZone = ServerZone.US,
                  flag_config_polling_interval_millis: int = 30000,
                  flag_config_poller_request_timeout_millis: int = 10000,
+                 stream_updates: bool = False,
+                 stream_server_url: str = DEFAULT_STREAM_URL,
+                 stream_flag_conn_timeout: int = 1500,
                  assignment_config: AssignmentConfig = None,
                  cohort_sync_config: CohortSyncConfig = None):
         """
@@ -48,6 +54,12 @@ class LocalEvaluationConfig:
                     cohort_sync_config.cohort_server_url == DEFAULT_COHORT_SYNC_URL):
                 self.cohort_sync_config.cohort_server_url = EU_COHORT_SYNC_URL
 
+        self.stream_server_url = stream_server_url
+        if stream_server_url == DEFAULT_SERVER_URL and server_zone == ServerZone.EU:
+            self.stream_server_url = EU_STREAM_SERVER_URL
+
         self.flag_config_polling_interval_millis = flag_config_polling_interval_millis
         self.flag_config_poller_request_timeout_millis = flag_config_poller_request_timeout_millis
+        self.stream_updates = stream_updates
+        self.stream_flag_conn_timeout = stream_flag_conn_timeout
         self.assignment_config = assignment_config

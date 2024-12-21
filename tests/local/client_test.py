@@ -15,6 +15,7 @@ test_user_2 = User(user_id='user_id', device_id='device_id')
 
 class LocalEvaluationClientTestCase(unittest.TestCase):
     _local_evaluation_client: LocalEvaluationClient = None
+    _stream_update: bool = False
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -25,7 +26,8 @@ class LocalEvaluationClientTestCase(unittest.TestCase):
                                               secret_key=secret_key)
         cls._local_evaluation_client = (
             LocalEvaluationClient(SERVER_API_KEY, LocalEvaluationConfig(debug=False,
-                                                                        cohort_sync_config=cohort_sync_config)))
+                                                                        cohort_sync_config=cohort_sync_config,
+                                                                        stream_updates=cls._stream_update)))
         cls._local_evaluation_client.start()
 
     @classmethod
@@ -108,6 +110,10 @@ class LocalEvaluationClientTestCase(unittest.TestCase):
                     "{.*} without {.*} in storage"
                 )
                 self.assertTrue(any(re.match(log_message, message) for message in log.output))
+
+
+class LocalEvaluationClientStreamingTestCase(LocalEvaluationClientTestCase):
+    _stream_update: bool = True
 
 
 if __name__ == '__main__':
