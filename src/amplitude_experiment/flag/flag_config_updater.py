@@ -10,7 +10,7 @@ from ..flag.flag_config_api import FlagConfigApi, FlagConfigStreamApi
 from ..flag.flag_config_storage import FlagConfigStorage
 from ..local.poller import Poller
 from ..cohort.cohort_loader import CohortLoader
-from ..util.flag_config import get_all_cohort_ids_from_flag, get_all_cohort_ids_from_flags
+from ..util.flag_config import get_all_cohort_ids_from_flag
 from ..util.updater import get_duration_with_jitter
 
 

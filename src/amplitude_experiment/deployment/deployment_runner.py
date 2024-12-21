@@ -9,7 +9,7 @@ from ..cohort.cohort_storage import CohortStorage
 from ..flag.flag_config_api import FlagConfigApi, FlagConfigStreamApi
 from ..flag.flag_config_storage import FlagConfigStorage
 from ..local.poller import Poller
-from ..util.flag_config import get_all_cohort_ids_from_flag, get_all_cohort_ids_from_flags
+from ..util.flag_config import get_all_cohort_ids_from_flags
 
 DEFAULT_STREAM_UPDATER_RETRY_DELAY_MILLIS = 15000
 DEFAULT_STREAM_UPDATER_RETRY_DELAY_MAX_JITTER_MILLIS = 1000

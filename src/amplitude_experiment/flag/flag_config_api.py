@@ -1,13 +1,11 @@
 import json
-import random
 import threading
-import time
 from http.client import HTTPResponse, HTTPConnection, HTTPSConnection
-from typing import List, Tuple, Optional, Callable, Mapping
+from typing import List, Optional, Callable, Mapping
 
 import sseclient
 
-from ..connection_pool import HTTPConnectionPool, WrapperHTTPConnection
+from ..connection_pool import HTTPConnectionPool
 from ..util.updater import get_duration_with_jitter
 from ..evaluation.types import EvaluationFlag
 from ..version import __version__

@@ -1,11 +1,8 @@
 import json
-import logging
 import threading
 import time
 import unittest
 from unittest.mock import MagicMock, patch
-
-from amplitude_experiment.evaluation.types import EvaluationFlag
 
 from amplitude_experiment.flag.flag_config_api import FlagConfigStreamApi
 
