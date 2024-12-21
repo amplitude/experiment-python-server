@@ -3,6 +3,7 @@ import threading
 import time
 from typing import List, Callable, Optional
 
+from ..evaluation.types import EvaluationFlag
 from ..local.config import LocalEvaluationConfig
 from ..cohort.cohort_storage import CohortStorage
 from ..flag.flag_config_api import FlagConfigApi, FlagConfigStreamApi
@@ -21,7 +22,7 @@ class FlagConfigUpdater:
         pass
 
 
-class FlagConfigUpdaterBase():
+class FlagConfigUpdaterBase:
     def __init__(self,
                  flag_config_storage: FlagConfigStorage,
                  cohort_loader: CohortLoader,
@@ -32,13 +33,13 @@ class FlagConfigUpdaterBase():
         self.cohort_storage = cohort_storage
         self.logger = logger
 
-    def update(self, flag_configs: List):
-        flag_keys = {flag['key'] for flag in flag_configs}
-        self.flag_config_storage.remove_if(lambda f: f['key'] not in flag_keys)
+    def update(self, flag_configs: List[EvaluationFlag]):
+        flag_keys = {flag.key for flag in flag_configs}
+        self.flag_config_storage.remove_if(lambda f: f.key not in flag_keys)
 
         if not self.cohort_loader:
             for flag_config in flag_configs:
-                self.logger.debug(f"Putting non-cohort flag {flag_config['key']}")
+                self.logger.debug(f"Putting non-cohort flag {flag_config.key}")
                 self.flag_config_storage.put_flag_config(flag_config)
             return
 
@@ -52,21 +53,18 @@ class FlagConfigUpdaterBase():
         # download all new cohorts
         try:
             self.cohort_loader.download_cohorts(cohort_ids_to_download).result()
-            print("cohort downloaded")
         except Exception as e:
-            print("cohort error")
             self.logger.warning(f"Error while downloading cohorts: {e}")
 
-        # get updated set of cohort ids
         updated_cohort_ids = self.cohort_storage.get_cohort_ids()
         # iterate through new flag configs and check if their required cohorts exist
         for flag_config in flag_configs:
             cohort_ids = get_all_cohort_ids_from_flag(flag_config)
-            self.logger.debug(f"Storing flag {flag_config['key']}")
+            self.logger.debug(f"Storing flag {flag_config.key}")
             self.flag_config_storage.put_flag_config(flag_config)
             missing_cohorts = cohort_ids - updated_cohort_ids
             if missing_cohorts:
-                self.logger.warning(f"Flag {flag_config['key']} - failed to load cohorts: {missing_cohorts}")
+                self.logger.warning(f"Flag {flag_config.key} - failed to load cohorts: {missing_cohorts}")
 
         # delete unused cohorts
         self._delete_unused_cohorts()
@@ -115,6 +113,7 @@ class FlagConfigPoller(FlagConfigUpdaterBase):
         try:
             self.__update_flag_configs()
         except Exception as e:
+            self.logger.warning(f"Error while updating flags: {e}")
             self.stop()
             if self.on_error:
                 self.on_error(e)

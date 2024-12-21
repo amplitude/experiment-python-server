@@ -1,4 +1,3 @@
-import json
 import logging
 from threading import Lock
 from typing import Any, List, Dict, Set
@@ -6,7 +5,6 @@ from typing import Any, List, Dict, Set
 from amplitude import Amplitude
 
 from .config import LocalEvaluationConfig
-from .topological_sort import topological_sort
 from ..assignment import Assignment, AssignmentFilter, AssignmentService
 from ..cohort.cohort import USER_GROUP_TYPE
 from ..cohort.cohort_download_api import DirectCohortDownloadApi
@@ -17,11 +15,11 @@ from ..flag.flag_config_api import FlagConfigApiV2, FlagConfigStreamApi
 from ..flag.flag_config_storage import InMemoryFlagConfigStorage
 from ..user import User
 from ..connection_pool import HTTPConnectionPool
-from .evaluation.evaluation import evaluate
+from ..evaluation.engine import EvaluationEngine
+from ..evaluation.topological_sort import topological_sort
 from ..util import deprecated
 from ..util.flag_config import get_grouped_cohort_ids_from_flags, get_all_cohort_ids_from_flag
 from ..util.user import user_to_evaluation_context
-from ..util.variant import evaluation_variants_json_to_variants
 from ..variant import Variant
 
 
@@ -41,13 +39,14 @@ class LocalEvaluationClient:
 
         if not api_key:
             raise ValueError("Experiment API key is empty")
+        self.engine = EvaluationEngine()
         self.api_key = api_key
         self.config = config or LocalEvaluationConfig()
         self.assignment_service = None
         if config and config.assignment_config:
             instance = Amplitude(config.assignment_config.api_key, config.assignment_config)
             self.assignment_service = AssignmentService(instance, AssignmentFilter(
-                config.assignment_config.cache_capacity))
+                config.assignment_config.cache_capacity), config.assignment_config.send_evaluated_props)
         self.logger = logging.getLogger("Amplitude")
         self.logger.addHandler(logging.StreamHandler())
         if self.config.debug:
@@ -101,7 +100,7 @@ class LocalEvaluationClient:
         if flag_configs is None or len(flag_configs) == 0:
             return {}
         self.logger.debug(f"[Experiment] Evaluate: user={user} - Flags: {flag_configs}")
-        sorted_flags = topological_sort(flag_configs, flag_keys)
+        sorted_flags = topological_sort(flag_configs, flag_keys and list(flag_keys))
         if not sorted_flags:
             return {}
 
@@ -111,19 +110,16 @@ class LocalEvaluationClient:
             user = self._enrich_user_with_cohorts(user, flag_configs)
 
         context = user_to_evaluation_context(user)
-        flags_json = json.dumps(sorted_flags)
-        context_json = json.dumps(context)
-        result_json = evaluate(flags_json, context_json)
-        self.logger.debug(f"[Experiment] Evaluate Result: {result_json}")
-        evaluation_result = json.loads(result_json)
-        error = evaluation_result.get('error')
-        if error is not None:
-            self.logger.error(f"[Experiment] Evaluation failed: {error}")
-            return {}
-        result = evaluation_result.get('result')
-        if result is None:
-            return {}
-        variants = evaluation_variants_json_to_variants(result)
+        result = self.engine.evaluate(context, sorted_flags)
+        variants = {
+            k: Variant(
+                key=v.key,
+                value=v.value,
+                payload=v.payload,
+                metadata=v.metadata
+            ) for k, v in result.items()
+        }
+        self.logger.debug(f"[Experiment] Evaluate Result: {variants}")
         if self.assignment_service is not None:
             self.assignment_service.track(Assignment(user, variants))
         return variants
@@ -182,10 +178,10 @@ class LocalEvaluationClient:
             missing_cohorts = flag_cohort_ids - stored_cohort_ids
             if missing_cohorts:
                 message = (
-                    f"Evaluating flag {flag['key']} dependent on cohorts {flag_cohort_ids} "
+                    f"Evaluating flag {flag.key} dependent on cohorts {flag_cohort_ids} "
                     f"without {missing_cohorts} in storage"
                     if self.config.cohort_sync_config
-                    else f"Evaluating flag {flag['key']} dependent on cohorts {flag_cohort_ids} without "
+                    else f"Evaluating flag {flag.key} dependent on cohorts {flag_cohort_ids} without "
                          f"cohort syncing configured"
                 )
                 self.logger.warning(message)
