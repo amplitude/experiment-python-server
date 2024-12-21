@@ -102,8 +102,12 @@ class FlagConfigUpdaterFallbackRetryWrapperTest(unittest.TestCase):
         self.api.start(None)
         assert self.dummy1.start_count == 1
         assert self.dummy2.start_count == 1
-        self.dummy1.fail_time = 0
+        self.dummy1.fail_time = -1
         time.sleep(1.1)
+        assert self.dummy1.start_count == 2
+        assert self.dummy2.start_count == 1
+        # No more restarts
+        time.sleep(2)
         assert self.dummy1.start_count == 2
         assert self.dummy2.start_count == 1
 
@@ -219,4 +223,4 @@ class FlagConfigUpdaterFallbackRetryWrapperTest(unittest.TestCase):
         # Now main failed
         assert self.dummy1.start_count == 1
         assert self.dummy2.start_count == 1
-
+        self.api.stop()

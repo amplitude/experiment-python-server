@@ -11,8 +11,8 @@ from ..flag.flag_config_storage import FlagConfigStorage
 from ..local.poller import Poller
 from ..util.flag_config import get_all_cohort_ids_from_flag, get_all_cohort_ids_from_flags
 
-streamUpdaterRetryDelayMillis = 15000
-updaterRetryMaxJitterMillis = 1000
+DEFAULT_STREAM_UPDATER_RETRY_DELAY_MILLIS = 15000
+DEFAULT_STREAM_UPDATER_RETRY_DELAY_MAX_JITTER_MILLIS = 1000
 
 
 class DeploymentRunner:
@@ -32,13 +32,17 @@ class DeploymentRunner:
         self.cohort_storage = cohort_storage
         self.cohort_loader = cohort_loader
         self.lock = threading.Lock()
-        self.flag_updater = FlagConfigPoller(flag_config_api, flag_config_storage, cohort_loader, cohort_storage,
-                                             config, logger)
+        self.flag_updater = FlagConfigUpdaterFallbackRetryWrapper(
+            FlagConfigPoller(flag_config_api, flag_config_storage, cohort_loader, cohort_storage, config, logger),
+            None,
+            0, 0, config.flag_config_polling_interval_millis, 0,
+            logger
+            )
         if flag_config_stream_api:
             self.flag_updater = FlagConfigUpdaterFallbackRetryWrapper(
                 FlagConfigStreamer(flag_config_stream_api, flag_config_storage, cohort_loader, cohort_storage, logger),
                 self.flag_updater,
-                streamUpdaterRetryDelayMillis, updaterRetryMaxJitterMillis,
+                DEFAULT_STREAM_UPDATER_RETRY_DELAY_MILLIS, DEFAULT_STREAM_UPDATER_RETRY_DELAY_MAX_JITTER_MILLIS,
                 config.flag_config_polling_interval_millis, 0,
                 logger
             )
@@ -52,7 +56,6 @@ class DeploymentRunner:
     def start(self):
         with self.lock:
             self.flag_updater.start(None)
-            print("flag updater start finished")
             if self.cohort_loader:
                 self.cohort_poller.start()
 

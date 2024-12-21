@@ -53,16 +53,16 @@ class FlagConfigApiV2(FlagConfigApi):
                                                    read_timeout=timeout, scheme=scheme)
 
 
-streamApiKeepaliveTimeout = 17000
-streamApiReconnIntervalMillis = 15 * 60 * 1000
-streamApiMaxJitterMillis = 5000
+DEFAULT_STREAM_API_KEEP_ALIVE_TIMEOUT_MILLIS = 17000
+DEFAULT_STREAM_MAX_CONN_DURATION_MILLIS = 15 * 60 * 1000
+DEFAULT_STREAM_MAX_JITTER_MILLIS = 5000
 
 
 class EventSource:
     def __init__(self, server_url: str, path: str, headers: Mapping[str, str], conn_timeout_millis: int,
-                 max_conn_duration_millis: int = streamApiReconnIntervalMillis,
-                 max_jitter_millis: int = streamApiMaxJitterMillis,
-                 keep_alive_timeout_millis: int = streamApiKeepaliveTimeout):
+                 max_conn_duration_millis: int = DEFAULT_STREAM_MAX_CONN_DURATION_MILLIS,
+                 max_jitter_millis: int = DEFAULT_STREAM_MAX_JITTER_MILLIS,
+                 keep_alive_timeout_millis: int = DEFAULT_STREAM_API_KEEP_ALIVE_TIMEOUT_MILLIS):
         self.keep_alive_timer: Optional[threading.Timer] = None
         self.server_url = server_url
         self.path = path
@@ -114,12 +114,13 @@ class EventSource:
         with self.lock:
             if self.keep_alive_timer:
                 self.keep_alive_timer.cancel()
-            self.keep_alive_timer = threading.Timer(self.keep_alive_timeout_millis, self.keep_alive_timed_out, args=[on_error])
+            self.keep_alive_timer = threading.Timer(self.keep_alive_timeout_millis / 1000, self.keep_alive_timed_out,
+                                                    args=[on_error])
             self.keep_alive_timer.start()
 
     def keep_alive_timed_out(self, on_error: Callable[[str], None]):
         with self.lock:
-            if self.conn and self.sse:
+            if not self._stopped:
                 self.stop()
                 on_error("[Experiment] Stream flagConfigs - Keep alive timed out")
 
@@ -145,7 +146,7 @@ class EventSource:
             with self.lock:
                 if self._stopped:
                     return
-            on_error(e)
+            on_error("[Experiment] Stream flagConfigs - Unexpected exception" + str(e))
 
     def _get_conn(self) -> tuple[HTTPConnection | HTTPSConnection, HTTPResponse]:
         scheme, _, host = self.server_url.split('/', 3)
@@ -169,8 +170,8 @@ class FlagConfigStreamApi:
                  deployment_key: str,
                  server_url: str,
                  conn_timeout_millis: int,
-                 max_conn_duration_millis: int = streamApiReconnIntervalMillis,
-                 max_jitter_millis: int = streamApiMaxJitterMillis):
+                 max_conn_duration_millis: int = DEFAULT_STREAM_MAX_CONN_DURATION_MILLIS,
+                 max_jitter_millis: int = DEFAULT_STREAM_MAX_JITTER_MILLIS):
         self.deployment_key = deployment_key
         self.server_url = server_url
         self.conn_timeout_millis = conn_timeout_millis
@@ -187,14 +188,15 @@ class FlagConfigStreamApi:
 
         self.eventsource = EventSource(self.server_url, "/sdk/stream/v1/flags", headers, conn_timeout_millis)
 
-    def start(self, on_update: Callable[[List], None], on_error: Callable[[str], None]):
+    def start(self, on_update: Callable[[List[EvaluationFlag]], None], on_error: Callable[[str], None]):
         with self.lock:
             init_finished_event = threading.Event()
             init_error_event = threading.Event()
             init_updated_event = threading.Event()
 
             def _on_update(data):
-                flags = json.loads(data)
+                response_json = json.loads(data)
+                flags = EvaluationFlag.schema().load(response_json, many=True)
                 if init_finished_event.is_set():
                     on_update(flags)
                 else:
@@ -210,7 +212,7 @@ class FlagConfigStreamApi:
                     init_finished_event.set()
                     on_error(data)
 
-            t = threading.Thread(target=lambda: self.eventsource.start(_on_update, _on_error))
+            t = threading.Thread(target=self.eventsource.start, args=[_on_update, _on_error])
             t.start()
             init_finished_event.wait(self.conn_timeout_millis / 1000)
             if t.is_alive() or not init_finished_event.is_set() or init_error_event.is_set():

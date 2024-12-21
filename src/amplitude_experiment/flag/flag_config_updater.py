@@ -84,7 +84,7 @@ class FlagConfigUpdaterBase:
                 self.cohort_storage.delete_cohort(deleted_cohort.group_type, deleted_cohort_id)
 
 
-class FlagConfigPoller(FlagConfigUpdaterBase):
+class FlagConfigPoller(FlagConfigUpdaterBase, FlagConfigUpdater):
     def __init__(self, flag_config_api: FlagConfigApi, flag_config_storage: FlagConfigStorage,
                  cohort_loader: CohortLoader,
                  cohort_storage: CohortStorage, config: LocalEvaluationConfig,
@@ -103,6 +103,7 @@ class FlagConfigPoller(FlagConfigUpdaterBase):
             self.__update_flag_configs()
         except Exception as e:
             self.logger.warning(f"Error while updating flags: {e}")
+            raise e
         self.on_error = on_error
         self.flag_poller.start()
 
@@ -128,7 +129,7 @@ class FlagConfigPoller(FlagConfigUpdaterBase):
         super().update(flag_configs)
 
 
-class FlagConfigStreamer(FlagConfigUpdaterBase):
+class FlagConfigStreamer(FlagConfigUpdaterBase, FlagConfigUpdater):
     def __init__(self, flag_config_stream_api: FlagConfigStreamApi, flag_config_storage: FlagConfigStorage,
                  cohort_loader: CohortLoader,
                  cohort_storage: CohortStorage,
@@ -151,7 +152,7 @@ class FlagConfigStreamer(FlagConfigUpdaterBase):
 
 
 class FlagConfigUpdaterFallbackRetryWrapper(FlagConfigUpdater):
-    def __init__(self, main_updater: FlagConfigUpdater, fallback_updater: FlagConfigUpdater,
+    def __init__(self, main_updater: FlagConfigUpdater, fallback_updater: Optional[FlagConfigUpdater],
                  retry_delay_millis: int, max_jitter_millis: int,
                  fallback_start_retry_delay_millis: int, fallback_start_retry_max_jitter_millis: int,
                  logger: logging.Logger):
@@ -178,13 +179,15 @@ class FlagConfigUpdaterFallbackRetryWrapper(FlagConfigUpdater):
             def _main_on_error(err: str):
                 self.start_main_retry(_main_on_error)
                 try:
-                    self.fallback_updater.start(_fallback_on_error)
+                    if self.fallback_updater is not None:
+                        self.fallback_updater.start(_fallback_on_error)
                 except:
                     self.start_fallback_retry(_fallback_on_error)
 
             try:
                 self.main_updater.start(_main_on_error)
-                self.fallback_updater.stop()
+                if self.fallback_updater is not None:
+                    self.fallback_updater.stop()
                 self.stop_main_retry()
                 self.stop_fallback_retry()
             except Exception as e:
@@ -199,7 +202,8 @@ class FlagConfigUpdaterFallbackRetryWrapper(FlagConfigUpdater):
             self.main_retry_stopper.set()
             self.fallback_retry_stopper.set()
             self.main_updater.stop()
-            self.fallback_updater.stop()
+            if self.fallback_updater is not None:
+                self.fallback_updater.stop()
 
     def start_main_retry(self, main_on_error: Callable[[str], None]):
         with self.lock:
@@ -219,7 +223,8 @@ class FlagConfigUpdaterFallbackRetryWrapper(FlagConfigUpdater):
                             self.main_updater.start(main_on_error)
                             stopper.set()
                             self.stop_fallback_retry()
-                            self.fallback_updater.stop()
+                            if self.fallback_updater is not None:
+                                self.fallback_updater.stop()
                             break
                         except:
                             pass
@@ -233,6 +238,9 @@ class FlagConfigUpdaterFallbackRetryWrapper(FlagConfigUpdater):
             if self.fallback_retry_stopper:
                 self.fallback_retry_stopper.set()
 
+            if self.fallback_updater is None:
+                return
+
             stopper = threading.Event()
 
             def retry_fallback():
@@ -243,7 +251,8 @@ class FlagConfigUpdaterFallbackRetryWrapper(FlagConfigUpdater):
                         if stopper.is_set():
                             break
                         try:
-                            self.fallback_updater.start(fallback_on_error)
+                            if self.fallback_updater is not None:
+                                self.fallback_updater.start(fallback_on_error)
                             stopper.set()
                             break
                         except:
