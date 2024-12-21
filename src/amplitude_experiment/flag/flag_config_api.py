@@ -1,7 +1,7 @@
 import json
 import threading
 from http.client import HTTPResponse, HTTPConnection, HTTPSConnection
-from typing import List, Optional, Callable, Mapping, Union
+from typing import List, Optional, Callable, Mapping, Union, Tuple
 
 import sseclient
 
@@ -146,7 +146,7 @@ class EventSource:
                     return
             on_error("[Experiment] Stream flagConfigs - Unexpected exception" + str(e))
 
-    def _get_conn(self) -> tuple[Union[HTTPConnection, HTTPSConnection], HTTPResponse]:
+    def _get_conn(self) -> Tuple[Union[HTTPConnection, HTTPSConnection], HTTPResponse]:
         scheme, _, host = self.server_url.split('/', 3)
         connection = HTTPConnection if scheme == 'http:' else HTTPSConnection
 
