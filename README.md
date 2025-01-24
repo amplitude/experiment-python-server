@@ -77,7 +77,7 @@ user = User(
 variants = experiment.evaluate(user)
 ```
 
-# Running unit tests suite
+# Running Unit Tests Suite
 To setup for running test on local, create a `.env` file with following
 contents, and replace `{API_KEY}` and `{SECRET_KEY}` (or `{EU_API_KEY}` and `{EU_SECRET_KEY}` for EU data center) for the project in test:
 
