@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v1.6.1 (2025-01-27)
+
+### Fix
+
+* Readme ([#55](https://github.com/amplitude/experiment-python-server/issues/55)) ([`8585300`](https://github.com/amplitude/experiment-python-server/commit/8585300d1eba0c8aa8e07547795055fa1b8ea7e8))
+
 ## v1.6.0 (2024-12-20)
 
 ### Feature
