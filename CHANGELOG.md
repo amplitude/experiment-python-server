@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v1.6.2 (2025-02-05)
+
+### Fix
+
+* Readme code example spaces ([#56](https://github.com/amplitude/experiment-python-server/issues/56)) ([`0c57df0`](https://github.com/amplitude/experiment-python-server/commit/0c57df07d9a59caf2a6b22d95324f7fc6fbe327e))
+
 ## v1.6.1 (2025-01-27)
 
 ### Fix
