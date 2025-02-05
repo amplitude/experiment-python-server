@@ -22,7 +22,7 @@ from amplitude_experiment import Experiment, RemoteEvaluationConfig, RemoteEvalu
 # (1) Get your deployment's API key
 apiKey = 'YOUR-API-KEY'
 
- # (2) Initialize the experiment remote evaluation
+# (2) Initialize the experiment remote evaluation
 experiment = Experiment.initialize_remote(api_key)
 
 # (3) Fetch variants for a user
