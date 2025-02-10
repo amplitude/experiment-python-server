@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v1.6.3 (2025-02-10)
+
+### Fix
+
+* Add dataclasses-json as requirement ([#58](https://github.com/amplitude/experiment-python-server/issues/58)) ([`d36d294`](https://github.com/amplitude/experiment-python-server/commit/d36d2944b098da0be69adddc187127102a714ba3))
+
 ## v1.6.2 (2025-02-05)
 
 ### Fix
