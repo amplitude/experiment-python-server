@@ -31,10 +31,10 @@ class AmplitudeCookieTestCase(unittest.TestCase):
         self.assertEqual(AmplitudeCookie.generate('deviceId'), 'deviceId..........')
 
     def test_new_format_valid_api_key_return_cookie_name(self):
-        self.assertEqual(AmplitudeCookie.cookie_name('1234567'), 'amp_123456')
+        self.assertEqual(AmplitudeCookie.cookie_name('12345678901', new_format=True), 'AMP_1234567890')
 
     def test_new_format_invalid_api_key_raise_error(self):
-        self.assertRaises(ValueError, AmplitudeCookie.cookie_name, '')
+        self.assertRaises(ValueError, AmplitudeCookie.cookie_name, '12345678', new_format=True)
 
     def test_new_format_parse_cookie_with_device_id_only(self):
         user = AmplitudeCookie.parse('JTdCJTIyZGV2aWNlSWQlMjIlM0ElMjJzb21lRGV2aWNlSWQlMjIlN0Q=', new_format=True)
