@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v1.7.0 (2025-02-12)
+
+### Feature
+
+* Add new cookie format ([#61](https://github.com/amplitude/experiment-python-server/issues/61)) ([`eadae62`](https://github.com/amplitude/experiment-python-server/commit/eadae62a41b757a9c07f130da211c99ad289f67f))
+
 ## v1.6.3 (2025-02-10)
 
 ### Fix
