@@ -11,7 +11,7 @@ from ..cohort.cohort_download_api import DirectCohortDownloadApi
 from ..cohort.cohort_loader import CohortLoader
 from ..cohort.cohort_storage import InMemoryCohortStorage
 from ..deployment.deployment_runner import DeploymentRunner
-from ..flag.flag_config_api import FlagConfigApiV2
+from ..flag.flag_config_api import FlagConfigApiV2, FlagConfigStreamApi
 from ..flag.flag_config_storage import InMemoryFlagConfigStorage
 from ..user import User
 from ..connection_pool import HTTPConnectionPool
@@ -66,8 +66,13 @@ class LocalEvaluationClient:
             cohort_loader = CohortLoader(cohort_download_api, self.cohort_storage)
         flag_config_api = FlagConfigApiV2(api_key, self.config.server_url,
                                           self.config.flag_config_poller_request_timeout_millis)
-        self.deployment_runner = DeploymentRunner(self.config, flag_config_api, self.flag_config_storage,
-                                                  self.cohort_storage, self.logger, cohort_loader)
+        flag_config_stream_api = None
+        if self.config.stream_updates:
+            flag_config_stream_api = FlagConfigStreamApi(api_key, self.config.stream_server_url, self.config.stream_flag_conn_timeout)
+
+        self.deployment_runner = DeploymentRunner(self.config, flag_config_api, flag_config_stream_api,
+                                                  self.flag_config_storage, self.cohort_storage, self.logger,
+                                                  cohort_loader)
 
     def start(self):
         """
