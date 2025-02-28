@@ -26,6 +26,7 @@ class User:
             device_model: str = None,
             carrier: str = None,
             library: str = None,
+            ip_address: str = None,
             user_properties: Dict[str, Any] = None,
             groups: Dict[str, List[str]] = None,
             group_properties: Dict[str, Dict[str, Dict[str, Any]]] = None,
@@ -50,6 +51,7 @@ class User:
                 device_model (str): Predefined field, must be manually provided
                 carrier (str): Predefined field, must be manually provided
                 library (str): Predefined field, must be manually provided
+                ip_address (str): Predefined field, must be manually provided
                 user_properties (dict): Custom user properties
                 groups (dict): Groups associated with the user
                 group_properties (dict): Properties for groups
@@ -72,6 +74,7 @@ class User:
         self.device_model = device_model
         self.carrier = carrier
         self.library = library
+        self.ip_address = ip_address
         self.user_properties = user_properties
         self.groups = groups
         self.group_properties = group_properties
