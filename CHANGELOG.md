@@ -2,6 +2,16 @@
 
 <!--next-version-placeholder-->
 
+## v1.8.0 (2025-02-28)
+
+### Feature
+
+* Add stream flag ([#53](https://github.com/amplitude/experiment-python-server/issues/53)) ([`cd8dd95`](https://github.com/amplitude/experiment-python-server/commit/cd8dd95e2751234588e6cba44479c0364fa8bb85))
+
+### Fix
+
+* Add IP property to user object ([#62](https://github.com/amplitude/experiment-python-server/issues/62)) ([`2c37029`](https://github.com/amplitude/experiment-python-server/commit/2c370294c6547f96bdc169f2b0bfd3d334924b3e))
+
 ## v1.7.0 (2025-02-12)
 
 ### Feature
