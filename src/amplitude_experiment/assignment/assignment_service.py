@@ -17,7 +17,7 @@ def to_event(assignment: Assignment, send_evaluated_props: bool) -> BaseEvent:
         user_attributes = [
             "country", "city", "region", "dma", "language",
             "platform", "version", "os", "device_manufacturer",
-            "device_brand", "device_model", "carrier"
+            "device_brand", "device_model", "carrier", "library", "ip_address"
         ]
         for attr in user_attributes:
             setattr(event, attr, getattr(assignment.user, attr, None))
