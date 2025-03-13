@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v1.8.1 (2025-03-13)
+
+### Fix
+
+* Add sseclient-py to setup.py ([#63](https://github.com/amplitude/experiment-python-server/issues/63)) ([`a52c8e8`](https://github.com/amplitude/experiment-python-server/commit/a52c8e877b20d6a194ff380d7e90efd4a8a4dd0b))
+
 ## v1.8.0 (2025-02-28)
 
 ### Feature
