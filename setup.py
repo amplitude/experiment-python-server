@@ -33,7 +33,7 @@ setup(
         "Programming Language :: Python :: 3.10",
     ],
     keywords="amplitude, python, backend",
-    install_requires=["dataclasses-json>=0.6.7","amplitude_analytics>=1.1.1"],
+    install_requires=["dataclasses-json>=0.6.7","amplitude_analytics>=1.1.1","sseclient-py~=1.8.0"],
     package_dir={"": "src"},
     packages=["amplitude_experiment"],
     include_package_data=True,
