@@ -6,9 +6,9 @@ from time import sleep
 from typing import Any, Dict
 
 from .config import RemoteEvaluationConfig
+from .fetch_options import FetchOptions
 from ..connection_pool import HTTPConnectionPool
 from ..exception import FetchException
-from ..fetch_options import FetchOptions
 from ..user import User
 from ..util.deprecated import deprecated
 from ..util.variant import evaluation_variants_json_to_variants

@@ -6,7 +6,7 @@ from parameterized import parameterized
 
 from src.amplitude_experiment import RemoteEvaluationClient, Variant, User, RemoteEvaluationConfig
 from src.amplitude_experiment.exception import FetchException
-from src.amplitude_experiment.fetch_options import FetchOptions
+from src.amplitude_experiment.remote.fetch_options import FetchOptions
 
 API_KEY = 'client-DvWljIjiiuqLbyjqdvBaLFfEBrAvGuA3'
 SERVER_URL = 'https://api.lab.amplitude.com/sdk/vardata'
@@ -71,7 +71,7 @@ class RemoteEvaluationClientTestCase(unittest.TestCase):
             })
 
             mock_conn.request.reset_mock()
-            
+
             variants = client.fetch_v2(user, FetchOptions(tracksAssignment=True, tracksExposure=False))
             self.assertIn('sdk-ci-test', variants)
             mock_conn.request.assert_called_once_with('POST', '/sdk/v2/vardata?v=0', mock.ANY, {
