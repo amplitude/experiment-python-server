@@ -41,25 +41,21 @@ class LocalEvaluationConfigLoggerTestCase(unittest.TestCase):
         self.assertEqual(config.logger, custom_logger)
         self.assertEqual(config.logger.name, "CustomLogger")
 
-    def test_custom_logger_has_debug_level_when_debug_true(self):
-        """Test that custom logger has DEBUG level set when debug=True"""
-        custom_logger = logging.getLogger("CustomLogger")
-        config = LocalEvaluationConfig(debug=True, logger=custom_logger)
-        self.assertEqual(config.logger.level, logging.DEBUG)
-
-    def test_custom_logger_has_warning_level_when_debug_false(self):
-        """Test that custom logger has WARNING level set when debug=False"""
-        custom_logger = logging.getLogger("CustomLogger")
-        config = LocalEvaluationConfig(debug=False, logger=custom_logger)
-        self.assertEqual(config.logger.level, logging.WARNING)
-
-    def test_custom_logger_debug_flag_takes_precedence(self):
-        """Test that debug flag takes precedence over logger's existing level"""
-        custom_logger = logging.getLogger("CustomLogger")
+    def test_custom_logger_level_not_modified_by_debug_flag(self):
+        """Test that custom logger level is not modified by debug flag"""
+        # Test with debug=True
+        custom_logger = logging.getLogger("CustomLoggerDebug")
         custom_logger.setLevel(logging.ERROR)
         config = LocalEvaluationConfig(debug=True, logger=custom_logger)
-        # Debug flag should override to DEBUG
-        self.assertEqual(config.logger.level, logging.DEBUG)
+        # Logger level should remain unchanged (ERROR), not modified to DEBUG
+        self.assertEqual(config.logger.level, logging.ERROR)
+        
+        # Test with debug=False
+        custom_logger2 = logging.getLogger("CustomLoggerWarning")
+        custom_logger2.setLevel(logging.INFO)
+        config2 = LocalEvaluationConfig(debug=False, logger=custom_logger2)
+        # Logger level should remain unchanged (INFO), not modified to WARNING
+        self.assertEqual(config2.logger.level, logging.INFO)
 
     def test_default_logger_only_one_handler_added(self):
         """Test that only one handler is added to default logger"""
