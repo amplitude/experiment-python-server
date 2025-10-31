@@ -31,7 +31,7 @@ class RemoteEvaluationConfig:
                 fetch_retry_backoff_scalar (float): Scales the minimum backoff exponentially.
                 fetch_retry_timeout_millis (int): The request timeout for retrying fetch requests.
                 logger (logging.Logger): Optional logger instance. If provided, this logger will be used instead of
-                  creating a new one. The debug flag will still be applied to set the log level.
+                  creating a new one. The debug flag only applies when no logger is provided.
 
             Returns:
                 The config object
@@ -52,10 +52,9 @@ class RemoteEvaluationConfig:
             if not self.logger.handlers:
                 handler = logging.StreamHandler(sys.stderr)
                 self.logger.addHandler(handler)
+            # Set log level: DEBUG if debug=True, otherwise WARNING
+            # Only apply debug flag to default logger, not user-provided loggers
+            log_level = logging.DEBUG if self.debug else logging.WARNING
+            self.logger.setLevel(log_level)
         else:
             self.logger = logger
-        
-        # Set log level: DEBUG if debug=True, otherwise WARNING
-        # This applies to both provided loggers and the default logger
-        log_level = logging.DEBUG if self.debug else logging.WARNING
-        self.logger.setLevel(log_level)
