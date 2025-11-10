@@ -1,18 +1,12 @@
-from enum import Enum
-
 from ..assignment import AssignmentConfig
 from ..cohort.cohort_sync_config import CohortSyncConfig, DEFAULT_COHORT_SYNC_URL, EU_COHORT_SYNC_URL
+from ..server_zone import ServerZone
 
 DEFAULT_SERVER_URL = 'https://api.lab.amplitude.com'
 EU_SERVER_URL = 'https://flag.lab.eu.amplitude.com'
 
 DEFAULT_STREAM_URL = 'https://stream.lab.amplitude.com'
 EU_STREAM_SERVER_URL = 'https://stream.lab.eu.amplitude.com'
-
-
-class ServerZone(Enum):
-    US = "US"
-    EU = "EU"
 
 
 class LocalEvaluationConfig:
