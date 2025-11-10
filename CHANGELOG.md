@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v1.8.3 (2025-11-10)
+
+### Fix
+
+* Use ServerZone enum for remote evaluation config ([#67](https://github.com/amplitude/experiment-python-server/issues/67)) ([`3c9ff52`](https://github.com/amplitude/experiment-python-server/commit/3c9ff5267618ef86eac16faa67556e669718ec2f))
+
 ## v1.8.2 (2025-11-10)
 
 ### Fix
