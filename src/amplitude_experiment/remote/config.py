@@ -1,7 +1,8 @@
+DEFAULT_SERVER_URL = 'https://api.lab.amplitude.com'
+EU_SERVER_URL = 'https://api.lab.eu.amplitude.com'
+
 class RemoteEvaluationConfig:
     """Experiment Remote Client Configuration"""
-
-    DEFAULT_SERVER_URL = 'https://api.lab.amplitude.com'
 
     def __init__(self, debug=False,
                  server_url=DEFAULT_SERVER_URL,
@@ -10,7 +11,8 @@ class RemoteEvaluationConfig:
                  fetch_retry_backoff_min_millis=500,
                  fetch_retry_backoff_max_millis=10000,
                  fetch_retry_backoff_scalar=1.5,
-                 fetch_retry_timeout_millis=10000):
+                 fetch_retry_timeout_millis=10000,
+                 server_zone='us'):
         """
         Initialize a config
             Parameters:
@@ -25,6 +27,7 @@ class RemoteEvaluationConfig:
                   greater than the max, the max is used for all subsequent retries.
                 fetch_retry_backoff_scalar (float): Scales the minimum backoff exponentially.
                 fetch_retry_timeout_millis (int): The request timeout for retrying fetch requests.
+                server_zone (str): Select the Amplitude data center to get flags and variants from, `us` or `eu`.
 
             Returns:
                 The config object
@@ -37,3 +40,7 @@ class RemoteEvaluationConfig:
         self.fetch_retry_backoff_max_millis = fetch_retry_backoff_max_millis
         self.fetch_retry_backoff_scalar = fetch_retry_backoff_scalar
         self.fetch_retry_timeout_millis = fetch_retry_timeout_millis
+        self.server_zone = server_zone
+        if server_url == DEFAULT_SERVER_URL and server_zone == 'eu':
+            self.server_url = EU_SERVER_URL
+
