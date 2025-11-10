@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v1.8.2 (2025-11-10)
+
+### Fix
+
+* Add server zone config to remote evaluation client ([#66](https://github.com/amplitude/experiment-python-server/issues/66)) ([`64d6d6d`](https://github.com/amplitude/experiment-python-server/commit/64d6d6deb172ee2489fbc6f0809a78b7a537d355))
+
 ## v1.8.1 (2025-03-13)
 
 ### Fix
