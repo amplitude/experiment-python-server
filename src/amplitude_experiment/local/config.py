@@ -4,7 +4,7 @@ from ..assignment import AssignmentConfig
 from ..cohort.cohort_sync_config import CohortSyncConfig, DEFAULT_COHORT_SYNC_URL, EU_COHORT_SYNC_URL
 
 DEFAULT_SERVER_URL = 'https://api.lab.amplitude.com'
-EU_SERVER_URL = 'https://flag.lab.eu.amplitude.com'
+EU_FLAG_SERVER_URL = 'https://flag.lab.eu.amplitude.com'
 
 DEFAULT_STREAM_URL = 'https://stream.lab.amplitude.com'
 EU_STREAM_SERVER_URL = 'https://stream.lab.eu.amplitude.com'
@@ -49,7 +49,7 @@ class LocalEvaluationConfig:
         self.server_zone = server_zone
         self.cohort_sync_config = cohort_sync_config
         if server_url == DEFAULT_SERVER_URL and server_zone == ServerZone.EU:
-            self.server_url = EU_SERVER_URL
+            self.server_url = EU_FLAG_SERVER_URL
             if (cohort_sync_config is not None and
                     cohort_sync_config.cohort_server_url == DEFAULT_COHORT_SYNC_URL):
                 self.cohort_sync_config.cohort_server_url = EU_COHORT_SYNC_URL
