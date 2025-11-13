@@ -30,24 +30,20 @@ def to_exposure_events(exposure: Exposure, ttl_millis: int) -> List[BaseEvent]:
         unset_props = {}
         flag_type = variant.metadata.get('flagType') if variant.metadata is not None else None
         if flag_type != FLAG_TYPE_MUTUAL_EXCLUSION_GROUP:
-            if is_default:
-                unset_props[f'[Experiment] {flag_key}'] = '-'
-            else:
-                if variant.key:
-                    set_props[f'[Experiment] {flag_key}'] = variant.key
-                elif variant.value:
-                    set_props[f'[Experiment] {flag_key}'] = variant.value
+            if variant.key:
+                set_props[f'[Experiment] {flag_key}'] = variant.key
+            elif variant.value:
+                set_props[f'[Experiment] {flag_key}'] = variant.value
 
         # Build event properties.
         event_properties = {}
-        if not is_default:
-            event_properties['[Experiment] Flag Key'] = flag_key
-            if variant.key:
-                event_properties['[Experiment] Variant'] = variant.key
-            elif variant.value:
-                event_properties['[Experiment] Variant'] = variant.value
-            if variant.metadata:
-                event_properties['metadata'] = variant.metadata
+        event_properties['[Experiment] Flag Key'] = flag_key
+        if variant.key:
+            event_properties['[Experiment] Variant'] = variant.key
+        elif variant.value:
+            event_properties['[Experiment] Variant'] = variant.value
+        if variant.metadata:
+            event_properties['metadata'] = variant.metadata
 
         # Build event.
         event = BaseEvent(

@@ -52,9 +52,8 @@ class LocalEvaluationClient:
         
         # Exposure service is always instantiated, using deployment key if no api key provided
         exposure_config = self.config.exposure_config
-        if not exposure_config.api_key:
-            exposure_config.api_key = api_key
-        exposure_instance = Amplitude(exposure_config.api_key, exposure_config)
+        api_key_to_use = exposure_config.api_key or api_key
+        exposure_instance = Amplitude(api_key_to_use, exposure_config)
         self.exposure_service = ExposureService(exposure_instance, ExposureFilter(exposure_config.cache_capacity))
         self.logger = logging.getLogger("Amplitude")
         self.logger.addHandler(logging.StreamHandler())
