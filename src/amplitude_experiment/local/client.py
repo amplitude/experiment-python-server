@@ -5,7 +5,9 @@ from typing import Any, List, Dict, Set
 from amplitude import Amplitude
 
 from .config import LocalEvaluationConfig
+from .evaluate_options import EvaluateOptions
 from ..assignment import Assignment, AssignmentFilter, AssignmentService
+from ..exposure import Exposure, ExposureFilter, ExposureService
 from ..cohort.cohort import USER_GROUP_TYPE
 from ..cohort.cohort_download_api import DirectCohortDownloadApi
 from ..cohort.cohort_loader import CohortLoader
@@ -47,6 +49,13 @@ class LocalEvaluationClient:
             instance = Amplitude(config.assignment_config.api_key, config.assignment_config)
             self.assignment_service = AssignmentService(instance, AssignmentFilter(
                 config.assignment_config.cache_capacity), config.assignment_config.send_evaluated_props)
+        
+        # Exposure service is always instantiated, using deployment key if no api key provided
+        exposure_config = self.config.exposure_config
+        if not exposure_config.api_key:
+            exposure_config.api_key = api_key
+        exposure_instance = Amplitude(exposure_config.api_key, exposure_config)
+        self.exposure_service = ExposureService(exposure_instance, ExposureFilter(exposure_config.cache_capacity))
         self.logger = logging.getLogger("Amplitude")
         self.logger.addHandler(logging.StreamHandler())
         if self.config.debug:
@@ -81,7 +90,8 @@ class LocalEvaluationClient:
         """
         self.deployment_runner.start()
 
-    def evaluate_v2(self, user: User, flag_keys: Set[str] = None) -> Dict[str, Variant]:
+    # TODO: python backwards compatibility for evaluate_v2 to be looked at again
+    def evaluate_v2(self, user: User, flag_keys: Set[str] = None, options: EvaluateOptions = None) -> Dict[str, Variant]:
         """
         Locally evaluates flag variants for a user.
 
@@ -91,16 +101,23 @@ class LocalEvaluationClient:
 
             Parameters:
                 user (User): The user to evaluate
-                flag_keys (List[str]): The flags to evaluate with the user. If empty, all flags are evaluated.
+                flag_keys (Set[str]): The flags to evaluate with the user. If empty, all flags are evaluated.
+                options (EvaluateOptions): Optional evaluation options.
 
             Returns:
                 The evaluated variants.
         """
+        # Handle backwards compatibility: if options is None, create default
+        if options is None:
+            options = EvaluateOptions(flag_keys=flag_keys)
+        # Use flag_keys from options if provided, otherwise fall back to parameter
+        flag_keys_to_use = options.flag_keys if options.flag_keys is not None else flag_keys
+        
         flag_configs = self.flag_config_storage.get_flag_configs()
         if flag_configs is None or len(flag_configs) == 0:
             return {}
         self.logger.debug(f"[Experiment] Evaluate: user={user} - Flags: {flag_configs}")
-        sorted_flags = topological_sort(flag_configs, flag_keys and list(flag_keys))
+        sorted_flags = topological_sort(flag_configs, flag_keys_to_use and list(flag_keys_to_use))
         if not sorted_flags:
             return {}
 
@@ -120,7 +137,10 @@ class LocalEvaluationClient:
             ) for k, v in result.items()
         }
         self.logger.debug(f"[Experiment] Evaluate Result: {variants}")
+        if options.tracks_exposure is True:
+            self.exposure_service.track(Exposure(user, variants))
         if self.assignment_service is not None:
+            # @deprecated Assignment tracking is deprecated. Use ExposureService with Exposure tracking instead.
             self.assignment_service.track(Assignment(user, variants))
         return variants
 

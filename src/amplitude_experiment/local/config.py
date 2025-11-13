@@ -1,4 +1,5 @@
 from ..assignment import AssignmentConfig
+from ..exposure import ExposureConfig
 from ..cohort.cohort_sync_config import CohortSyncConfig, DEFAULT_COHORT_SYNC_URL, EU_COHORT_SYNC_URL
 from ..server_zone import ServerZone
 
@@ -21,6 +22,7 @@ class LocalEvaluationConfig:
                  stream_server_url: str = DEFAULT_STREAM_URL,
                  stream_flag_conn_timeout: int = 1500,
                  assignment_config: AssignmentConfig = None,
+                 exposure_config: ExposureConfig = ExposureConfig(),
                  cohort_sync_config: CohortSyncConfig = None):
         """
         Initialize a config
@@ -32,7 +34,8 @@ class LocalEvaluationConfig:
                   configurations.
                 flag_config_poller_request_timeout_millis (int): The request timeout, in milliseconds, used when
                   fetching flag configurations.
-                assignment_config (AssignmentConfig): The assignment configuration.
+                assignment_config (AssignmentConfig): The assignment configuration. @deprecated use exposure_config instead.
+                exposure_config (ExposureConfig): The exposure configuration.
                 cohort_sync_config (CohortSyncConfig): The cohort sync configuration.
 
            Returns:
@@ -57,3 +60,4 @@ class LocalEvaluationConfig:
         self.stream_updates = stream_updates
         self.stream_flag_conn_timeout = stream_flag_conn_timeout
         self.assignment_config = assignment_config
+        self.exposure_config = exposure_config
