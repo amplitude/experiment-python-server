@@ -7,9 +7,9 @@ from ..user import User
 DAY_MILLIS = 24 * 60 * 60 * 1000
 
 
-class Assignment:
+class Exposure:
     """
-    @deprecated Assignment tracking is deprecated. Use Exposure with ExposureService instead.
+    Exposure is a class that represents a user's exposure to a set of flags.
     """
 
     def __init__(self, user: User, results: Dict[str, Variant]):
@@ -28,3 +28,4 @@ class Assignment:
             value = self.results[flag_key].key.strip()
             canonical += flag_key.strip() + ' ' + value + ' '
         return canonical
+

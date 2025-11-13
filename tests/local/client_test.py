@@ -4,6 +4,7 @@ from unittest import mock
 
 from src.amplitude_experiment import LocalEvaluationClient, LocalEvaluationConfig, User, Variant
 from src.amplitude_experiment.cohort.cohort_sync_config import CohortSyncConfig
+from src.amplitude_experiment.local.evaluate_options import EvaluateOptions
 from dotenv import load_dotenv
 import os
 
@@ -110,6 +111,47 @@ class LocalEvaluationClientTestCase(unittest.TestCase):
                     "{.*} without {.*} in storage"
                 )
                 self.assertTrue(any(re.match(log_message, message) for message in log.output))
+
+    def test_evaluate_v2_with_tracks_exposure_tracks_non_default_variants(self):
+        # Mock the amplitude client's track method
+        with mock.patch.object(self._local_evaluation_client.exposure_service.amplitude, 'track') as mock_track:
+            # Perform evaluation with tracks_exposure=True
+            options = EvaluateOptions(tracks_exposure=True)
+            variants = self._local_evaluation_client.evaluate_v2(test_user, None, options)
+            
+            # Verify that track was called
+            self.assertTrue(mock_track.called, 'Amplitude track should be called when tracks_exposure is True')
+            
+            # Count non-default variants
+            non_default_variants = {
+                flag_key: variant for flag_key, variant in variants.items()
+                if not (variant.metadata and variant.metadata.get('default'))
+            }
+            
+            # Get all tracked events
+            tracked_events = [call[0][0] for call in mock_track.call_args_list]
+            
+            # Verify that we have one event per non-default variant
+            self.assertEqual(len(tracked_events), len(non_default_variants),
+                           f'Expected {len(non_default_variants)} exposure events, got {len(tracked_events)}')
+            
+            # Verify each event has the correct structure
+            tracked_flag_keys = set()
+            for event in tracked_events:
+                self.assertEqual(event.event_type, '[Experiment] Exposure')
+                self.assertEqual(event.user_id, test_user.user_id)
+                flag_key = event.event_properties.get('[Experiment] Flag Key')
+                self.assertIsNotNone(flag_key, 'Event should have flag key')
+                tracked_flag_keys.add(flag_key)
+                # Verify the variant is not default
+                variant = variants.get(flag_key)
+                self.assertIsNotNone(variant, f'Variant for {flag_key} should exist')
+                self.assertFalse(variant.metadata and variant.metadata.get('default'),
+                               f'Variant for {flag_key} should not be default')
+            
+            # Verify all non-default variants were tracked
+            self.assertEqual(tracked_flag_keys, set(non_default_variants.keys()),
+                           'All non-default variants should be tracked')
 
 
 class LocalEvaluationClientStreamingTestCase(LocalEvaluationClientTestCase):
