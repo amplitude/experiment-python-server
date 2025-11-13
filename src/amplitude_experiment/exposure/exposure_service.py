@@ -1,13 +1,13 @@
 from amplitude import Amplitude, BaseEvent
+from typing import List
 from .exposure import Exposure
-from .exposure import DAY_MILLIS
 from .exposure_filter import ExposureFilter
 from ..util import hash_code
 
 FLAG_TYPE_MUTUAL_EXCLUSION_GROUP = "mutual-exclusion-group"
 
 
-def to_exposure_events(exposure: Exposure, ttl_millis: int) -> list[BaseEvent]:
+def to_exposure_events(exposure: Exposure, ttl_millis: int) -> List[BaseEvent]:
     """
     Convert an Exposure to a list of Amplitude events (one per flag).
     """
