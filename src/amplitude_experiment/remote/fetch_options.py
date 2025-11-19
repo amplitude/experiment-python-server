@@ -4,8 +4,8 @@ class FetchOptions:
         """
         Fetch Options
             Parameters:
-                tracksAssignment (Optional[bool]): Whether to track the assignment. The default None means track the assignment event.
-                tracksExposure (Optional[bool]): Whether to track the exposure. The default None means don't track the exposure event.
+                tracksAssignment (Optional[bool]): Whether to track the assignment. The default None uses the server's default behavior (track the assignment event).
+                tracksExposure (Optional[bool]): Whether to track the exposure. The default None uses the server's default behavior (don't track the exposure event).
         """
         self.tracksAssignment = tracksAssignment
         self.tracksExposure = tracksExposure
