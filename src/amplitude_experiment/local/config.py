@@ -1,3 +1,6 @@
+import logging
+import sys
+
 from ..assignment import AssignmentConfig
 from ..cohort.cohort_sync_config import CohortSyncConfig, DEFAULT_COHORT_SYNC_URL, EU_COHORT_SYNC_URL
 from ..server_zone import ServerZone
@@ -21,7 +24,8 @@ class LocalEvaluationConfig:
                  stream_server_url: str = DEFAULT_STREAM_URL,
                  stream_flag_conn_timeout: int = 1500,
                  assignment_config: AssignmentConfig = None,
-                 cohort_sync_config: CohortSyncConfig = None):
+                 cohort_sync_config: CohortSyncConfig = None,
+                 logger: logging.Logger = None):
         """
         Initialize a config
            Parameters:
@@ -34,6 +38,8 @@ class LocalEvaluationConfig:
                   fetching flag configurations.
                 assignment_config (AssignmentConfig): The assignment configuration.
                 cohort_sync_config (CohortSyncConfig): The cohort sync configuration.
+                logger (logging.Logger): Optional logger instance. If provided, this logger will be used instead of
+                  creating a new one. The debug flag only applies when no logger is provided.
 
            Returns:
                The config object
@@ -57,3 +63,17 @@ class LocalEvaluationConfig:
         self.stream_updates = stream_updates
         self.stream_flag_conn_timeout = stream_flag_conn_timeout
         self.assignment_config = assignment_config
+
+        # Set up logger: use provided logger or create default one
+        if logger is None:
+            self.logger = logging.getLogger("Amplitude")
+            # Only add handler if logger doesn't already have one
+            if not self.logger.handlers:
+                handler = logging.StreamHandler(sys.stderr)
+                self.logger.addHandler(handler)
+            # Set log level: DEBUG if debug=True, otherwise WARNING
+            # Only apply debug flag to default logger, not user-provided loggers
+            log_level = logging.DEBUG if self.debug else logging.WARNING
+            self.logger.setLevel(log_level)
+        else:
+            self.logger = logger
