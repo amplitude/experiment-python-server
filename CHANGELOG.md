@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v1.9.0 (2025-11-20)
+
+### Feature
+
+* Allow configs to take in user provided logger instances for client logging behavior ([#65](https://github.com/amplitude/experiment-python-server/issues/65)) ([`688dc70`](https://github.com/amplitude/experiment-python-server/commit/688dc70a32763bcac91bde1fc8abcbb31b2d26de))
+
 ## v1.8.3 (2025-11-10)
 
 ### Fix
