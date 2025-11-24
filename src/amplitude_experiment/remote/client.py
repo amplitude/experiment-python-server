@@ -1,5 +1,4 @@
 import json
-import logging
 import threading
 import time
 from time import sleep
@@ -33,10 +32,7 @@ class RemoteEvaluationClient:
             raise ValueError("Experiment API key is empty")
         self.api_key = api_key
         self.config = config or RemoteEvaluationConfig()
-        self.logger = logging.getLogger("Amplitude")
-        self.logger.addHandler(logging.StreamHandler())
-        if self.config.debug:
-            self.logger.setLevel(logging.DEBUG)
+        self.logger = self.config.logger
         self.__setup_connection_pool()
 
     def fetch_v2(self, user: User, fetch_options: FetchOptions = None):

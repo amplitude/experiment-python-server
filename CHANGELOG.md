@@ -2,6 +2,24 @@
 
 <!--next-version-placeholder-->
 
+## v1.9.0 (2025-11-20)
+
+### Feature
+
+* Allow configs to take in user provided logger instances for client logging behavior ([#65](https://github.com/amplitude/experiment-python-server/issues/65)) ([`688dc70`](https://github.com/amplitude/experiment-python-server/commit/688dc70a32763bcac91bde1fc8abcbb31b2d26de))
+
+## v1.8.3 (2025-11-10)
+
+### Fix
+
+* Use ServerZone enum for remote evaluation config ([#67](https://github.com/amplitude/experiment-python-server/issues/67)) ([`3c9ff52`](https://github.com/amplitude/experiment-python-server/commit/3c9ff5267618ef86eac16faa67556e669718ec2f))
+
+## v1.8.2 (2025-11-10)
+
+### Fix
+
+* Add server zone config to remote evaluation client ([#66](https://github.com/amplitude/experiment-python-server/issues/66)) ([`64d6d6d`](https://github.com/amplitude/experiment-python-server/commit/64d6d6deb172ee2489fbc6f0809a78b7a537d355))
+
 ## v1.8.1 (2025-03-13)
 
 ### Fix

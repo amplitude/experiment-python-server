@@ -1,4 +1,3 @@
-import logging
 from threading import Lock
 from typing import Any, List, Dict, Set
 
@@ -47,10 +46,7 @@ class LocalEvaluationClient:
             instance = Amplitude(config.assignment_config.api_key, config.assignment_config)
             self.assignment_service = AssignmentService(instance, AssignmentFilter(
                 config.assignment_config.cache_capacity), config.assignment_config.send_evaluated_props)
-        self.logger = logging.getLogger("Amplitude")
-        self.logger.addHandler(logging.StreamHandler())
-        if self.config.debug:
-            self.logger.setLevel(logging.DEBUG)
+        self.logger = self.config.logger
         self.__setup_connection_pool()
         self.lock = Lock()
         self.cohort_storage = InMemoryCohortStorage()
