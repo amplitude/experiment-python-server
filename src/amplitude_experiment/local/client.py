@@ -85,7 +85,6 @@ class LocalEvaluationClient:
         """
         self.deployment_runner.start()
 
-    # TODO: python backwards compatibility for evaluate_v2 to be looked at again
     def evaluate_v2(self, user: User, flag_keys: Set[str] = None, options: EvaluateOptions = None) -> Dict[str, Variant]:
         """
         Locally evaluates flag variants for a user.
