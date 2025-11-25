@@ -1,4 +1,3 @@
-import logging
 from threading import Lock
 from typing import Any, List, Dict, Set
 
@@ -49,17 +48,13 @@ class LocalEvaluationClient:
             instance = Amplitude(config.assignment_config.api_key, config.assignment_config)
             self.assignment_service = AssignmentService(instance, AssignmentFilter(
                 config.assignment_config.cache_capacity), config.assignment_config.send_evaluated_props)
-        
         # Exposure service is always instantiated, using deployment key if no api key provided
         self.exposure_service = None
         if config and config.exposure_config:
             exposure_config = config.exposure_config
             exposure_instance = Amplitude(exposure_config.api_key, exposure_config)
             self.exposure_service = ExposureService(exposure_instance, ExposureFilter(exposure_config.cache_capacity))
-        self.logger = logging.getLogger("Amplitude")
-        self.logger.addHandler(logging.StreamHandler())
-        if self.config.debug:
-            self.logger.setLevel(logging.DEBUG)
+        self.logger = self.config.logger
         self.__setup_connection_pool()
         self.lock = Lock()
         self.cohort_storage = InMemoryCohortStorage()

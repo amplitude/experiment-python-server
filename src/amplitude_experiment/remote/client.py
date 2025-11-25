@@ -1,11 +1,11 @@
 import json
-import logging
 import threading
 import time
 from time import sleep
 from typing import Any, Dict
 
 from .config import RemoteEvaluationConfig
+from .fetch_options import FetchOptions
 from ..connection_pool import HTTPConnectionPool
 from ..exception import FetchException
 from ..user import User
@@ -32,13 +32,10 @@ class RemoteEvaluationClient:
             raise ValueError("Experiment API key is empty")
         self.api_key = api_key
         self.config = config or RemoteEvaluationConfig()
-        self.logger = logging.getLogger("Amplitude")
-        self.logger.addHandler(logging.StreamHandler())
-        if self.config.debug:
-            self.logger.setLevel(logging.DEBUG)
+        self.logger = self.config.logger
         self.__setup_connection_pool()
 
-    def fetch_v2(self, user: User):
+    def fetch_v2(self, user: User, fetch_options: FetchOptions = None):
         """
         Fetch all variants for a user synchronously. This method will automatically retry if configured, and throw if
         all retries fail. This function differs from fetch as it will return a default variant object if the flag
@@ -46,12 +43,13 @@ class RemoteEvaluationClient:
 
             Parameters:
                 user (User): The Experiment User to fetch variants for.
+                fetch_options (FetchOptions): The Fetch Options
 
             Returns:
                 Variants Dictionary.
         """
         try:
-            return self.__fetch_internal(user)
+            return self.__fetch_internal(user, fetch_options)
         except Exception as e:
             self.logger.error(f"[Experiment] Failed to fetch variants: {e}")
             raise e
@@ -67,17 +65,18 @@ class RemoteEvaluationClient:
         thread.start()
 
     @deprecated("Use fetch_v2")
-    def fetch(self, user: User):
+    def fetch(self, user: User, fetch_options: FetchOptions = None):
         """
         Fetch all variants for a user synchronous. This method will automatically retry if configured.
             Parameters:
                 user (User): The Experiment User
+                fetch_options (FetchOptions): The Fetch Options
 
             Returns:
                 Variants Dictionary.
         """
         try:
-            variants = self.fetch_v2(user)
+            variants = self.fetch_v2(user, fetch_options)
             return self.__filter_default_variants(variants)
         except Exception:
             return {}
@@ -107,16 +106,16 @@ class RemoteEvaluationClient:
                 callback(user, {}, e)
             return {}
 
-    def __fetch_internal(self, user):
+    def __fetch_internal(self, user, fetch_options: FetchOptions = None):
         self.logger.debug(f"[Experiment] Fetching variants for user: {user}")
         try:
-            return self.__do_fetch(user)
+            return self.__do_fetch(user, fetch_options)
         except Exception as e:
             self.logger.error(f"[Experiment] Fetch failed: {e}")
             if self.__should_retry_fetch(e):
-                return self.__retry_fetch(user)
+                return self.__retry_fetch(user, fetch_options)
 
-    def __retry_fetch(self, user):
+    def __retry_fetch(self, user, fetch_options: FetchOptions = None):
         if self.config.fetch_retries == 0:
             return {}
         self.logger.debug("[Experiment] Retrying fetch")
@@ -125,7 +124,7 @@ class RemoteEvaluationClient:
         for i in range(self.config.fetch_retries):
             sleep(delay_millis / 1000.0)
             try:
-                return self.__do_fetch(user)
+                return self.__do_fetch(user, fetch_options)
             except Exception as e:
                 self.logger.error(f"[Experiment] Retry failed: {e}")
                 err = e
@@ -133,13 +132,18 @@ class RemoteEvaluationClient:
                                self.config.fetch_retry_backoff_max_millis)
         raise err
 
-    def __do_fetch(self, user):
+    def __do_fetch(self, user, fetch_options: FetchOptions = None):
         start = time.time()
         user_context = self.__add_context(user)
         headers = {
             'Authorization': f"Api-Key {self.api_key}",
             'Content-Type': 'application/json;charset=utf-8'
         }
+        if fetch_options and fetch_options.tracksAssignment is not None:
+            headers['X-Amp-Exp-Track'] = "track" if fetch_options.tracksAssignment else "no-track"
+        if fetch_options and fetch_options.tracksExposure is not None:
+            headers['X-Amp-Exp-Exposure-Track'] = "track" if fetch_options.tracksExposure else "no-track"
+
         conn = self._connection_pool.acquire()
         body = user_context.to_json().encode('utf8')
         if len(body) > 8000:
