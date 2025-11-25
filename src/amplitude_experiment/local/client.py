@@ -51,10 +51,11 @@ class LocalEvaluationClient:
                 config.assignment_config.cache_capacity), config.assignment_config.send_evaluated_props)
         
         # Exposure service is always instantiated, using deployment key if no api key provided
-        exposure_config = self.config.exposure_config
-        api_key_to_use = exposure_config.api_key or api_key
-        exposure_instance = Amplitude(api_key_to_use, exposure_config)
-        self.exposure_service = ExposureService(exposure_instance, ExposureFilter(exposure_config.cache_capacity))
+        self.exposure_service = None
+        if config and config.exposure_config:
+            exposure_config = config.exposure_config
+            exposure_instance = Amplitude(exposure_config.api_key, exposure_config)
+            self.exposure_service = ExposureService(exposure_instance, ExposureFilter(exposure_config.cache_capacity))
         self.logger = logging.getLogger("Amplitude")
         self.logger.addHandler(logging.StreamHandler())
         if self.config.debug:
@@ -131,7 +132,7 @@ class LocalEvaluationClient:
             ) for k, v in result.items()
         }
         self.logger.debug(f"[Experiment] Evaluate Result: {variants}")
-        if options and options.tracks_exposure is True:
+        if self.exposure_service is not None and options and options.tracks_exposure is True:
             self.exposure_service.track(Exposure(user, variants))
         if self.assignment_service is not None:
             # @deprecated Assignment tracking is deprecated. Use ExposureService with Exposure tracking instead.

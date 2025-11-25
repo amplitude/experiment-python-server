@@ -22,7 +22,7 @@ class LocalEvaluationConfig:
                  stream_server_url: str = DEFAULT_STREAM_URL,
                  stream_flag_conn_timeout: int = 1500,
                  assignment_config: AssignmentConfig = None,
-                 exposure_config: ExposureConfig = ExposureConfig(),
+                 exposure_config: ExposureConfig = None,
                  cohort_sync_config: CohortSyncConfig = None):
         """
         Initialize a config

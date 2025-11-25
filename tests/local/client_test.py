@@ -4,6 +4,7 @@ from unittest import mock
 
 from src.amplitude_experiment import LocalEvaluationClient, LocalEvaluationConfig, User, Variant
 from src.amplitude_experiment.cohort.cohort_sync_config import CohortSyncConfig
+from src.amplitude_experiment.exposure.exposure_config import ExposureConfig
 from src.amplitude_experiment.local.evaluate_options import EvaluateOptions
 from dotenv import load_dotenv
 import os
@@ -17,6 +18,7 @@ test_user_2 = User(user_id='user_id', device_id='device_id')
 class LocalEvaluationClientTestCase(unittest.TestCase):
     _local_evaluation_client: LocalEvaluationClient = None
     _stream_update: bool = False
+    _exposure_config: ExposureConfig = None
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -28,7 +30,8 @@ class LocalEvaluationClientTestCase(unittest.TestCase):
         cls._local_evaluation_client = (
             LocalEvaluationClient(SERVER_API_KEY, LocalEvaluationConfig(debug=False,
                                                                         cohort_sync_config=cohort_sync_config,
-                                                                        stream_updates=cls._stream_update)))
+                                                                        stream_updates=cls._stream_update,
+                                                                        exposure_config=cls._exposure_config)))
         cls._local_evaluation_client.start()
 
     @classmethod
@@ -112,6 +115,13 @@ class LocalEvaluationClientTestCase(unittest.TestCase):
                 )
                 self.assertTrue(any(re.match(log_message, message) for message in log.output))
 
+
+class LocalEvaluationClientStreamingTestCase(LocalEvaluationClientTestCase):
+    _stream_update: bool = True
+
+class LocalEvaluationClientExposureTestCase(LocalEvaluationClientTestCase):
+    _exposure_config: ExposureConfig = ExposureConfig(api_key='some_api_key')
+
     def test_evaluate_v2_with_tracks_exposure_tracks_non_default_variants(self):
         # Mock the amplitude client's track method
         with mock.patch.object(self._local_evaluation_client.exposure_service.amplitude, 'track') as mock_track:
@@ -152,11 +162,6 @@ class LocalEvaluationClientTestCase(unittest.TestCase):
             # Verify all non-default variants were tracked
             self.assertEqual(tracked_flag_keys, set(non_default_variants.keys()),
                            'All non-default variants should be tracked')
-
-
-class LocalEvaluationClientStreamingTestCase(LocalEvaluationClientTestCase):
-    _stream_update: bool = True
-
 
 if __name__ == '__main__':
     unittest.main()
