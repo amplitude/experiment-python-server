@@ -9,6 +9,9 @@ FLAG_TYPE_HOLDOUT_GROUP = "holdout-group"
 
 
 def to_event(assignment: Assignment, send_evaluated_props: bool) -> BaseEvent:
+    """
+    @deprecated Assignment tracking is deprecated. Use Exposure tracking.
+    """
     event = BaseEvent(event_type='[Experiment] Assignment', user_id=assignment.user.user_id,
                       device_id=assignment.user.device_id, event_properties={}, user_properties={})
 
@@ -58,6 +61,9 @@ def to_event(assignment: Assignment, send_evaluated_props: bool) -> BaseEvent:
 
 
 class AssignmentService:
+    """
+    @deprecated Assignment tracking is deprecated. Use ExposureService with Exposure tracking instead.
+    """
     def __init__(self, amplitude: Amplitude, assignment_filter: AssignmentFilter, send_evaluated_props: bool):
         self.amplitude = amplitude
         self.assignmentFilter = assignment_filter
