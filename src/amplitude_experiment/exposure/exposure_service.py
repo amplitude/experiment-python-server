@@ -16,7 +16,6 @@ def to_exposure_events(exposure: Exposure, ttl_millis: int) -> List[BaseEvent]:
     for flag_key in exposure.results:
         variant = exposure.results[flag_key]
 
-        # TODO: We don't seem to use trackExposure metadata.
         track_exposure = variant.metadata.get('trackExposure') if variant.metadata is not None else True
         if track_exposure is False:
             continue
