@@ -4,6 +4,9 @@ from ..util.cache import Cache
 
 
 class AssignmentFilter:
+    """
+    @deprecated Assignment tracking is deprecated. Use ExposureFilter with ExposureService instead.
+    """
     def __init__(self, size: int, ttl_millis: int = DAY_MILLIS):
         self.cache = Cache(size, ttl_millis)
 
