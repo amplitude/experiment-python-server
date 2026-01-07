@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v1.10.0 (2026-01-07)
+
+### Feature
+
+* Add exposure service ([#68](https://github.com/amplitude/experiment-python-server/issues/68)) ([`704add8`](https://github.com/amplitude/experiment-python-server/commit/704add8a22ae679eea455c5c1e584fe5132beeb3))
+* Add tracks assignment and exposure ([#64](https://github.com/amplitude/experiment-python-server/issues/64)) ([`69aa85f`](https://github.com/amplitude/experiment-python-server/commit/69aa85f13d28d47eeddf84a2bfc24f5f02a4af0c))
+
 ## v1.9.0 (2025-11-20)
 
 ### Feature
