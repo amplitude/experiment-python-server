@@ -13,7 +13,7 @@ PATCH_REGEX = r'(\d+)'
 PRERELEASE_REGEX = r'(-(([-\w]+\.?)*))?'
 
 # Version pattern should be major.minor(.patchAndPreRelease) where .patchAndPreRelease is optional
-VERSION_PATTERN = f'^{MAJOR_MINOR_REGEX}(\.{PATCH_REGEX}{PRERELEASE_REGEX})?$'
+VERSION_PATTERN = fr'^{MAJOR_MINOR_REGEX}(\.{PATCH_REGEX}{PRERELEASE_REGEX})?$'
 
 @dataclass
 class SemanticVersion:
