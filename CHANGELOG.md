@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v1.10.1 (2026-01-30)
+
+### Fix
+
+* Fixes invalid escape sequence syntax error in VERSION_PATTERN ([#69](https://github.com/amplitude/experiment-python-server/issues/69)) ([`b2a70c2`](https://github.com/amplitude/experiment-python-server/commit/b2a70c288ead18dd3db2078a3c754860d840d5f4))
+
 ## v1.10.0 (2026-01-07)
 
 ### Feature
