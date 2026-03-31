@@ -20,6 +20,7 @@ jobs:
     needs: [authorize]
     environment: Unit Test
     permissions:
+      contents: read
       id-token: write
     steps:
       - name: Checkout for release to PyPI
