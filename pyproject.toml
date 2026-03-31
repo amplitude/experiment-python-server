@@ -13,3 +13,8 @@ upload_to_vcs_release = true
 [tool.semantic_release.branches.main]
 match = "(main|master)"
 prerelease = false
+
+[tool.semantic_release.branches.alpha]
+match = "^(?!.*main|master).*$"
+prerelease = true
+prerelease_token = "alpha"
