@@ -4,7 +4,7 @@ version_variable = [
 ]
 major_on_zero = true
 branch = "main"
-upload_to_PyPI = true
+upload_to_PyPI = false
 upload_to_release = true
 build_command = "pip install build && python -m build"
 version_source = "commit"
