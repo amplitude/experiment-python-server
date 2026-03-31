@@ -33,7 +33,7 @@ jobs:
           python-version: 3.8
 
       - name: Install dependencies
-        run: python -m pip install build setuptools wheel twine amplitude_analytics parameterized python-dotenv~=0.21.1 python-semantic-release==10.5.3
+        run: python -m pip install build setuptools wheel twine amplitude_analytics parameterized python-dotenv~=0.21.1
 
       - name: Install requirements
         run: pip install -r requirements.txt && pip install -r requirements-dev.txt
@@ -47,7 +47,7 @@ jobs:
         run: python -m unittest discover -s ./tests -p '*_test.py'
 
       - name: Publish distribution PyPI --dry-run
-        uses: python-semantic-release/python-semantic-release@v10.5.3
+        uses: python-semantic-release/python-semantic-release@350c48fcb3ffcdfd2e0a235206bc2ecea6b69df0 # v10.5.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           push: false
