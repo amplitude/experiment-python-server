@@ -1,7 +1,2 @@
-# Workflow and release automation files require review from SDK team
-/.github/workflows/ @amplitude/sdk
-/.github/CODEOWNERS @amplitude/sdk
-
-# Package metadata and build configuration
-/setup.py @amplitude/sdk
-/pyproject.toml @amplitude/sdk
+# Default: require experiment-sdk team review for all files
+* @amplitude/experiment-sdk
