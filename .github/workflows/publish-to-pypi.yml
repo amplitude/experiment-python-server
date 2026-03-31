@@ -8,31 +8,35 @@ on:
         required: true
         default: 'true'
 
+permissions:
+  contents: write
+  id-token: write
+
 jobs:
   authorize:
     name: Authorize
     runs-on: ubuntu-latest
     steps:
       - name: ${{ github.actor }} permission check to do a release
-        uses: "lannonbr/repo-permission-check-action@2.0.2"
+        uses: "lannonbr/repo-permission-check-action@2bb8c89ba8bf115c4bfab344d6a6f442b24c9a1f" # v2.0.2
         with:
           permission: "write"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build-n-publish:
-    environment: Unit Test
+    environment: PyPI Release
     name: Build and publish to PyPI
     runs-on: ubuntu-latest
     needs: [authorize]
     steps:
       - name: Checkout for release to PyPI
-        uses: actions/checkout@v3
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
 
       - name: Set up Python 3.8
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
         with:
           python-version: 3.8
 
@@ -56,6 +60,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           semantic-release publish --noop
+
       - name: Publish distribution PyPI
         if: ${{ github.event.inputs.dryRun == 'false'}}
         run: |
@@ -64,5 +69,7 @@ jobs:
           semantic-release publish
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPOSITORY_USERNAME: __token__
-          REPOSITORY_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+
+      - name: Publish to PyPI via trusted publishing
+        if: ${{ github.event.inputs.dryRun == 'false' }}
+        uses: pypa/gh-action-pypi-publish@76f52bc884231f62b9a034ebfe128415bbaabdfc # v1.12.4
