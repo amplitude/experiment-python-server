@@ -61,6 +61,12 @@ jobs:
           push: false
           vcs_release: false
 
+      - name: Publish to Test PyPI
+        if: ${{ github.event.inputs.dryRun == 'true'}}
+        uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e # v1.13.0
+        with:
+          repository-url: https://test.pypi.org/legacy/
+  
       - name: Python Semantic Release
         if: ${{ github.event.inputs.dryRun == 'false'}}
         uses: python-semantic-release/python-semantic-release@350c48fcb3ffcdfd2e0a235206bc2ecea6b69df0 # v10.5.3
@@ -70,9 +76,3 @@ jobs:
       - name: Publish to PyPI
         if: ${{ github.event.inputs.dryRun == 'false'}}
         uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e # v1.13.0
-
-      - name: Publish to Test PyPI
-        if: ${{ github.event.inputs.dryRun == 'true'}}
-        uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e # v1.13.0
-        with:
-          repository-url: https://test.pypi.org/legacy/
