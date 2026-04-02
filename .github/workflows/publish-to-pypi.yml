@@ -53,7 +53,7 @@ jobs:
           EU_SECRET_KEY: ${{ secrets.EU_SECRET_KEY }}
         run: python -m unittest discover -s ./tests -p '*_test.py'
 
-      - name: Publish distribution PyPI --dry-run
+      - name: Python Semantic Release --dry-run
         if: ${{ github.event.inputs.dryRun == 'true'}}
         uses: python-semantic-release/python-semantic-release@350c48fcb3ffcdfd2e0a235206bc2ecea6b69df0 # v10.5.3
         with:
