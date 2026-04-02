@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ${{ github.actor }} permission check to do a release
-        uses: "lannonbr/repo-permission-check-action@2.0.2"
+        uses: lannonbr/repo-permission-check-action@2bb8c89ba8bf115c4bfab344d6a6f442b24c9a1f # 2.0.2
         with:
           permission: "write"
         env:
@@ -25,19 +25,22 @@ jobs:
     name: Build and publish to PyPI
     runs-on: ubuntu-latest
     needs: [authorize]
+    permissions:
+      contents: write
+      id-token: write
     steps:
       - name: Checkout for release to PyPI
-        uses: actions/checkout@v3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
         with:
           fetch-depth: 0
 
       - name: Set up Python 3.8
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6
         with:
           python-version: 3.8
 
       - name: Install dependencies
-        run: python -m pip install build setuptools wheel twine amplitude_analytics parameterized python-dotenv~=0.21.1 python-semantic-release==7.34.6
+        run: python -m pip install build setuptools wheel twine amplitude_analytics parameterized python-dotenv~=0.21.1
 
       - name: Install requirements
         run: pip install -r requirements.txt && pip install -r requirements-dev.txt
@@ -50,19 +53,26 @@ jobs:
           EU_SECRET_KEY: ${{ secrets.EU_SECRET_KEY }}
         run: python -m unittest discover -s ./tests -p '*_test.py'
 
-      - name: Publish distribution PyPI --dry-run
+      - name: Python Semantic Release --dry-run
         if: ${{ github.event.inputs.dryRun == 'true'}}
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          semantic-release publish --noop
-      - name: Publish distribution PyPI
+        uses: python-semantic-release/python-semantic-release@350c48fcb3ffcdfd2e0a235206bc2ecea6b69df0 # v10.5.3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          push: false
+          vcs_release: false
+
+      - name: Publish to Test PyPI
+        if: ${{ github.event.inputs.dryRun == 'true'}}
+        uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e # v1.13.0
+        with:
+          repository-url: https://test.pypi.org/legacy/
+  
+      - name: Python Semantic Release
         if: ${{ github.event.inputs.dryRun == 'false'}}
-        run: |
-          git config user.name amplitude-sdk-bot
-          git config user.email amplitude-sdk-bot@users.noreply.github.com
-          semantic-release publish
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPOSITORY_USERNAME: __token__
-          REPOSITORY_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        uses: python-semantic-release/python-semantic-release@350c48fcb3ffcdfd2e0a235206bc2ecea6b69df0 # v10.5.3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish to PyPI
+        if: ${{ github.event.inputs.dryRun == 'false'}}
+        uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e # v1.13.0

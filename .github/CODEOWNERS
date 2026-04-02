@@ -1,0 +1,2 @@
+# Default: require experiment-sdk team review for all files
+* @amplitude/experiment-sdk
