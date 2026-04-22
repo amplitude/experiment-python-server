@@ -110,25 +110,30 @@ class EvaluationEngine:
         """Match a single condition."""
         prop_value = select(target, condition.selector)
 
-        # We need special matching for null properties and set type prop values
-        # and operators. All other values are matched as strings, since the
-        # filter values are always strings.
+        # Null values use dedicated null matching. For non-null values, we try
+        # to coerce to a string list first: set operators require a list, and
+        # non-set operators use any-match semantics over the elements when the
+        # value is multi-valued. Scalars fall through to single-string matching.
         if not prop_value:
             return self.match_null(condition.op, condition.values)
-        elif self.is_set_operator(condition.op):
-            prop_value_string_list = self.coerce_string_array(prop_value)
+
+        prop_value_string_list = self.coerce_string_array(prop_value)
+        if self.is_set_operator(condition.op):
             if not prop_value_string_list:
                 return False
             return self.match_set(prop_value_string_list, condition.op, condition.values)
-        else:
-            prop_value_string = self.coerce_string(prop_value)
-            if prop_value_string is not None:
-                return self.match_string(
-                    prop_value_string,
-                    condition.op,
-                    condition.values
-                )
-            return False
+        if prop_value_string_list is not None:
+            return self.match_strings_non_set(
+                prop_value_string_list, condition.op, condition.values
+            )
+        prop_value_string = self.coerce_string(prop_value)
+        if prop_value_string is not None:
+            return self.match_string(
+                prop_value_string,
+                condition.op,
+                condition.values
+            )
+        return False
 
     def get_hash(self, key: str) -> int:
         """Generate a hash value from a key."""
@@ -221,6 +226,18 @@ class EvaluationEngine:
         elif op == EvaluationOperator.SET_DOES_NOT_CONTAIN_ANY:
             return not self.matches_set_contains_any(prop_values, filter_values)
         return False
+
+    def match_strings_non_set(
+            self,
+            prop_values: List[str],
+            op: str,
+            filter_values: List[str]
+    ) -> bool:
+        """Match any element of a multi-valued property against a non-set operator."""
+        return any(
+            self.match_string(prop_value, op, filter_values)
+            for prop_value in prop_values
+        )
 
     def match_string(self, prop_value: str, op: str, filter_values: List[str]) -> bool:
         """Match string values against filter values."""
@@ -363,21 +380,21 @@ class EvaluationEngine:
         return str(value)
 
     def coerce_string_array(self, value: Any) -> Optional[List[str]]:
-        """Coerce value to string array, handling special cases."""
+        """Coerce a list-like value to a string list, else return None."""
         if isinstance(value, list):
             return [s for s in map(self.coerce_string, value) if s is not None]
 
         string_value = str(value)
+        # Cheap guard so scalar strings skip JSON parsing (and its exception).
+        if not string_value.startswith("["):
+            return None
         try:
             parsed_value = json.loads(string_value)
-            if isinstance(parsed_value, list):
-                return [s for s in map(self.coerce_string, value) if s is not None]
-
-            s = self.coerce_string(string_value)
-            return [s] if s is not None else None
         except json.JSONDecodeError:
-            s = self.coerce_string(string_value)
-            return [s] if s is not None else None
+            return None
+        if not isinstance(parsed_value, list):
+            return None
+        return [s for s in map(self.coerce_string, parsed_value) if s is not None]
 
     def is_set_operator(self, op: str) -> bool:
         """Check if operator is a set operator."""
