@@ -233,7 +233,15 @@ class EvaluationEngine:
             op: str,
             filter_values: List[str]
     ) -> bool:
-        """Match any element of a multi-valued property against a non-set operator."""
+        """Match any element of a multi-valued property against a non-set operator.
+
+        Negation operators (is not, does not contain) also use any-match semantics
+        — the condition is true if any single element satisfies the negation, not
+        if all elements do. For example, `is not "A"` on `["A", "B"]` is true
+        because "B" is not "A", even though "A" is present. This matches
+        analytics/charts filtering behavior and the Kotlin evaluation-core
+        reference implementation.
+        """
         return any(
             self.match_string(prop_value, op, filter_values)
             for prop_value in prop_values
