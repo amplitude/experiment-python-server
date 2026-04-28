@@ -12,7 +12,7 @@ class EvaluationIntegrationTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Set up test fixtures before running tests."""
-        cls.deployment_key = "server-NgJxxvg8OGwwBsWVXqyxQbdiflbhvugy"
+        cls.deployment_key = "server-VVhLULXCxxY0xqmszXouXxiEzoeJWmSh"
         cls.engine = EvaluationEngine()
         cls.flags = cls.get_flags(cls.deployment_key)
 
@@ -495,6 +495,54 @@ class EvaluationIntegrationTestCase(unittest.TestCase):
             "false": "false"
         })
         result = self.engine.evaluate(user, self.flags)["test-is-with-booleans"]
+        self.assertEqual(result.key, "on")
+
+    def test_set_is_with_json_array_string(self):
+        """Test 'set is' operator with a JSON array string property value."""
+        user = self.user_context(None, None, None, {"key": '["1", "2", "3"]'})
+        result = self.engine.evaluate(user, self.flags)["test-set-is"]
+        self.assertEqual(result.key, "on")
+
+    def test_is_with_array_collection(self):
+        """Test 'is' operator with a list property value (any-match)."""
+        user = self.user_context(None, None, None, {"key": ["value1", "value2"]})
+        result = self.engine.evaluate(user, self.flags)["test-is-array"]
+        self.assertEqual(result.key, "on")
+
+    def test_is_not_with_array_collection(self):
+        """Test 'is not' operator with a list property value (any-match)."""
+        user = self.user_context(None, None, None, {"key": ["value3", "value4"]})
+        result = self.engine.evaluate(user, self.flags)["test-is-not-array"]
+        self.assertEqual(result.key, "on")
+
+    def test_contains_with_array_collection(self):
+        """Test 'contains' operator with a list property value (any-match)."""
+        user = self.user_context(None, None, None, {
+            "key": ["has-target-value", "has", "value"]
+        })
+        result = self.engine.evaluate(user, self.flags)["test-contains-array"]
+        self.assertEqual(result.key, "on")
+
+    def test_does_not_contain_with_array_collection(self):
+        """Test 'does not contain' operator with a list property value (any-match)."""
+        user = self.user_context(None, None, None, {
+            "key": ["has-value", "has", "value"]
+        })
+        result = self.engine.evaluate(user, self.flags)["test-does-not-contain-array"]
+        self.assertEqual(result.key, "on")
+
+    def test_is_with_json_array_string(self):
+        """Test 'is' operator with a JSON array string property value (any-match)."""
+        user = self.user_context(None, None, None, {"key": '["value1", "value2"]'})
+        result = self.engine.evaluate(user, self.flags)["test-is-array"]
+        self.assertEqual(result.key, "on")
+
+    def test_does_not_contain_with_json_array_string(self):
+        """Test 'does not contain' operator with a JSON array string property value."""
+        user = self.user_context(None, None, None, {
+            "key": '["has-value", "has", "value"]'
+        })
+        result = self.engine.evaluate(user, self.flags)["test-does-not-contain-array"]
         self.assertEqual(result.key, "on")
 
     @staticmethod
