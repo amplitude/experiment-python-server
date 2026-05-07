@@ -50,6 +50,13 @@ class ExposureServiceTestCase(unittest.TestCase):
         })
         empty_metadata = Variant(key='on', value='on')
         empty_variant = Variant()
+        with_experiment_key = Variant(key='treatment', value='treatment', metadata={
+            'segmentName': 'All Other Users',
+            'flagType': 'experiment',
+            'flagVersion': 10,
+            'default': False,
+            'experimentKey': 'exp-1',
+        })
         results = {
             'basic': basic,
             'different_value': different_value,
@@ -59,12 +66,13 @@ class ExposureServiceTestCase(unittest.TestCase):
             'partial_metadata': partial_metadata,
             'empty_metadata': empty_metadata,
             'empty_variant': empty_variant,
+            'with_experiment_key': with_experiment_key,
         }
         exposure = Exposure(user, results)
         events = to_exposure_events(exposure, DAY_MILLIS)
         # Should exclude default (default=True) only
-        # basic, different_value, mutex, holdout, partial_metadata, empty_metadata, empty_variant = 7 events
-        self.assertEqual(7, len(events))
+        # basic, different_value, mutex, holdout, partial_metadata, empty_metadata, empty_variant, with_experiment_key = 8 events
+        self.assertEqual(8, len(events))
         
         # Verify empty_variant is included
         empty_variant_events = [e for e in events if e.event_properties.get('[Experiment] Flag Key') == 'empty_variant']
@@ -95,6 +103,12 @@ class ExposureServiceTestCase(unittest.TestCase):
             # If variant has no key or value (empty_variant), variant property may not be set
             if variant.metadata:
                 self.assertEqual(variant.metadata, event.event_properties.get('metadata'))
+
+            # Validate experiment key is lifted to top-level event property when present
+            if flag_key == 'with_experiment_key':
+                self.assertEqual('exp-1', event.event_properties.get('[Experiment] Experiment Key'))
+            else:
+                self.assertNotIn('[Experiment] Experiment Key', event.event_properties)
             
             # Validate user properties
             user_properties = event.user_properties
