@@ -41,6 +41,9 @@ def to_exposure_events(exposure: Exposure, ttl_millis: int) -> List[BaseEvent]:
             event_properties['[Experiment] Variant'] = variant.key
         elif variant.value:
             event_properties['[Experiment] Variant'] = variant.value
+        experiment_key = variant.metadata.get('experimentKey') if variant.metadata is not None else None
+        if experiment_key:
+            event_properties['[Experiment] Experiment Key'] = experiment_key
         if variant.metadata:
             event_properties['metadata'] = variant.metadata
 
