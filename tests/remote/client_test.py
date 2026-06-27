@@ -88,7 +88,7 @@ class RemoteEvaluationClientTestCase(unittest.TestCase):
             mock_conn.request.assert_called_once_with('POST', '/sdk/v2/vardata?v=0', mock.ANY, {
                 'Authorization': f"Api-Key {API_KEY}",
                 'Content-Type': 'application/json;charset=utf-8',
-                'X-Amp-Exp-Flag-Keys': 'WyJmbGFnLWEiLCAiZmxhZy1iIl0'  # gitleaks:allow
+                'X-Amp-Exp-Flag-Keys': 'WyJmbGFnLWEiLCJmbGFnLWIiXQ'
             })
 
             mock_conn.request.reset_mock()
