@@ -1,3 +1,4 @@
+import base64
 import json
 import threading
 import time
@@ -143,6 +144,10 @@ class RemoteEvaluationClient:
             headers['X-Amp-Exp-Track'] = "track" if fetch_options.tracksAssignment else "no-track"
         if fetch_options and fetch_options.tracksExposure is not None:
             headers['X-Amp-Exp-Exposure-Track'] = "track" if fetch_options.tracksExposure else "no-track"
+        if fetch_options and fetch_options.flagKeys:
+            headers['X-Amp-Exp-Flag-Keys'] = base64.urlsafe_b64encode(
+                json.dumps(fetch_options.flagKeys).encode("utf-8")
+            ).rstrip(b"=").decode("utf-8")
 
         conn = self._connection_pool.acquire()
         body = user_context.to_json().encode('utf8')
