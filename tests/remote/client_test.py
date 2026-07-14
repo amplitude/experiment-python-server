@@ -81,6 +81,25 @@ class RemoteEvaluationClientTestCase(unittest.TestCase):
                 'X-Amp-Exp-Exposure-Track': 'no-track'
             })
 
+            mock_conn.request.reset_mock()
+
+            variants = client.fetch_v2(user, FetchOptions(flagKeys=['flag-a', 'flag-b']))
+            self.assertIn('sdk-ci-test', variants)
+            mock_conn.request.assert_called_once_with('POST', '/sdk/v2/vardata?v=0', mock.ANY, {
+                'Authorization': f"Api-Key {API_KEY}",
+                'Content-Type': 'application/json;charset=utf-8',
+                'X-Amp-Exp-Flag-Keys': 'WyJmbGFnLWEiLCJmbGFnLWIiXQ'
+            })
+
+            mock_conn.request.reset_mock()
+
+            variants = client.fetch_v2(user, FetchOptions(flagKeys=[]))
+            self.assertIn('sdk-ci-test', variants)
+            mock_conn.request.assert_called_once_with('POST', '/sdk/v2/vardata?v=0', mock.ANY, {
+                'Authorization': f"Api-Key {API_KEY}",
+                'Content-Type': 'application/json;charset=utf-8'
+            })
+
     @parameterized.expand([
         (300, "Fetch Exception 300", True),
         (400, "Fetch Exception 400", False),
