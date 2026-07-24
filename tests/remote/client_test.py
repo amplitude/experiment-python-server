@@ -124,3 +124,15 @@ class RemoteEvaluationClientTestCase(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class RemoteEvaluationClientConnectionPoolTestCase(unittest.TestCase):
+
+    def test_connection_pool_defaults_to_single_connection(self):
+        with RemoteEvaluationClient(API_KEY) as client:
+            self.assertEqual(client._connection_pool.max_size, 1)
+
+    def test_connection_pool_size_is_configurable(self):
+        config = RemoteEvaluationConfig(connection_pool_max_size=8)
+        with RemoteEvaluationClient(API_KEY, config) as client:
+            self.assertEqual(client._connection_pool.max_size, 8)
