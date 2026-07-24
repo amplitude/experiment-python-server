@@ -25,7 +25,8 @@ class RemoteEvaluationConfig:
                 debug (bool): Set to true to log some extra information to the console.
                 server_url (str): The server endpoint from which to request variants.
                 fetch_timeout_millis (int): The request timeout, in milliseconds, used when fetching variants
-                  triggered by calling start() or setUser().
+                  triggered by calling start() or setUser(). Also bounds how long a fetch may wait to acquire a
+                  connection from the connection pool when all connections are in use by concurrent fetches.
                 fetch_retries (int): The number of retries to attempt before failing.
                 fetch_retry_backoff_min_millis (int): Retry backoff minimum (starting backoff delay) in milliseconds.
                   The minimum backoff is scaled by `fetch_retry_backoff_scalar` after each retry failure.
