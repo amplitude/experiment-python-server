@@ -42,26 +42,37 @@ class RemoteEvaluationClientTestCase(unittest.TestCase):
         user = User(user_id='test_user')
         self.client.fetch_async(user, self.callback_for_async)
 
-    def test_fetch_pool_exhausted_times_out_with_fetch_exception(self):
+    def test_fetch_pool_exhausted_times_out(self):
         client = RemoteEvaluationClient(API_KEY, RemoteEvaluationConfig(fetch_timeout_millis=100))
         # Occupy the pool's only connection so the next fetch must wait for it.
         held = client._connection_pool.acquire()
         try:
             start = time.time()
-            with self.assertRaises(FetchException) as ctx:
+            with self.assertRaises(TimeoutError):
                 client._RemoteEvaluationClient__do_fetch(User(user_id='test_user'))
             elapsed = time.time() - start
-            self.assertEqual(408, ctx.exception.status_code)
             # Must fail promptly (bounded by fetch_timeout_millis), not hang indefinitely.
             self.assertLess(elapsed, 5)
         finally:
             client._connection_pool.release(held)
             client.close()
 
-    def test_pool_acquire_timeout_is_not_retried(self):
-        # Retrying a starved pool would re-enter the same queue; 408 must be non-retryable.
+    def test_pool_acquire_timeout_classified_like_read_timeout(self):
+        # A pool-wait timeout must take the same retry path as a socket read timeout.
         should_retry = RemoteEvaluationClient._RemoteEvaluationClient__should_retry_fetch
-        self.assertFalse(should_retry(FetchException(408, "pool acquire timed out")))
+        self.assertTrue(should_retry(TimeoutError("pool acquire timed out")))
+
+    def test_fetch_v2_pool_exhausted_matches_read_timeout_behavior(self):
+        # With fetch_retries=0, a pool-wait timeout must surface exactly like a read
+        # timeout: an empty variants dict, not None and not an exception.
+        client = RemoteEvaluationClient(API_KEY, RemoteEvaluationConfig(fetch_timeout_millis=100))
+        held = client._connection_pool.acquire()
+        try:
+            variants = client.fetch_v2(User(user_id='test_user'))
+            self.assertEqual({}, variants)
+        finally:
+            client._connection_pool.release(held)
+            client.close()
 
     def test_fetch_failed_with_retry(self):
         with RemoteEvaluationClient(API_KEY, RemoteEvaluationConfig(debug=False, fetch_retries=1,

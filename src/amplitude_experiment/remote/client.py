@@ -152,8 +152,8 @@ class RemoteEvaluationClient:
         try:
             conn = self._connection_pool.acquire(timeout=self.config.fetch_timeout_millis / 1000)
         except EmptyPoolError:
-            raise FetchException(408, f"Timed out waiting {self.config.fetch_timeout_millis}ms for a connection "
-                                      f"from the pool (max_size={self._connection_pool.max_size})")
+            raise TimeoutError(f"Timed out waiting {self.config.fetch_timeout_millis}ms for a connection "
+                               f"from the pool (max_size={self._connection_pool.max_size})")
         body = user_context.to_json().encode('utf8')
         if len(body) > 8000:
             self.logger.warning(f"[Experiment] encoded user object length ${len(body)} "
