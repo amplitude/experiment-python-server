@@ -42,8 +42,13 @@ class RemoteEvaluationClientTestCase(unittest.TestCase):
         user = User(user_id='test_user')
         self.client.fetch_async(user, self.callback_for_async)
 
+    def test_pool_acquire_wait_unbounded_by_default(self):
+        assert RemoteEvaluationConfig().fetch_pool_acquire_timeout_millis is None
+
     def test_fetch_pool_exhausted_times_out(self):
-        client = RemoteEvaluationClient(API_KEY, RemoteEvaluationConfig(fetch_timeout_millis=100))
+        client = RemoteEvaluationClient(
+            API_KEY, RemoteEvaluationConfig(fetch_pool_acquire_timeout_millis=100)
+        )
         # Occupy the pool's only connection so the next fetch must wait for it.
         held = client._connection_pool.acquire()
         try:
@@ -65,7 +70,9 @@ class RemoteEvaluationClientTestCase(unittest.TestCase):
     def test_fetch_v2_pool_exhausted_matches_read_timeout_behavior(self):
         # With fetch_retries=0, a pool-wait timeout must surface exactly like a read
         # timeout: an empty variants dict, not None and not an exception.
-        client = RemoteEvaluationClient(API_KEY, RemoteEvaluationConfig(fetch_timeout_millis=100))
+        client = RemoteEvaluationClient(
+            API_KEY, RemoteEvaluationConfig(fetch_pool_acquire_timeout_millis=100)
+        )
         held = client._connection_pool.acquire()
         try:
             variants = client.fetch_v2(User(user_id='test_user'))

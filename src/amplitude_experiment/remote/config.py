@@ -17,6 +17,7 @@ class RemoteEvaluationConfig:
                  fetch_retry_backoff_max_millis=10000,
                  fetch_retry_backoff_scalar=1.5,
                  fetch_retry_timeout_millis=10000,
+                 fetch_pool_acquire_timeout_millis=None,
                  server_zone: ServerZone = ServerZone.US,
                  logger=None):
         """
@@ -25,8 +26,7 @@ class RemoteEvaluationConfig:
                 debug (bool): Set to true to log some extra information to the console.
                 server_url (str): The server endpoint from which to request variants.
                 fetch_timeout_millis (int): The request timeout, in milliseconds, used when fetching variants
-                  triggered by calling start() or setUser(). Also bounds how long a fetch may wait to acquire a
-                  connection from the connection pool when all connections are in use by concurrent fetches.
+                  triggered by calling start() or setUser().
                 fetch_retries (int): The number of retries to attempt before failing.
                 fetch_retry_backoff_min_millis (int): Retry backoff minimum (starting backoff delay) in milliseconds.
                   The minimum backoff is scaled by `fetch_retry_backoff_scalar` after each retry failure.
@@ -34,6 +34,10 @@ class RemoteEvaluationConfig:
                   greater than the max, the max is used for all subsequent retries.
                 fetch_retry_backoff_scalar (float): Scales the minimum backoff exponentially.
                 fetch_retry_timeout_millis (int): The request timeout for retrying fetch requests.
+                fetch_pool_acquire_timeout_millis (int | None): Maximum time, in milliseconds, a fetch may wait to
+                  acquire a connection from the connection pool when all pooled connections are busy with concurrent
+                  fetches. None (the default) preserves the existing behavior of waiting indefinitely. When set, an
+                  exhausted wait raises TimeoutError, classified for retries exactly like a socket read timeout.
                 server_zone (str): Select the Amplitude data center to get flags and variants from, US or EU.
                 logger (logging.Logger): Optional logger instance. If provided, this logger will be used instead of
                   creating a new one. The debug flag only applies when no logger is provided.
@@ -49,6 +53,7 @@ class RemoteEvaluationConfig:
         self.fetch_retry_backoff_max_millis = fetch_retry_backoff_max_millis
         self.fetch_retry_backoff_scalar = fetch_retry_backoff_scalar
         self.fetch_retry_timeout_millis = fetch_retry_timeout_millis
+        self.fetch_pool_acquire_timeout_millis = fetch_pool_acquire_timeout_millis
         self.server_zone = server_zone
         if server_url == DEFAULT_SERVER_URL and server_zone == ServerZone.EU:
             self.server_url = EU_SERVER_URL

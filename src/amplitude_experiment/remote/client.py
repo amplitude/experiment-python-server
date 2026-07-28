@@ -149,10 +149,13 @@ class RemoteEvaluationClient:
                 json.dumps(fetch_options.flagKeys, separators=(",", ":")).encode("utf-8")
             ).rstrip(b"=").decode("utf-8")
 
+        acquire_timeout_millis = self.config.fetch_pool_acquire_timeout_millis
         try:
-            conn = self._connection_pool.acquire(timeout=self.config.fetch_timeout_millis / 1000)
+            conn = self._connection_pool.acquire(
+                timeout=acquire_timeout_millis / 1000 if acquire_timeout_millis is not None else None
+            )
         except EmptyPoolError:
-            raise TimeoutError(f"Timed out waiting {self.config.fetch_timeout_millis}ms for a connection "
+            raise TimeoutError(f"Timed out waiting {acquire_timeout_millis}ms for a connection "
                                f"from the pool (max_size={self._connection_pool.max_size})")
         body = user_context.to_json().encode('utf8')
         if len(body) > 8000:
