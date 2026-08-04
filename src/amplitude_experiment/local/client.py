@@ -1,5 +1,6 @@
+from concurrent.futures import wait
 from threading import Lock
-from typing import Any, List, Dict, Set
+from typing import Any, List, Dict, Set, Optional
 
 from amplitude import Amplitude
 
@@ -158,12 +159,35 @@ class LocalEvaluationClient:
         self._connection_pool = HTTPConnectionPool(host, max_size=1, idle_timeout=30,
                                                    read_timeout=timeout, scheme=scheme)
 
-    def stop(self) -> None:
+    def stop(self, timeout: Optional[float] = 10.0) -> None:
         """
-        Stop polling for flag configurations. Close resource like connection pool with client
+        Stop polling for flag configurations, flush pending assignment and exposure events, and close resources
+        like the connection pool.
+
+            Parameters:
+                timeout (float | None): Maximum time, in seconds, to wait for pending assignment and exposure
+                  events to finish sending before returning. Defaults to 10 seconds. Pass None to wait
+                  indefinitely.
         """
         self.deployment_runner.stop()
         self._connection_pool.close()
+        self.__shutdown_event_services(timeout)
+
+    def __shutdown_event_services(self, timeout: Optional[float]) -> None:
+        instances = [service.amplitude for service in (self.assignment_service, self.exposure_service)
+                     if service is not None]
+        if not instances:
+            return
+        futures = []
+        for instance in instances:
+            futures.extend(f for f in (instance.flush() or []) if f is not None)
+        if futures:
+            _, not_done = wait(futures, timeout=timeout)
+            if not_done:
+                self.logger.warning(f"[Experiment] Stop timed out after {timeout}s waiting for "
+                                    f"{len(not_done)} pending event batch(es) to flush")
+        for instance in instances:
+            instance.shutdown()
 
     def __enter__(self) -> 'LocalEvaluationClient':
         return self
