@@ -68,3 +68,15 @@ class RemoteEvaluationConfigLoggerTestCase(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class RemoteEvaluationConfigConnectionPoolTestCase(unittest.TestCase):
+    """Tests for RemoteEvaluationConfig connection pool configuration"""
+
+    def test_connection_pool_max_size_defaults_to_one(self):
+        config = RemoteEvaluationConfig()
+        self.assertEqual(config.connection_pool_max_size, 1)
+
+    def test_connection_pool_max_size_is_stored(self):
+        config = RemoteEvaluationConfig(connection_pool_max_size=8)
+        self.assertEqual(config.connection_pool_max_size, 8)
