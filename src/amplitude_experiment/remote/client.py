@@ -166,10 +166,12 @@ class RemoteEvaluationClient:
             response = conn.request('POST', '/sdk/v2/vardata?v=0', body, headers)
             elapsed = '%.3f' % ((time.time() - start) * 1000)
             self.logger.debug(f"[Experiment] Fetch complete in {elapsed} ms")
+            # always read so the keep-alive connection is reusable
+            response_as_bytes = response.read()
             if response.status != 200:
                 raise FetchException(response.status,
                                      f"Fetch error response: status={response.status} {response.reason}")
-            json_response = json.loads(response.read().decode("utf8"))
+            json_response = json.loads(response_as_bytes.decode("utf8"))
             variants = evaluation_variants_json_to_variants(json_response)
             self.logger.debug(f"[Experiment] Fetched variants: {json.dumps(variants, default=str)}")
             return variants
