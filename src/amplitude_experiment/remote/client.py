@@ -149,6 +149,12 @@ class RemoteEvaluationClient:
                 json.dumps(fetch_options.flagKeys, separators=(",", ":")).encode("utf-8")
             ).rstrip(b"=").decode("utf-8")
 
+        body = user_context.to_json().encode('utf8')
+        if len(body) > 8000:
+            self.logger.warning(f"[Experiment] encoded user object length ${len(body)} "
+                                f"cannot be cached by CDN; must be < 8KB")
+        self.logger.debug(f"[Experiment] Fetch variants for user: {str(user_context)}")
+
         acquire_timeout_millis = self.config.fetch_pool_acquire_timeout_millis
         try:
             conn = self._connection_pool.acquire(
@@ -157,19 +163,21 @@ class RemoteEvaluationClient:
         except EmptyPoolError:
             raise TimeoutError(f"Timed out waiting {acquire_timeout_millis}ms for a connection "
                                f"from the pool (max_size={self._connection_pool.max_size})")
-        body = user_context.to_json().encode('utf8')
-        if len(body) > 8000:
-            self.logger.warning(f"[Experiment] encoded user object length ${len(body)} "
-                                f"cannot be cached by CDN; must be < 8KB")
-        self.logger.debug(f"[Experiment] Fetch variants for user: {str(user_context)}")
         try:
             response = conn.request('POST', '/sdk/v2/vardata?v=0', body, headers)
             elapsed = '%.3f' % ((time.time() - start) * 1000)
             self.logger.debug(f"[Experiment] Fetch complete in {elapsed} ms")
             if response.status != 200:
+                # The error body may be large or slow. Retire its connection instead of reading it.
+                conn.close()
                 raise FetchException(response.status,
                                      f"Fetch error response: status={response.status} {response.reason}")
-            json_response = json.loads(response.read().decode("utf8"))
+            try:
+                response_as_bytes = response.read()
+            except Exception:
+                conn.close()
+                raise
+            json_response = json.loads(response_as_bytes.decode("utf8"))
             variants = evaluation_variants_json_to_variants(json_response)
             self.logger.debug(f"[Experiment] Fetched variants: {json.dumps(variants, default=str)}")
             return variants
