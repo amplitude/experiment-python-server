@@ -106,7 +106,7 @@ class LocalEvaluationClient:
         flag_configs = self.flag_config_storage.get_flag_configs()
         if flag_configs is None or len(flag_configs) == 0:
             return {}
-        self.logger.debug(f"[Experiment] Evaluate: user={user} - Flags: {flag_configs}")
+        self.logger.debug("[Experiment] Evaluate: user=%s - Flags: %s", user, flag_configs)
         sorted_flags = topological_sort(flag_configs, flag_keys and list(flag_keys))
         if not sorted_flags:
             return {}
@@ -126,7 +126,7 @@ class LocalEvaluationClient:
                 metadata=v.metadata
             ) for k, v in result.items()
         }
-        self.logger.debug(f"[Experiment] Evaluate Result: {variants}")
+        self.logger.debug("[Experiment] Evaluate Result: %s", variants)
         if self.exposure_service is not None and options and options.tracks_exposure is True:
             self.exposure_service.track(Exposure(user, variants))
         if self.assignment_service is not None:
