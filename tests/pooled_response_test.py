@@ -1,5 +1,6 @@
 import json
 import logging
+import socket
 import threading
 import time
 import unittest
@@ -117,7 +118,7 @@ class PooledResponseTest(unittest.TestCase):
         with ResponseServer([(503, b'e', True), (200, b'[]', False)]) as server:
             api = FlagConfigApiV2('test-key', server.url, 100)
             try:
-                with self.assertRaises(TimeoutError):
+                with self.assertRaises(socket.timeout):
                     api.get_flag_configs()
                 self.assertEqual([], api.get_flag_configs())
                 self.assertEqual(2, len(server.requests))
@@ -149,7 +150,7 @@ class PooledResponseTest(unittest.TestCase):
             api._connection_pool.max_size = 1
             api._connection_pool.read_timeout = 0.1
             try:
-                with self.assertRaises(TimeoutError):
+                with self.assertRaises(socket.timeout):
                     with api._get_cohort_members_request('cohort', None) as response:
                         response.read()
                 with api._get_cohort_members_request('cohort', None) as response:
