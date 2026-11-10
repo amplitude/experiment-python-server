@@ -16,7 +16,7 @@ jobs:
 
   build-n-publish:
     name: Build and publish to TestPyPI
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: [authorize]
     environment: Unit Test
     permissions:
