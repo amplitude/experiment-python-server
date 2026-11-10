@@ -23,7 +23,7 @@ jobs:
   build-n-publish:
     environment: Unit Test
     name: Build and publish to PyPI
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: [authorize]
     permissions:
       contents: write
