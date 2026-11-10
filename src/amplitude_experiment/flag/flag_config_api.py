@@ -35,7 +35,11 @@ class FlagConfigApiV2(FlagConfigApi):
         body = None
         try:
             response = conn.request('GET', '/sdk/v2/flags?v=0', body, headers)
-            response_body = response.read().decode("utf8")
+            try:
+                response_body = response.read().decode("utf8")
+            except Exception:
+                conn.close()
+                raise
             if response.status != 200:
                 raise Exception(
                     f"[Experiment] Get flagConfigs - received error response: ${response.status}: ${response_body}")

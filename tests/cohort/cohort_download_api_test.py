@@ -1,19 +1,20 @@
 import json
 import logging
 import unittest
+from contextlib import nullcontext
 from unittest import mock
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 from src.amplitude_experiment.cohort.cohort import Cohort
 from src.amplitude_experiment.cohort.cohort_download_api import DirectCohortDownloadApi
 from src.amplitude_experiment.exception import CohortTooLargeException
 
 
 def response(code: int, body: dict = None):
-    mock_response = MagicMock()
+    mock_response = mock.MagicMock()
     mock_response.status = code
     if body is not None:
         mock_response.read.return_value = json.dumps(body).encode()
-    return mock_response
+    return nullcontext(mock_response)
 
 
 class CohortDownloadApiTest(unittest.TestCase):
