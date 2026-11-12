@@ -112,9 +112,9 @@ class RemoteEvaluationClient:
         try:
             return self.__do_fetch(user, fetch_options)
         except Exception as e:
-            self.logger.error(f"[Experiment] Fetch failed: {e}")
             if self.__should_retry_fetch(e):
                 return self.__retry_fetch(user, fetch_options)
+            self.logger.error(f"[Experiment] Fetch failed: {e}", exc_info=e)
 
     def __retry_fetch(self, user, fetch_options: FetchOptions = None):
         if self.config.fetch_retries == 0:
@@ -127,7 +127,7 @@ class RemoteEvaluationClient:
             try:
                 return self.__do_fetch(user, fetch_options)
             except Exception as e:
-                self.logger.error(f"[Experiment] Retry failed: {e}")
+                self.logger.error(f"[Experiment] Retry failed: {e}", exc_info=e)
                 err = e
             delay_millis = min(delay_millis * self.config.fetch_retry_backoff_scalar,
                                self.config.fetch_retry_backoff_max_millis)
