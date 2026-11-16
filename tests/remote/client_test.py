@@ -1,4 +1,5 @@
 import json
+import threading
 import time
 import unittest
 from unittest import mock
@@ -140,9 +141,40 @@ class RemoteEvaluationClientTestCase(unittest.TestCase):
                 'Content-Type': 'application/json;charset=utf-8'
             })
 
+    @parameterized.expand([(400,), (401,), (403,)])
+    def test_fetch_v2_non_retryable_response(self, status):
+        with RemoteEvaluationClient(API_KEY, RemoteEvaluationConfig(fetch_retries=1)) as client:
+            user = User(user_id='test_user')
+            conn = mock.MagicMock()
+            conn.request.return_value.status = status
+            with mock.patch.object(client._connection_pool, 'acquire', return_value=conn):
+                with self.assertRaises(FetchException) as raised:
+                    client.fetch_v2(user)
+            self.assertEqual(status, raised.exception.status_code)
+            conn.request.assert_called_once()
+
+    @parameterized.expand([(400,), (401,), (403,)])
+    def test_fetch_async_v2_non_retryable_response(self, status):
+        with RemoteEvaluationClient(API_KEY, RemoteEvaluationConfig(fetch_retries=1)) as client:
+            user = User(user_id='test_user')
+            conn = mock.MagicMock()
+            conn.request.return_value.status = status
+            done = threading.Event()
+            callback = mock.Mock(side_effect=lambda *args: done.set())
+            with mock.patch.object(client._connection_pool, 'acquire', return_value=conn):
+                client.fetch_async_v2(user, callback)
+                self.assertTrue(done.wait(2), 'Fetch callback did not complete')
+            callback.assert_called_once_with(user, {}, mock.ANY)
+            error = callback.call_args[0][2]
+            self.assertIsInstance(error, FetchException)
+            self.assertEqual(status, error.status_code)
+            conn.request.assert_called_once()
+
     @parameterized.expand([
         (300, "Fetch Exception 300", True),
         (400, "Fetch Exception 400", False),
+        (401, "Fetch Exception 401", False),
+        (403, "Fetch Exception 403", False),
         (429, "Fetch Exception 429", True),
         (500, "Fetch Exception 500", True),
         (000, "Other Exception", True),
@@ -157,7 +189,13 @@ class RemoteEvaluationClientTestCase(unittest.TestCase):
             mock_do_fetch.side_effect = FetchException(response_code, error_message)
         instance = RemoteEvaluationClient(API_KEY, RemoteEvaluationConfig(fetch_retries=1))
         user = User(user_id='test_user')
-        instance.fetch_v2(user)
+        if should_call_retry:
+            instance.fetch_v2(user)
+        else:
+            with self.assertRaises(FetchException) as raised:
+                instance.fetch_v2(user)
+            self.assertIs(raised.exception, mock_do_fetch.side_effect)
+        instance.close()
         mock_do_fetch.assert_called_once_with(user, None)
         self.assertEqual(should_call_retry, mock_retry_fetch.called)
 

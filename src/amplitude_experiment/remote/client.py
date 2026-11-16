@@ -115,6 +115,7 @@ class RemoteEvaluationClient:
             self.logger.error(f"[Experiment] Fetch failed: {e}")
             if self.__should_retry_fetch(e):
                 return self.__retry_fetch(user, fetch_options)
+            raise
 
     def __retry_fetch(self, user, fetch_options: FetchOptions = None):
         if self.config.fetch_retries == 0:
